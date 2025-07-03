@@ -1,5 +1,5 @@
-import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import Login from '../admin/Login';
 import Dashboard from '../admin/Dashboard';
 import Appointments from '../admin/Appointments';
@@ -11,40 +11,31 @@ import ProtectedRoute from '../components/ProtectedRoute';
 import AdminLayout from '../admin/AdminLayout';
 
 export default function Admin({ onLogin }) {
-  const [loggedIn, setLoggedIn] = useState(() => localStorage.getItem('loggedIn') === 'true');
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (loggedIn) localStorage.setItem('loggedIn', 'true');
-    else localStorage.removeItem('loggedIn');
-  }, [loggedIn]);
+  const { isLoggedIn, setIsLoggedIn } = useAuth();
 
   const handleLogout = () => {
-    setLoggedIn(false);
-    navigate('/admin/login');
+    setIsLoggedIn(false);
   };
 
   return (
     <Routes>
-      {/* Login route */}
       <Route
         path="login"
         element={
-          loggedIn ? (
+          isLoggedIn ? (
             <Navigate to="/admin/dashboard" replace />
           ) : (
             <Login
               onLogin={() => {
-                setLoggedIn(true);
-                onLogin(); // notify parent App.jsx
+                setIsLoggedIn(true);
+                onLogin();
               }}
             />
           )
         }
       />
 
-      {/* Protected Routes wrapped in AdminLayout */}
-      <Route element={<ProtectedRoute loggedIn={loggedIn} />}>
+      <Route element={<ProtectedRoute loggedIn={isLoggedIn} />}>
         <Route element={<AdminLayout onLogout={handleLogout} />}>
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="appointments" element={<Appointments />} />
@@ -55,10 +46,9 @@ export default function Admin({ onLogin }) {
         </Route>
       </Route>
 
-      {/* Default redirect */}
       <Route
         path=""
-        element={loggedIn ? <Navigate to="dashboard" replace /> : <Navigate to="login" replace />}
+        element={isLoggedIn ? <Navigate to="dashboard" replace /> : <Navigate to="login" replace />}
       />
     </Routes>
   );
