@@ -1,35 +1,58 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Routes, Route, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { BusinessProvider } from './context/BusinessContext';
+import Home from './pages/Home';
+import Navbar from './components/Navbar';
+import AdminNavbar from './components/AdminNavbar';
+import Footer from './components/Footer';
+import Admin from './pages/Admin';
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const navigate = useNavigate();
+  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(() => localStorage.getItem('loggedIn') === 'true');
+  const [justLoggedOut, setJustLoggedOut] = useState(false);
+
+  useEffect(() => {
+    const checkStorage = () => {
+      setIsAdminLoggedIn(localStorage.getItem('loggedIn') === 'true');
+    };
+    window.addEventListener('storage', checkStorage);
+    return () => window.removeEventListener('storage', checkStorage);
+  }, []);
+
+  useEffect(() => {
+    if (justLoggedOut) {
+      navigate('/admin/login');
+      setJustLoggedOut(false);
+    }
+  }, [justLoggedOut, navigate]);
+
+  const handleAdminLogin = () => {
+    localStorage.setItem('loggedIn', 'true');
+    setIsAdminLoggedIn(true);
+  };
+
+  const handleAdminLogout = () => {
+    localStorage.removeItem('loggedIn');
+    setIsAdminLoggedIn(false);
+    setJustLoggedOut(true);
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <BusinessProvider>
+      {isAdminLoggedIn ? (
+        <AdminNavbar onLogout={handleAdminLogout} />
+      ) : (
+        <Navbar />
+      )}
 
-export default App
+      <Routes>
+        <Route path="/admin/*" element={<Admin onLogin={handleAdminLogin} />} />
+        <Route path="/" element={<Home />} />
+        {/* other public-facing routes */}
+      </Routes>
+
+      <Footer />
+    </BusinessProvider>
+  );
+}

@@ -1,0 +1,111 @@
+/* General section layout */
+section {
+  padding: 4rem 1rem;
+  max-width: 1000px;
+  margin: 0 auto;
+  text-align: center;
+  color: #4b3b2b;
+}
+
+/* Reuse for headings */
+section h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Hero already styled — keep your existing hero styles */
+
+/* Book Appointment Section */
+.book-section {
+  background-color: #fdf7f2;
+}
+
+.book-section .cta-btn {
+  margin-top: 1rem;
+}
+
+/* About */
+.about p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+}
+
+/* Services */
+.services .service-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.service-card {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  width: 280px;
+}
+
+.service-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: #6b4c3b;
+}
+
+/* Team */
+.team .team-grid {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+.team-member {
+  text-align: center;
+  width: 200px;
+}
+
+.team-member img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+}
+
+/* Business Hours */
+.hours ul {
+  list-style: none;
+  padding: 0;
+  font-size: 1.1rem;
+  line-height: 2rem;
+}
+
+/* Social */
+.social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.social-icons a img {
+  width: 32px;
+  height: 32px;
+  filter: brightness(0) saturate(100%) invert(20%) sepia(8%) saturate(144%) hue-rotate(356deg) brightness(96%) contrast(88%);
+  transition: transform 0.2s ease;
+}
+
+.social-icons a:hover img {
+  transform: scale(1.1);
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #ddd;
+  margin: 3rem auto;
+  width: 80%;
+}

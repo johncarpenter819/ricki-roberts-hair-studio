@@ -1,42 +1,84 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+.hero {
+  height: 100vh; /* full viewport height */
+  display: flex;
+  justify-content: center; /* horizontal centering */
+  align-items: center;     /* vertical centering */
   text-align: center;
+  padding: 0 1rem;
+  background: url('/assets/salon-hero.jpg') center/cover no-repeat;
+  background-color: #f7f3ef; /* fallback color */
+  box-shadow: inset 0 0 0 1000px rgba(247, 243, 239, 0.85); /* light overlay */
+  flex-direction: column; /* stack children vertically */
+  gap: 1rem;             /* spacing between children */
+  color: #4b3b2b;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.hero-content {
+  max-width: 700px;
+  width: 100%;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+/* Heading */
+.hero h1 {
+  font-size: 4rem;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+  font-family: 'Poppins', sans-serif;
+  color: #6b4c3b;
+  line-height: 1.1;
+}
+
+/* Subheading */
+.hero p {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  font-weight: 400;
+  color: #7a6551;
+}
+
+/* CTA Button */
+.cta-btn {
+  background-color: #a77b5a;
+  color: #fff;
+  font-size: 1.25rem;
+  padding: 0.85rem 3rem;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 6px 12px rgba(167, 123, 90, 0.5);
+}
+
+.cta-btn:hover {
+  background-color: #8b6649;
+  box-shadow: 0 8px 16px rgba(139, 102, 73, 0.6);
+}
+
+/* Responsive - Tablets */
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 3rem;
   }
-  to {
-    transform: rotate(360deg);
+  .hero p {
+    font-size: 1.25rem;
+  }
+  .cta-btn {
+    font-size: 1.1rem;
+    padding: 0.75rem 2.5rem;
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+/* Responsive - Mobile */
+@media (max-width: 480px) {
+  .hero h1 {
+    font-size: 2.2rem;
   }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+  .hero p {
+    font-size: 1rem;
+  }
+  .cta-btn {
+    font-size: 1rem;
+    padding: 0.65rem 2rem;
+  }
 }
