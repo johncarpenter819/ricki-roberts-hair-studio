@@ -16,14 +16,17 @@ export default function Booking() {
 
   const [form, setForm] = useState({
     name: '',
+    email: '',
     phone: '',
     serviceId: '',
     date: '',
     time: '',
+    subscribe: false, // ✅ added subscribe checkbox state
   });
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value, type, checked } = e.target;
+    setForm({ ...form, [name]: type === 'checkbox' ? checked : value });
   };
 
   const handleSubmit = (e) => {
@@ -36,20 +39,31 @@ export default function Booking() {
     }
 
     const newAppointment = {
-      id: Date.now(), // simple unique ID
+      id: Date.now(),
       name: form.name,
+      email: form.email,
       phone: form.phone,
       service: selectedService.name,
       date: form.date,
-      time: formatTimeTo12Hour(form.time), // <-- format time here!
+      time: formatTimeTo12Hour(form.time),
       status: 'Confirmed',
+      subscribe: form.subscribe, // ✅ included in data
     };
 
     setAppointments([...appointments, newAppointment]);
 
     alert(`Thank you, ${form.name}! Your ${selectedService.name} is booked.`);
 
-    setForm({ name: '', phone: '', serviceId: '', date: '', time: '' });
+    // Reset form
+    setForm({
+      name: '',
+      email: '',
+      phone: '',
+      serviceId: '',
+      date: '',
+      time: '',
+      subscribe: false,
+    });
   };
 
   return (
@@ -60,6 +74,11 @@ export default function Booking() {
         <label style={labelStyle}>
           Name
           <input type="text" name="name" value={form.name} onChange={handleChange} required style={inputStyle} />
+        </label>
+
+        <label style={labelStyle}>
+          Email
+          <input type="email" name="email" value={form.email} onChange={handleChange} required style={inputStyle} />
         </label>
 
         <label style={labelStyle}>
@@ -85,6 +104,18 @@ export default function Booking() {
         <label style={labelStyle}>
           Time
           <input type="time" name="time" value={form.time} onChange={handleChange} required style={inputStyle} />
+        </label>
+
+        {/* ✅ Newsletter Checkbox */}
+        <label style={{ ...labelStyle, flexDirection: 'row', alignItems: 'center' }}>
+          <input
+            type="checkbox"
+            name="subscribe"
+            checked={form.subscribe}
+            onChange={handleChange}
+            style={{ marginRight: '0.5rem' }}
+          />
+          I’d like to receive newsletters, discounts, or service updates.
         </label>
 
         <button type="submit" style={buttonStyle}>Book Now</button>

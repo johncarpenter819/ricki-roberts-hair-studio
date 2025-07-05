@@ -1,0 +1,92 @@
+/* src/styles/Appointments.css */
+
+.appointments-container {
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 1rem;
+  background-color: #fff;
+}
+
+.appointments-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  overflow-x: auto;
+}
+
+.appointments-table th,
+.appointments-table td {
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  text-align: left;
+  vertical-align: middle;
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+
+.appointments-table th {
+  background-color: #a77b5a;
+  color: white;
+}
+
+.appointments-table tbody tr:nth-child(even) {
+  background-color: #f8f5f1;
+}
+
+.appointments-table td button {
+  padding: 0.3rem 0.7rem;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.appointments-table td button:hover {
+  background-color: #c82333;
+}
+
+.filter-input {
+  margin-bottom: 1rem;
+  padding: 0.4rem 0.6rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.appointments-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.csv-button {
+  padding: 0.4rem 0.8rem;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.csv-button:hover {
+  background-color: #43a047;
+}
+
+.appointment-counts {
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+
+@media screen and (max-width: 768px) {
+  .appointments-table {
+    display: block;
+    overflow-x: auto;
+  }
+}
