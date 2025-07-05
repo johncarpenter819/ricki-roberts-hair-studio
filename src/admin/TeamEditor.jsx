@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { useTeam } from "../context/TeamContext";
+import "../styles/AdminPortal.css"; // assuming shared admin styles here
 
 const defaultTeam = [
   {
@@ -10,22 +12,18 @@ const defaultTeam = [
 ];
 
 export default function TeamEditor() {
-  const [team, setTeam] = useState([]);
+  const { team, setTeam } = useTeam();
   const [newMember, setNewMember] = useState({ name: "", role: "", photo: "" });
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    const saved = localStorage.getItem("teamMembers");
-    if (saved) {
-      setTeam(JSON.parse(saved));
-    } else {
+    if (!team || team.length === 0) {
       setTeam(defaultTeam);
     }
-  }, []);
+  }, [team, setTeam]);
 
   function saveTeam(updatedTeam) {
     setTeam(updatedTeam);
-    localStorage.setItem("teamMembers", JSON.stringify(updatedTeam));
     setMessage("Team updated successfully!");
     setTimeout(() => setMessage(""), 3000);
   }
@@ -52,7 +50,10 @@ export default function TeamEditor() {
     const memberToAdd = {
       ...newMember,
       id: Date.now(),
-      photo: newMember.photo.trim() || "/assets/default-profile.png",
+      photo:
+        newMember.photo && typeof newMember.photo === "string" && newMember.photo.startsWith("blob:")
+          ? newMember.photo
+          : "/assets/default-profile.png",
     };
     const updated = [...team, memberToAdd];
     saveTeam(updated);
@@ -60,111 +61,99 @@ export default function TeamEditor() {
   }
 
   return (
-    <div style={{ maxWidth: 700, margin: "2rem auto", padding: "1rem" }}>
+    <div className="admin-container team-editor-container">
       <h2>Meet the Team Editor</h2>
 
-      {team.length === 0 && <p>No team members yet.</p>}
+      {(!team || team.length === 0) && <p>No team members yet.</p>}
 
-      <ul style={{ listStyle: "none", paddingLeft: 0 }}>
-        {team.map(({ id, name, role, photo }) => (
-          <li
-            key={id}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "1rem",
-              marginBottom: "1rem",
-              borderBottom: "1px solid #ccc",
-              paddingBottom: "1rem",
-            }}
-          >
-            <img
-              src={photo}
-              alt={name}
-              style={{ width: 80, height: 80, objectFit: "cover", borderRadius: "50%" }}
-            />
-            <div style={{ flex: 1 }}>
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => handleChange(id, "name", e.target.value)}
-                style={{ width: "100%", marginBottom: 6, padding: 6 }}
-                placeholder="Name"
-              />
-              <input
-                type="text"
-                value={role}
-                onChange={(e) => handleChange(id, "role", e.target.value)}
-                style={{ width: "100%", padding: 6 }}
-                placeholder="Role"
-              />
-              <input
-                type="text"
-                value={photo}
-                onChange={(e) => handleChange(id, "photo", e.target.value)}
-                style={{ width: "100%", marginTop: 6, padding: 6, fontSize: "0.9rem" }}
-                placeholder="Photo URL"
-              />
-            </div>
-            <button
-              onClick={() => handleDelete(id)}
-              style={{
-                backgroundColor: "#dc3545",
-                border: "none",
-                color: "white",
-                borderRadius: 4,
-                padding: "6px 10px",
-                cursor: "pointer",
-                height: 40,
-              }}
-              aria-label={`Delete ${name}`}
-            >
-              Delete
-            </button>
-          </li>
-        ))}
+      <ul className="team-list">
+        {team &&
+          team.map(({ id, name, role, photo }) => (
+            <li key={id} className="team-member">
+              <img src={photo} alt={name} className="team-photo" />
+              <div className="team-info">
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => handleChange(id, "name", e.target.value)}
+                  className="admin-input"
+                  placeholder="Name"
+                />
+                <input
+                  type="text"
+                  value={role}
+                  onChange={(e) => handleChange(id, "role", e.target.value)}
+                  className="admin-input"
+                  placeholder="Role"
+                />
+                <input
+                  type="file"
+                  accept="image/*"
+                  id={`photo-upload-${id}`}
+                  className="photo-input"
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                      const localUrl = URL.createObjectURL(file);
+                      handleChange(id, "photo", localUrl);
+                    }
+                  }}
+                  style={{ display: "none" }}
+                />
+                <label htmlFor={`photo-upload-${id}`} className="upload-button">
+                  Choose Photo
+                </label>
+              </div>
+              <button
+                onClick={() => handleDelete(id)}
+                className="delete-button"
+                aria-label={`Delete ${name}`}
+              >
+                Delete
+              </button>
+            </li>
+          ))}
       </ul>
 
       <h3>Add New Team Member</h3>
-      <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", maxWidth: 400 }}>
+      <div className="add-member-form">
         <input
           type="text"
           placeholder="Name"
           value={newMember.name}
           onChange={(e) => setNewMember({ ...newMember, name: e.target.value })}
-          style={{ padding: 8 }}
+          className="admin-input"
         />
         <input
           type="text"
           placeholder="Role"
           value={newMember.role}
           onChange={(e) => setNewMember({ ...newMember, role: e.target.value })}
-          style={{ padding: 8 }}
+          className="admin-input"
         />
         <input
-          type="text"
-          placeholder="Photo URL (optional)"
-          value={newMember.photo}
-          onChange={(e) => setNewMember({ ...newMember, photo: e.target.value })}
-          style={{ padding: 8 }}
-        />
-        <button
-          onClick={handleAdd}
-          style={{
-            backgroundColor: "#a77b5a",
-            color: "white",
-            border: "none",
-            borderRadius: 6,
-            padding: "0.75rem",
-            cursor: "pointer",
-            fontWeight: "600",
+          type="file"
+          accept="image/*"
+          id="new-member-photo-upload"
+          className="photo-input"
+          onChange={(e) => {
+            const file = e.target.files[0];
+            if (file) {
+              const localUrl = URL.createObjectURL(file);
+              setNewMember((prev) => ({ ...prev, photo: localUrl }));
+            }
           }}
-        >
+          style={{ display: "none" }}
+        />
+        <label htmlFor="new-member-photo-upload" className="upload-button">
+          Choose Photo
+        </label>
+        <button onClick={handleAdd} className="admin-button add-member-button">
           Add Member
         </button>
       </div>
 
-      {message && <p style={{ color: "green", marginTop: "1rem" }}>{message}</p>}
+      {message && <p className="admin-message">{message}</p>}
     </div>
   );
 }

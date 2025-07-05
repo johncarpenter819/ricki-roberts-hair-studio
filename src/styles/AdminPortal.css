@@ -1,0 +1,294 @@
+/* AdminPortal.css */
+
+/* Container shared by all admin pages */
+.admin-container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 1.5rem 2rem;
+  background-color: #f9f6f2;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #4b3b2b;
+}
+
+/* Toolbar shared */
+.admin-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.admin-toolbar label {
+  font-weight: 600;
+}
+
+.admin-input, .admin-select {
+  padding: 0.4rem 0.6rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  max-width: 180px;
+}
+
+.admin-button {
+  background-color: #a77b5a;
+  color: white;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.admin-button:hover {
+  background-color: #8b6847;
+}
+
+.admin-counts {
+  margin-bottom: 1rem;
+  font-weight: 600;
+  display: flex;
+  gap: 2rem;
+  font-size: 1.1rem;
+}
+
+/* Table shared styles */
+.admin-table-wrapper {
+  overflow-x: auto;
+  width: 100%;
+  -webkit-overflow-scrolling: touch;
+}
+
+.admin-table {
+  border-collapse: collapse;
+  box-shadow: 0 0 8px rgba(0,0,0,0.05);
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  table-layout: fixed;
+  min-width: 1200px;
+  width: 100%;
+}
+
+.admin-table thead tr {
+  background-color: #a77b5a;
+  color: white;
+  text-align: left;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e2ddd8;
+  vertical-align: middle;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-table tbody tr:hover {
+  background-color: #f0e9df;
+}
+
+/* Status and action buttons */
+.admin-status-cell {
+  font-weight: 600;
+  color: #155724;
+}
+
+.admin-cancel-button {
+  padding: 0.3rem 0.7rem;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.admin-cancel-button:hover {
+  background-color: #b02a37;
+}
+
+/* Add these to your AdminPortal.css */
+
+/* Label styling for form fields */
+.admin-label {
+  display: flex;
+  flex-direction: column;
+  color: #4b3b2b;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+/* Textarea style similar to inputs */
+.admin-textarea {
+  padding: 0.6rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  margin-top: 0.3rem;
+  resize: vertical;
+}
+
+/* Override margin bottom for inputs inside labels */
+.admin-input {
+  padding: 0.6rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  margin-top: 0.3rem;
+}
+
+/* Message below buttons */
+.admin-message {
+  color: green;
+  margin-top: 1rem;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+/* Team Editor Styles - reuse AdminPortal styles where possible */
+
+.team-list {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 1rem;
+}
+
+.team-member {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 1rem;
+}
+
+.team-photo {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.team-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.photo-input {
+  font-size: 0.9rem;
+  margin-top: 0.3rem;
+}
+
+/* Reuse .admin-input styles for inputs */
+
+.delete-button {
+  background-color: #dc3545;
+  border: none;
+  color: white;
+  border-radius: 4px;
+  padding: 6px 10px;
+  cursor: pointer;
+  height: 40px;
+  flex-shrink: 0;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.delete-button:hover {
+  background-color: #b02a37;
+}
+
+.add-member-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 400px;
+  margin-top: 1rem;
+}
+
+.add-member-button {
+  background-color: #a77b5a;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.75rem;
+  border-radius: 6px;
+  border: none;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.add-member-button:hover {
+  background-color: #8b6847;
+}
+
+.team-editor-container {
+  width: 30%;
+  max-width: none;
+  padding: 2rem 3rem;
+  box-sizing: border-box;
+}
+
+/* Hide native file input */
+.file-input {
+  display: none;
+}
+
+/* Styled label to look like a button */
+.upload-button {
+  display: inline-block;
+  background-color: #a77b5a;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  user-select: none;
+  transition: background-color 0.3s ease;
+  margin-top: 0.3rem;
+}
+
+.upload-button:hover {
+  background-color: #8b6847;
+}
+
+/* Confirmation message reused from admin-message */
+
+
+
+/* Responsive handling */
+@media (max-width: 768px) {
+  .admin-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .admin-counts {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .admin-table {
+    font-size: 0.85rem;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 0.5rem 0.6rem;
+    white-space: normal;
+  }
+}

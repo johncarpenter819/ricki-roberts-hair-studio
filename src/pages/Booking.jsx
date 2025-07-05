@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useServices } from '../context/ServicesContext';
 import { useAppointments } from '../context/AppointmentsContext';
 import { useTeam } from '../context/TeamContext';
@@ -24,8 +24,23 @@ export default function Booking() {
     stylistId: '',
     date: '',
     time: '',
-    subscribe: false,  // added subscribe state
+    subscribe: false,
   });
+
+  // Load appointments from localStorage once on mount
+  useEffect(() => {
+    const savedAppointments = localStorage.getItem('appointments');
+    if (savedAppointments) {
+      setAppointments(JSON.parse(savedAppointments));
+    }
+  }, [setAppointments]);
+
+  // Save appointments to localStorage whenever they change
+  useEffect(() => {
+    if (appointments.length > 0) {
+      localStorage.setItem('appointments', JSON.stringify(appointments));
+    }
+  }, [appointments]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -58,7 +73,7 @@ export default function Booking() {
       date: form.date,
       time: formatTimeTo12Hour(form.time),
       status: 'Confirmed',
-      subscribe: form.subscribe, // include subscription status
+      subscribe: form.subscribe,
     };
 
     setAppointments([...appointments, newAppointment]);
@@ -78,8 +93,19 @@ export default function Booking() {
   };
 
   return (
-    <div style={{ maxWidth: '600px', margin: '3rem auto', padding: '2rem', backgroundColor: '#f7f3ef', borderRadius: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
-      <h2 style={{ color: '#4b3b2b', textAlign: 'center', marginBottom: '1.5rem' }}>Book an Appointment</h2>
+    <div
+      style={{
+        maxWidth: '600px',
+        margin: '3rem auto',
+        padding: '2rem',
+        backgroundColor: '#f7f3ef',
+        borderRadius: '12px',
+        boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+      }}
+    >
+      <h2 style={{ color: '#4b3b2b', textAlign: 'center', marginBottom: '1.5rem' }}>
+        Book an Appointment
+      </h2>
 
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         <label style={labelStyle}>
@@ -102,7 +128,9 @@ export default function Booking() {
           <select name="serviceId" value={form.serviceId} onChange={handleChange} required style={inputStyle}>
             <option value="">Select a Service</option>
             {services.map((s) => (
-              <option key={s.id} value={s.id}>{s.name} — ${s.price.toFixed(2)}</option>
+              <option key={s.id} value={s.id}>
+                {s.name} — ${s.price.toFixed(2)}
+              </option>
             ))}
           </select>
         </label>
@@ -112,7 +140,9 @@ export default function Booking() {
           <select name="stylistId" value={form.stylistId} onChange={handleChange} required style={inputStyle}>
             <option value="">Select a Stylist</option>
             {team.map((stylist) => (
-              <option key={stylist.id} value={stylist.id}>{stylist.name}</option>
+              <option key={stylist.id} value={stylist.id}>
+                {stylist.name}
+              </option>
             ))}
           </select>
         </label>
@@ -139,7 +169,9 @@ export default function Booking() {
           I’d like to receive newsletters, discounts, or service updates.
         </label>
 
-        <button type="submit" style={buttonStyle}>Book Now</button>
+        <button type="submit" style={buttonStyle}>
+          Book Now
+        </button>
       </form>
     </div>
   );
