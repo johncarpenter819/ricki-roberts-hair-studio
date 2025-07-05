@@ -1,13 +1,25 @@
 import '../styles/Home.css';
 import { useBusiness } from '../context/BusinessContext';
+import { useTeam } from '../context/TeamContext';
 import { useNavigate } from 'react-router-dom';
 
 export default function Home() {
   const { hours } = useBusiness();
+  const { team } = useTeam();
   const navigate = useNavigate();
 
   const goToBooking = () => {
     navigate('/booking');
+  };
+
+  // Helper to get the correct image src
+  const getPhotoSrc = (photo) => {
+    if (!photo) return "/assets/default-profile.jpg";
+    if (photo.startsWith("/assets/") || photo.startsWith("blob:")) {
+      return photo; // already full path or blob URL
+    }
+    // else prepend assets folder
+    return `/assets/${photo}`;
   };
 
   return (
@@ -60,11 +72,22 @@ export default function Home() {
       <section className="team">
         <h2>Meet the Team</h2>
         <div className="team-grid">
-          <div className="team-member">
-            <img src="/assets/ricque.jpg" alt="Ricque" />
-            <h3>Ricque Roberts</h3>
-            <p>Owner & Master Stylist</p>
-          </div>
+          {team.length === 0 ? (
+            <p>No team members found.</p>
+          ) : (
+            team.map(member => (
+              <div key={member.id} className="team-member">
+                <img 
+                  src={getPhotoSrc(member.photo)} 
+                  alt={member.name} 
+                />
+                <h3>{member.name}</h3>
+                <p>{member.role}</p>
+                {/* Display bio only if present */}
+                {member.bio && <p className="team-bio">{member.bio}</p>}
+              </div>
+            ))
+          )}
         </div>
       </section>
 
