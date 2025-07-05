@@ -7,6 +7,7 @@ import BusinessInfo from '../admin/BusinessSettings';
 import TeamEditor from '../admin/TeamEditor';
 import Gallery from '../admin/GalleryManager';
 import SocialLinks from '../admin/SocialLinks';
+import ServicesEditor from '../admin/ServicesEditor';
 import ProtectedRoute from '../components/ProtectedRoute';
 import AdminLayout from '../admin/AdminLayout';
 
@@ -19,6 +20,7 @@ export default function Admin({ onLogin }) {
 
   return (
     <Routes>
+      {/* Login Route */}
       <Route
         path="login"
         element={
@@ -35,6 +37,7 @@ export default function Admin({ onLogin }) {
         }
       />
 
+      {/* Protected Admin Routes */}
       <Route element={<ProtectedRoute loggedIn={isLoggedIn} />}>
         <Route element={<AdminLayout onLogout={handleLogout} />}>
           <Route path="dashboard" element={<Dashboard />} />
@@ -43,9 +46,11 @@ export default function Admin({ onLogin }) {
           <Route path="team-editor" element={<TeamEditor />} />
           <Route path="gallery" element={<Gallery />} />
           <Route path="social-links" element={<SocialLinks />} />
+          <Route path="services" element={<ServicesEditor />} /> {/* NEW */}
         </Route>
       </Route>
 
+      {/* Default Redirect */}
       <Route
         path=""
         element={isLoggedIn ? <Navigate to="dashboard" replace /> : <Navigate to="login" replace />}

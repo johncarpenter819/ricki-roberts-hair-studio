@@ -7,35 +7,33 @@ import Navbar from './components/Navbar';
 import AdminNavbar from './components/AdminNavbar';
 import Footer from './components/Footer';
 import Admin from './pages/Admin';
+import Services from './pages/Services';
+import Booking from './pages/Booking';
 
 export default function App() {
   const navigate = useNavigate();
-  const location = useLocation();  // get current route path
+  const location = useLocation();
   const { isLoggedIn, setIsLoggedIn } = useAuth();
 
-  // When user logs out, redirect to admin login
+  // Redirect to admin login if user is not logged in and on admin route
   useEffect(() => {
     if (!isLoggedIn && location.pathname.startsWith('/admin')) {
       navigate('/admin/login');
     }
   }, [isLoggedIn, location.pathname, navigate]);
 
-  // Admin logout handler
   const handleAdminLogout = () => {
     setIsLoggedIn(false);
   };
 
-  // Admin login handler
   const handleAdminLogin = () => {
     setIsLoggedIn(true);
   };
 
-  // Check if we are on an admin route (for navbar selection)
   const isAdminRoute = location.pathname.startsWith('/admin');
 
   return (
     <BusinessProvider>
-      {/* Show admin navbar only on admin routes when logged in */}
       {isAdminRoute && isLoggedIn ? (
         <AdminNavbar onLogout={handleAdminLogout} />
       ) : (
@@ -45,7 +43,8 @@ export default function App() {
       <Routes>
         <Route path="/admin/*" element={<Admin onLogin={handleAdminLogin} />} />
         <Route path="/" element={<Home />} />
-        {/* other public-facing routes */}
+        <Route path="/services" element={<Services />} />
+        <Route path="/booking" element={<Booking />} />
       </Routes>
 
       <Footer />

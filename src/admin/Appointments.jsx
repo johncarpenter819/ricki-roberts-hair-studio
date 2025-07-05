@@ -1,37 +1,13 @@
 import { useState } from 'react';
+import { useAppointments } from '../context/AppointmentsContext';
 
-const mockAppointments = [
-  {
-    id: 1,
-    name: 'Sarah Johnson',
-    service: 'Haircut',
-    date: '2025-07-05',
-    time: '10:00 AM',
-    phone: '555-1234',
-    status: 'Confirmed',
-  },
-  {
-    id: 2,
-    name: 'Michael Lee',
-    service: 'Color',
-    date: '2025-07-06',
-    time: '2:00 PM',
-    phone: '555-5678',
-    status: 'Confirmed',
-  },
-  {
-    id: 3,
-    name: 'Emma Davis',
-    service: 'Styling',
-    date: '2025-07-06',
-    time: '4:00 PM',
-    phone: '555-9876',
-    status: 'Confirmed',
-  },
-];
+function formatDate(dateStr) {
+  const [year, month, day] = dateStr.split('-');
+  return `${month}-${day}-${year}`;
+}
 
 export default function Appointments() {
-  const [appointments, setAppointments] = useState(mockAppointments);
+  const { appointments, setAppointments } = useAppointments(); // ✅ context usage
   const [filterDate, setFilterDate] = useState('');
 
   // Filter appointments by selected date
@@ -75,27 +51,13 @@ export default function Appointments() {
         >
           <thead>
             <tr style={{ backgroundColor: '#a77b5a', color: 'white' }}>
-              <th style={{ padding: '0.5rem', border: '1px solid #ccc' }}>
-                Name
-              </th>
-              <th style={{ padding: '0.5rem', border: '1px solid #ccc' }}>
-                Service
-              </th>
-              <th style={{ padding: '0.5rem', border: '1px solid #ccc' }}>
-                Date
-              </th>
-              <th style={{ padding: '0.5rem', border: '1px solid #ccc' }}>
-                Time
-              </th>
-              <th style={{ padding: '0.5rem', border: '1px solid #ccc' }}>
-                Phone
-              </th>
-              <th style={{ padding: '0.5rem', border: '1px solid #ccc' }}>
-                Status
-              </th>
-              <th style={{ padding: '0.5rem', border: '1px solid #ccc' }}>
-                Actions
-              </th>
+              <th style={{ padding: '0.5rem', border: '1px solid #ccc' }}>Name</th>
+              <th style={{ padding: '0.5rem', border: '1px solid #ccc' }}>Service</th>
+              <th style={{ padding: '0.5rem', border: '1px solid #ccc' }}>Date</th>
+              <th style={{ padding: '0.5rem', border: '1px solid #ccc' }}>Time</th>
+              <th style={{ padding: '0.5rem', border: '1px solid #ccc' }}>Phone</th>
+              <th style={{ padding: '0.5rem', border: '1px solid #ccc' }}>Status</th>
+              <th style={{ padding: '0.5rem', border: '1px solid #ccc' }}>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -103,31 +65,21 @@ export default function Appointments() {
               <tr
                 key={appt.id}
                 style={{
-                  backgroundColor:
-                    appt.status === 'Cancelled' ? '#f8d7da' : 'transparent',
+                  backgroundColor: appt.status === 'Cancelled' ? '#f8d7da' : 'transparent',
                 }}
               >
+                <td style={{ padding: '0.5rem', border: '1px solid #ccc' }}>{appt.name}</td>
+                <td style={{ padding: '0.5rem', border: '1px solid #ccc' }}>{appt.service}</td>
                 <td style={{ padding: '0.5rem', border: '1px solid #ccc' }}>
-                  {appt.name}
+                  {formatDate(appt.date)}
                 </td>
-                <td style={{ padding: '0.5rem', border: '1px solid #ccc' }}>
-                  {appt.service}
-                </td>
-                <td style={{ padding: '0.5rem', border: '1px solid #ccc' }}>
-                  {appt.date}
-                </td>
-                <td style={{ padding: '0.5rem', border: '1px solid #ccc' }}>
-                  {appt.time}
-                </td>
-                <td style={{ padding: '0.5rem', border: '1px solid #ccc' }}>
-                  {appt.phone}
-                </td>
+                <td style={{ padding: '0.5rem', border: '1px solid #ccc' }}>{appt.time}</td>
+                <td style={{ padding: '0.5rem', border: '1px solid #ccc' }}>{appt.phone}</td>
                 <td
                   style={{
                     padding: '0.5rem',
                     border: '1px solid #ccc',
-                    color:
-                      appt.status === 'Cancelled' ? '#721c24' : '#155724',
+                    color: appt.status === 'Cancelled' ? '#721c24' : '#155724',
                     fontWeight: '600',
                   }}
                 >

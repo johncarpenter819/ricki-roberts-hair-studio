@@ -1,29 +1,29 @@
 import { useEffect, useState } from "react";
-
-const mockAppointments = [
-  { id: 1, name: "Sarah Johnson", service: "Haircut", date: "2025-07-05", time: "10:00 AM" },
-  { id: 2, name: "Michael Lee", service: "Color", date: "2025-07-06", time: "2:00 PM" },
-  { id: 3, name: "Emma Davis", service: "Styling", date: "2025-07-06", time: "4:00 PM" },
-];
+import { useAppointments } from "../context/AppointmentsContext";
 
 function isToday(dateStr) {
   const today = new Date();
-  const date = new Date(dateStr);
+  const [year, month, day] = dateStr.split("-").map(Number);
+  const date = new Date(year, month - 1, day); // month is 0-based
+
   return (
-    date.getDate() === today.getDate() &&
+    date.getFullYear() === today.getFullYear() &&
     date.getMonth() === today.getMonth() &&
-    date.getFullYear() === today.getFullYear()
+    date.getDate() === today.getDate()
   );
 }
 
 export default function Dashboard() {
+  const { appointments } = useAppointments(); // ✅ use context
   const [todaysAppointments, setTodaysAppointments] = useState([]);
 
   useEffect(() => {
-    // Filter mock appointments for today
-    const todayAppts = mockAppointments.filter((appt) => isToday(appt.date));
+    // Only show non-cancelled appointments for today
+    const todayAppts = appointments.filter(
+      (appt) => isToday(appt.date) && appt.status !== "Cancelled"
+    );
     setTodaysAppointments(todayAppts);
-  }, []);
+  }, [appointments]);
 
   return (
     <div style={{ maxWidth: "800px", margin: "2rem auto", padding: "1rem" }}>

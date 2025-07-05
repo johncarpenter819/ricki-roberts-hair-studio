@@ -31,12 +31,64 @@ export default function AdminNavbar({ onLogout }) {
         alignItems: 'center',
       }}
     >
-      <NavLink to="/admin/dashboard" style={({ isActive }) => (isActive ? { ...linkStyles, ...activeStyles } : linkStyles)}>Dashboard</NavLink>
-      <NavLink to="/admin/appointments" style={({ isActive }) => (isActive ? { ...linkStyles, ...activeStyles } : linkStyles)}>Appointments</NavLink>
-      <NavLink to="/admin/business-info" style={({ isActive }) => (isActive ? { ...linkStyles, ...activeStyles } : linkStyles)}>Business Info</NavLink>
-      <NavLink to="/admin/team-editor" style={({ isActive }) => (isActive ? { ...linkStyles, ...activeStyles } : linkStyles)}>Team Editor</NavLink>
-      <NavLink to="/admin/gallery" style={({ isActive }) => (isActive ? { ...linkStyles, ...activeStyles } : linkStyles)}>Gallery</NavLink>
-      <NavLink to="/admin/social-links" style={({ isActive }) => (isActive ? { ...linkStyles, ...activeStyles } : linkStyles)}>Social Links</NavLink>
+      <NavLink
+        to="/admin/dashboard"
+        style={({ isActive }) =>
+          isActive ? { ...linkStyles, ...activeStyles } : linkStyles
+        }
+      >
+        Dashboard
+      </NavLink>
+      <NavLink
+        to="/admin/appointments"
+        style={({ isActive }) =>
+          isActive ? { ...linkStyles, ...activeStyles } : linkStyles
+        }
+      >
+        Appointments
+      </NavLink>
+      <NavLink
+        to="/admin/business-info"
+        style={({ isActive }) =>
+          isActive ? { ...linkStyles, ...activeStyles } : linkStyles
+        }
+      >
+        Business Info
+      </NavLink>
+      <NavLink
+        to="/admin/team-editor"
+        style={({ isActive }) =>
+          isActive ? { ...linkStyles, ...activeStyles } : linkStyles
+        }
+      >
+        Team Editor
+      </NavLink>
+      {/* Services tab after Team Editor */}
+      <NavLink
+        to="/admin/services"
+        style={({ isActive }) =>
+          isActive ? { ...linkStyles, ...activeStyles } : linkStyles
+        }
+      >
+        Services
+      </NavLink>
+      <NavLink
+        to="/admin/gallery"
+        style={({ isActive }) =>
+          isActive ? { ...linkStyles, ...activeStyles } : linkStyles
+        }
+      >
+        Gallery
+      </NavLink>
+      <NavLink
+        to="/admin/social-links"
+        style={({ isActive }) =>
+          isActive ? { ...linkStyles, ...activeStyles } : linkStyles
+        }
+      >
+        Social Links
+      </NavLink>
+
       <button
         onClick={onLogout}
         style={{
