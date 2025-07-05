@@ -1,0 +1,81 @@
+.dashboard-container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 1.5rem 2rem;
+  background-color: #f9f6f2;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #4b3b2b;
+}
+
+.dashboard-container h2 {
+  margin-bottom: 0.5rem;
+}
+
+.dashboard-container p {
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.dashboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 8px rgba(0,0,0,0.05);
+  table-layout: fixed;
+  min-width: 600px;
+}
+
+.dashboard-table thead tr {
+  background-color: #a77b5a;
+  color: white;
+  text-align: left;
+}
+
+.dashboard-table th,
+.dashboard-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e2ddd8;
+  vertical-align: middle;
+  word-break: break-word;
+  white-space: nowrap;
+}
+
+.dashboard-table th:nth-child(1),
+.dashboard-table td:nth-child(1) {
+  min-width: 180px; /* Name */
+}
+
+.dashboard-table th:nth-child(2),
+.dashboard-table td:nth-child(2) {
+  min-width: 160px; /* Stylist */
+}
+
+
+.dashboard-table th:nth-child(2),
+.dashboard-table td:nth-child(2) {
+  min-width: 180px; /* Service */
+}
+
+.dashboard-table th:nth-child(3),
+.dashboard-table td:nth-child(3) {
+  min-width: 140px; /* Time */
+}
+
+.dashboard-table tbody tr:hover {
+  background-color: #f0e9df;
+}
+
+/* Responsive for smaller screens */
+@media (max-width: 768px) {
+  .dashboard-table th,
+  .dashboard-table td {
+    padding: 0.5rem 0.6rem;
+    font-size: 0.9rem;
+    white-space: normal;
+  }
+}

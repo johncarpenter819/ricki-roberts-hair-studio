@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAppointments } from "../context/AppointmentsContext";
+import '../styles/Dashboard.css';
 
 function isToday(dateStr) {
   const today = new Date();
@@ -14,11 +15,10 @@ function isToday(dateStr) {
 }
 
 export default function Dashboard() {
-  const { appointments } = useAppointments(); // ✅ use context
+  const { appointments } = useAppointments();
   const [todaysAppointments, setTodaysAppointments] = useState([]);
 
   useEffect(() => {
-    // Only show non-cancelled appointments for today
     const todayAppts = appointments.filter(
       (appt) => isToday(appt.date) && appt.status !== "Cancelled"
     );
@@ -26,27 +26,29 @@ export default function Dashboard() {
   }, [appointments]);
 
   return (
-    <div style={{ maxWidth: "800px", margin: "2rem auto", padding: "1rem" }}>
+    <div className="dashboard-container">
       <h2>Welcome to the Admin Dashboard</h2>
       <p>Here is a quick overview of today’s appointments.</p>
 
       {todaysAppointments.length === 0 ? (
         <p>No appointments scheduled for today.</p>
       ) : (
-        <table style={{ width: "100%", borderCollapse: "collapse" }}>
+        <table className="dashboard-table">
           <thead>
-            <tr style={{ backgroundColor: "#a77b5a", color: "white" }}>
-              <th style={{ padding: "0.5rem", border: "1px solid #ccc" }}>Name</th>
-              <th style={{ padding: "0.5rem", border: "1px solid #ccc" }}>Service</th>
-              <th style={{ padding: "0.5rem", border: "1px solid #ccc" }}>Time</th>
+            <tr>
+              <th>Name</th>
+              <th>Stylist</th> {/* Added Stylist column */}
+              <th>Service</th>
+              <th>Time</th>
             </tr>
           </thead>
           <tbody>
-            {todaysAppointments.map(({ id, name, service, time }) => (
+            {todaysAppointments.map(({ id, name, stylist, service, time }) => (
               <tr key={id}>
-                <td style={{ padding: "0.5rem", border: "1px solid #ccc" }}>{name}</td>
-                <td style={{ padding: "0.5rem", border: "1px solid #ccc" }}>{service}</td>
-                <td style={{ padding: "0.5rem", border: "1px solid #ccc" }}>{time}</td>
+                <td>{name}</td>
+                <td>{stylist || '—'}</td> {/* Show stylist or dash */}
+                <td>{service}</td>
+                <td>{time}</td>
               </tr>
             ))}
           </tbody>

@@ -1,58 +1,14 @@
-/* src/styles/Appointments.css */
+/* /src/styles/Appointments.css */
 
 .appointments-container {
-  max-width: 1000px;
+  max-width: 100%;
   margin: 2rem auto;
-  padding: 1rem;
-  background-color: #fff;
-}
-
-.appointments-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
-  overflow-x: auto;
-}
-
-.appointments-table th,
-.appointments-table td {
-  padding: 0.75rem;
-  border: 1px solid #ccc;
-  text-align: left;
-  vertical-align: middle;
-  font-size: 0.95rem;
-  white-space: nowrap;
-}
-
-.appointments-table th {
-  background-color: #a77b5a;
-  color: white;
-}
-
-.appointments-table tbody tr:nth-child(even) {
-  background-color: #f8f5f1;
-}
-
-.appointments-table td button {
-  padding: 0.3rem 0.7rem;
-  background-color: #dc3545;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.85rem;
-}
-
-.appointments-table td button:hover {
-  background-color: #c82333;
-}
-
-.filter-input {
-  margin-bottom: 1rem;
-  padding: 0.4rem 0.6rem;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+  padding: 1.5rem 2rem;
+  background-color: #f9f6f2;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #4b3b2b;
 }
 
 .appointments-toolbar {
@@ -63,30 +19,172 @@
   flex-wrap: wrap;
 }
 
+.appointments-toolbar label {
+  font-weight: 600;
+}
+
+.filter-input {
+  padding: 0.4rem 0.6rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  max-width: 180px;
+}
+
 .csv-button {
-  padding: 0.4rem 0.8rem;
-  background-color: #4caf50;
+  background-color: #a77b5a;
   color: white;
   border: none;
-  border-radius: 6px;
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 700;
   cursor: pointer;
-  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
 }
 
 .csv-button:hover {
-  background-color: #43a047;
+  background-color: #8b6847;
 }
 
 .appointment-counts {
   margin-bottom: 1rem;
-  font-size: 0.95rem;
-  color: #333;
+  font-weight: 600;
+  display: flex;
+  gap: 2rem;
+  font-size: 1.1rem;
 }
 
+/* ✅ Scroll wrapper */
+.appointments-table-wrapper {
+  overflow-x: auto;
+  width: 100%;
+  -webkit-overflow-scrolling: touch;
+}
 
-@media screen and (max-width: 768px) {
+.appointments-table {
+  border-collapse: collapse;
+  box-shadow: 0 0 8px rgba(0,0,0,0.05);
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  table-layout: fixed;
+  min-width: 1200px; /* Enough width for all 10 columns */
+  width: 100%;
+}
+
+.appointments-table thead tr {
+  background-color: #a77b5a;
+  color: white;
+  text-align: left;
+}
+
+.appointments-table th,
+.appointments-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e2ddd8;
+  vertical-align: middle;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 🔢 Column width tuning */
+.appointments-table th:nth-child(1),
+.appointments-table td:nth-child(1) {
+  min-width: 150px; /* Name */
+}
+
+.appointments-table th:nth-child(2),
+.appointments-table td:nth-child(2) {
+  min-width: 200px; /* Email */
+}
+
+.appointments-table th:nth-child(3),
+.appointments-table td:nth-child(3) {
+  min-width: 120px; /* Subscribed */
+  text-align: center;
+}
+
+.appointments-table th:nth-child(4),
+.appointments-table td:nth-child(4) {
+  min-width: 160px; /* Service */
+}
+
+.appointments-table th:nth-child(5),
+.appointments-table td:nth-child(5) {
+  min-width: 160px; /* Stylist */
+}
+
+.appointments-table th:nth-child(6),
+.appointments-table td:nth-child(6) {
+  min-width: 120px; /* Date */
+}
+
+.appointments-table th:nth-child(7),
+.appointments-table td:nth-child(7) {
+  min-width: 120px; /* Time */
+}
+
+.appointments-table th:nth-child(8),
+.appointments-table td:nth-child(8) {
+  min-width: 160px; /* Phone */
+}
+
+.appointments-table th:nth-child(9),
+.appointments-table td:nth-child(9) {
+  min-width: 130px; /* Status */
+  text-align: center;
+}
+
+.appointments-table th:nth-child(10),
+.appointments-table td:nth-child(10) {
+  min-width: 100px; /* Actions */
+  text-align: center;
+}
+
+.appointments-table tbody tr:hover {
+  background-color: #f0e9df;
+}
+
+.status-cell {
+  font-weight: 600;
+  color: #155724;
+}
+
+.cancel-button {
+  padding: 0.3rem 0.7rem;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.cancel-button:hover {
+  background-color: #b02a37;
+}
+
+/* Responsive handling */
+@media (max-width: 768px) {
+  .appointments-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .appointment-counts {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
   .appointments-table {
-    display: block;
-    overflow-x: auto;
+    font-size: 0.85rem;
+  }
+
+  .appointments-table th,
+  .appointments-table td {
+    padding: 0.5rem 0.6rem;
+    white-space: normal;
   }
 }

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useServices } from '../context/ServicesContext';
 import { useAppointments } from '../context/AppointmentsContext';
+import { useTeam } from '../context/TeamContext';
 
 function formatTimeTo12Hour(time24) {
   const [hour, minute] = time24.split(':');
@@ -13,15 +14,17 @@ function formatTimeTo12Hour(time24) {
 export default function Booking() {
   const { services } = useServices();
   const { appointments, setAppointments } = useAppointments();
+  const { team } = useTeam();
 
   const [form, setForm] = useState({
     name: '',
     email: '',
     phone: '',
     serviceId: '',
+    stylistId: '',
     date: '',
     time: '',
-    subscribe: false, // ✅ added subscribe checkbox state
+    subscribe: false,  // added subscribe state
   });
 
   const handleChange = (e) => {
@@ -33,8 +36,15 @@ export default function Booking() {
     e.preventDefault();
 
     const selectedService = services.find((s) => s.id === parseInt(form.serviceId));
+    const selectedStylist = team.find((t) => t.id === parseInt(form.stylistId));
+
     if (!selectedService) {
       alert('Please select a valid service.');
+      return;
+    }
+
+    if (!selectedStylist) {
+      alert('Please select a stylist.');
       return;
     }
 
@@ -44,22 +54,23 @@ export default function Booking() {
       email: form.email,
       phone: form.phone,
       service: selectedService.name,
+      stylist: selectedStylist.name,
       date: form.date,
       time: formatTimeTo12Hour(form.time),
       status: 'Confirmed',
-      subscribe: form.subscribe, // ✅ included in data
+      subscribe: form.subscribe, // include subscription status
     };
 
     setAppointments([...appointments, newAppointment]);
 
-    alert(`Thank you, ${form.name}! Your ${selectedService.name} is booked.`);
+    alert(`Thank you, ${form.name}! Your ${selectedService.name} with ${selectedStylist.name} is booked.`);
 
-    // Reset form
     setForm({
       name: '',
       email: '',
       phone: '',
       serviceId: '',
+      stylistId: '',
       date: '',
       time: '',
       subscribe: false,
@@ -97,6 +108,16 @@ export default function Booking() {
         </label>
 
         <label style={labelStyle}>
+          Stylist
+          <select name="stylistId" value={form.stylistId} onChange={handleChange} required style={inputStyle}>
+            <option value="">Select a Stylist</option>
+            {team.map((stylist) => (
+              <option key={stylist.id} value={stylist.id}>{stylist.name}</option>
+            ))}
+          </select>
+        </label>
+
+        <label style={labelStyle}>
           Date
           <input type="date" name="date" value={form.date} onChange={handleChange} required style={inputStyle} />
         </label>
@@ -106,7 +127,7 @@ export default function Booking() {
           <input type="time" name="time" value={form.time} onChange={handleChange} required style={inputStyle} />
         </label>
 
-        {/* ✅ Newsletter Checkbox */}
+        {/* Newsletter Subscription Checkbox */}
         <label style={{ ...labelStyle, flexDirection: 'row', alignItems: 'center' }}>
           <input
             type="checkbox"

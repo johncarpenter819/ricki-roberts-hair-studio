@@ -35,6 +35,7 @@ export default function Appointments() {
       'Email',
       'Subscribed',
       'Service',
+      'Stylist',
       'Date',
       'Time',
       'Phone',
@@ -46,6 +47,7 @@ export default function Appointments() {
       appt.email || '',
       appt.subscribe ? 'Yes' : 'No',
       appt.service,
+      appt.stylist || '',
       formatDate(appt.date),
       appt.time,
       appt.phone,
@@ -92,43 +94,47 @@ export default function Appointments() {
       {filteredAppointments.length === 0 ? (
         <p>No appointments found for this date.</p>
       ) : (
-        <table className="appointments-table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Subscribed</th>
-              <th>Service</th>
-              <th>Date</th>
-              <th>Time</th>
-              <th>Phone</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredAppointments.map((appt) => (
-              <tr key={appt.id}>
-                <td>{appt.name}</td>
-                <td>{appt.email || '—'}</td>
-                <td>{appt.subscribe ? '✅ Yes' : '❌ No'}</td>
-                <td>{appt.service}</td>
-                <td>{formatDate(appt.date)}</td>
-                <td>{appt.time}</td>
-                <td>{appt.phone}</td>
-                <td className="status-cell">{appt.status}</td>
-                <td>
-                  <button
-                    onClick={() => cancelAppointment(appt.id)}
-                    className="cancel-button"
-                  >
-                    Cancel
-                  </button>
-                </td>
+        <div className="appointments-table-wrapper">
+          <table className="appointments-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Subscribed</th>
+                <th>Service</th>
+                <th>Stylist</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Phone</th>
+                <th>Status</th>
+                <th>Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {filteredAppointments.map((appt) => (
+                <tr key={appt.id}>
+                  <td>{appt.name}</td>
+                  <td>{appt.email || '—'}</td>
+                  <td>{appt.subscribe ? '✅ Yes' : '❌ No'}</td>
+                  <td>{appt.service}</td>
+                  <td>{appt.stylist || '—'}</td>
+                  <td>{formatDate(appt.date)}</td>
+                  <td>{appt.time}</td>
+                  <td>{appt.phone}</td>
+                  <td className="status-cell">{appt.status}</td>
+                  <td>
+                    <button
+                      onClick={() => cancelAppointment(appt.id)}
+                      className="cancel-button"
+                    >
+                      Cancel
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

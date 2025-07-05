@@ -6,13 +6,16 @@ import { AuthProvider } from './context/AuthContext';
 import { AppointmentsProvider } from './context/AppointmentsContext';
 import { ServicesProvider } from './context/ServicesContext';
 import './index.css';
+import { TeamProvider } from './context/TeamContext';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <BrowserRouter>
     <AuthProvider>
       <ServicesProvider>
         <AppointmentsProvider>
-          <App />
+          <TeamProvider>
+           <App />
+         </TeamProvider>
         </AppointmentsProvider>
       </ServicesProvider>
     </AuthProvider>
