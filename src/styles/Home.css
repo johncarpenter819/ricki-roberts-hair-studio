@@ -1,5 +1,17 @@
+/* Reset and base layout */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+#root {
+  width: 100%;
+}
+
 /* General section layout */
-section {
+section:not(.hero-banner) {
   padding: 4rem 1rem;
   max-width: 1000px;
   margin: 0 auto;
@@ -14,15 +26,64 @@ section h2 {
   font-family: 'Poppins', sans-serif;
 }
 
-/* Hero already styled — keep your existing hero styles */
-
-/* Book Appointment Section */
-.book-section {
-  background-color: #fdf7f2;
+/* Hero Banner */
+.hero-banner {
+  position: relative;
+  width: 100vw;
+  height: 60vh;
+  background-color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin: 0; /* ensure no auto margin from section default */
+  padding: 0;
 }
 
-.book-section .cta-btn {
-  margin-top: 1rem;
+.banner-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.6);
+  z-index: 1;
+}
+
+.banner-text {
+  position: relative;
+  z-index: 2;
+  color: #fff;
+  max-width: 90%;
+  padding: 1rem;
+}
+
+.banner-text h1 {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  font-family: 'Poppins', sans-serif;
+}
+
+.banner-text p {
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+}
+
+.banner-text .cta-btn {
+  background-color: #a77b5a;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.banner-text .cta-btn:hover {
+  background-color: #8b6847;
 }
 
 /* About */
@@ -103,9 +164,29 @@ section h2 {
   transform: scale(1.1);
 }
 
+/* Horizontal Rule */
 hr {
   border: none;
   border-top: 1px solid #ddd;
   margin: 3rem auto;
   width: 80%;
+}
+
+/* Responsive Banner Fix */
+@media (max-width: 768px) {
+  .banner-text h1 {
+    font-size: 2.5rem;
+  }
+
+  .banner-text p {
+    font-size: 1.2rem;
+  }
+
+  .hero-banner {
+    height: 50vh;
+  }
+
+  .banner-image {
+    height: 100%;
+  }
 }

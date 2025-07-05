@@ -2,7 +2,7 @@
 
 /* Container shared by all admin pages */
 .admin-container {
-  max-width: 900px;
+  max-width: 60%;
   margin: 2rem auto;
   padding: 1.5rem 2rem;
   background-color: #f9f6f2;

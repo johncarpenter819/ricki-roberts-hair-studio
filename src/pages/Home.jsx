@@ -1,16 +1,25 @@
-import '../styles/Home.css'
+import '../styles/Home.css';
 import { useBusiness } from '../context/BusinessContext';
+import { useNavigate } from 'react-router-dom';
 
 export default function Home() {
   const { hours } = useBusiness();
+  const navigate = useNavigate();
+
+  const goToBooking = () => {
+    navigate('/booking');
+  };
 
   return (
     <>
-      {/* Book Appointment CTA */}
-      <section className="book-section">
-        <h2>Book an Appointment</h2>
-        <p>Use our easy online system to schedule your next visit.</p>
-        <button className="cta-btn">Schedule Now</button>
+      {/* Hero Banner */}
+      <section className="hero-banner">
+        <img src="/assets/banner.jpg" alt="Salon Banner" className="banner-image" />
+        <div className="banner-text">
+          <h1>Welcome to Ricki Roberts Hair Studio</h1>
+          <p>Style. Confidence. Community.</p>
+          <button className="cta-btn" onClick={goToBooking}>Book Now</button>
+        </div>
       </section>
 
       <hr />
@@ -27,7 +36,7 @@ export default function Home() {
       <hr />
 
       {/* Services Preview */}
-      <section className="services">
+      <section className="services" id="services">
         <h2>Our Services</h2>
         <div className="service-grid">
           <div className="service-card">
