@@ -25,23 +25,13 @@
   font-weight: 600;
 }
 
-.admin-input, .admin-select {
+.admin-input,
+.admin-select {
   padding: 0.4rem 0.6rem;
   font-size: 1rem;
   border: 1px solid #ccc;
   border-radius: 6px;
   max-width: 180px;
-}
-
-.admin-button {
-  background-color: #a77b5a;
-  color: white;
-  border: none;
-  padding: 0.5rem 1.2rem;
-  border-radius: 8px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
 .admin-button:hover {
@@ -156,8 +146,7 @@
   font-size: 1rem;
 }
 
-/* Team Editor Styles - reuse AdminPortal styles where possible */
-
+/* Team Editor Styles */
 .team-list {
   list-style: none;
   padding-left: 0;
@@ -165,21 +154,21 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
-  width: 100%;
+  width: 97%;      /* full width to align with container */
+  max-width: none;  /* remove max-width to avoid centering */
+  margin-left: 0;   /* align left */
+  margin-right: 0;
 }
 
 .team-member {
-  position: relative; /* For absolutely positioned buttons */
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
   gap: 1rem;
   width: 100%;
   padding: 1.5rem;
-  padding-bottom: 4rem; /* space for buttons below */
+  padding-bottom: 4rem;
   background-color: #fff;
   border: 2px solid #a77b5a;
   border-radius: 12px;
@@ -190,7 +179,7 @@
   width: 100px;
   height: 100px;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 50%;
   border: 3px solid #a77b5a;
   flex-shrink: 0;
 }
@@ -204,7 +193,8 @@
 
 .team-info input,
 .team-info textarea {
-  width: 100%;
+  width: 100%;    /* full width inputs for alignment */
+  max-width: 600px; /* optional max-width to keep inputs from stretching too wide */
 }
 
 .team-info textarea {
@@ -212,33 +202,51 @@
   min-height: 60px;
 }
 
-/* Container for Save & Delete buttons at bottom right */
+.choose-photo {
+  background-color: #a77b5a;
+  color: white;
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s ease;
+  display: inline-block;
+  text-align: center;
+  user-select: none;
+  white-space: nowrap;
+  max-width: 200px;
+}
+
+.choose-photo:hover {
+  background-color: #8b6847;
+}
+
+/* Save & Delete buttons */
 .team-member-buttons {
   position: absolute;
   bottom: 1.5rem;
   right: 1.5rem;
   display: flex;
-  gap: 0.6rem;
+  gap: 0.75rem;
 }
 
-/* Buttons inside team-member-buttons */
 .team-member-buttons button {
-  padding: 0.4rem 1rem;
-  font-size: 0.9rem;
+  all: unset; /* completely resets default styles */
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px; /* fixed width */
+  height: 36px; /* fixed height */
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: inherit;
+  text-align: center;
+  border-radius: 8px;
   cursor: pointer;
-  border-radius: 6px;
-  font-weight: 600;
-  border: none;
   transition: background-color 0.3s ease;
-}
-
-.team-member-buttons .delete-button {
-  background-color: #dc3545;
-  color: white;
-}
-
-.team-member-buttons .delete-button:hover {
-  background-color: #b02a37;
 }
 
 .team-member-buttons .admin-button {
@@ -250,33 +258,83 @@
   background-color: #8b6847;
 }
 
+.team-member-buttons .delete-button {
+  background-color: #dc3545;
+  color: white;
+}
+
+.team-member-buttons .delete-button:hover {
+  background-color: #b02a37;
+}
+
 /* Hide native file input */
 .file-input {
   display: none;
 }
 
-/* Styled label to look like a button */
-.upload-button {
-  display: inline-block;
+/* Upload and admin buttons */
+.upload-button,
+.admin-button {
   background-color: #a77b5a;
   color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 600;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 700;
   font-size: 1rem;
+  cursor: pointer;
   user-select: none;
   transition: background-color 0.3s ease;
+  display: inline-block;
+  text-align: center;
+  white-space: nowrap;
   margin-top: 0.3rem;
+  margin-left: 10px;
 }
 
-.upload-button:hover {
+.upload-button:hover,
+.admin-button:hover {
   background-color: #8b6847;
 }
 
-/* Confirmation message reused from admin-message */
+/* Add Member Form Buttons */
+.add-member-buttons {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  justify-content: flex-end;
+}
 
-/* Responsive handling */
+.add-member-buttons button {
+  flex: 1;
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.add-member-buttons .save-button {
+  background-color: #a77b5a;
+  color: white;
+}
+
+.add-member-buttons .save-button:hover {
+  background-color: #8b6847;
+}
+
+.add-member-buttons .cancel-button {
+  background-color: #dc3545;
+  color: white;
+}
+
+.add-member-buttons .cancel-button:hover {
+  background-color: #b02a37;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
   .admin-toolbar {
     flex-direction: column;

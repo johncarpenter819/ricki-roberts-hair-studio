@@ -130,7 +130,7 @@ section h2 {
 }
 
 /* Team Member Card */
-.team-member {
+.team-card {
   background-color: #fff;
   border: 2px solid #a77b5a;
   border-radius: 12px;
@@ -147,12 +147,12 @@ section h2 {
   box-sizing: border-box;
 }
 
-.team-member:hover {
+.team-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 20px rgba(0,0,0,0.1);
 }
 
-.team-member img {
+.team-card img {
   width: 120px;
   height: 120px;
   object-fit: cover;
@@ -161,14 +161,14 @@ section h2 {
   border: 3px solid #a77b5a;
 }
 
-.team-member h3 {
+.team-card h3 {
   font-size: 1.25rem;
   margin: 0 0 0.5rem;
   color: #4b3b2b;
   word-break: break-word;
 }
 
-.team-member p {
+.team-card p {
   font-size: 1rem;
   color: #7b6a58;
   margin: 0;
@@ -244,7 +244,7 @@ hr {
     gap: 1rem;
   }
 
-  .team-member {
+  .team-card {
     width: 100% !important;
     max-width: 320px;
     margin: 0 auto;

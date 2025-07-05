@@ -76,15 +76,16 @@ export default function Home() {
             <p>No team members found.</p>
           ) : (
             team.map(member => (
-              <div key={member.id} className="team-member">
+              <div key={member.id} className="team-card">
                 <img 
                   src={getPhotoSrc(member.photo)} 
                   alt={member.name} 
                 />
                 <h3>{member.name}</h3>
-                <p>{member.role}</p>
-                {/* Display bio only if present */}
-                {member.bio && <p className="team-bio">{member.bio}</p>}
+                <p><strong>Role:</strong> {member.role}</p>
+                {member.bio && (
+                  <p className="team-bio"><strong>Bio:</strong> {member.bio}</p>
+                )}
               </div>
             ))
           )}

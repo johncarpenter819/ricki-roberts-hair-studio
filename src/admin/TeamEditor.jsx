@@ -135,7 +135,7 @@ export default function TeamEditor() {
                   }}
                   style={{ display: "none" }}
                 />
-                <label htmlFor={`photo-upload-${id}`} className="upload-button">
+                <label htmlFor={`photo-upload-${id}`} className="choose-photo">
                   Choose Photo
                 </label>
               </div>
