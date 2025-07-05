@@ -27,6 +27,13 @@ export default function Booking() {
     subscribe: false,
   });
 
+  // Hydration flag
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
+
   // Load appointments from localStorage once on mount
   useEffect(() => {
     const savedAppointments = localStorage.getItem('appointments');
@@ -107,72 +114,75 @@ export default function Booking() {
         Book an Appointment
       </h2>
 
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        <label style={labelStyle}>
-          Name
-          <input type="text" name="name" value={form.name} onChange={handleChange} required style={inputStyle} />
-        </label>
+      {!hydrated ? (
+        <p>Loading form...</p>
+      ) : (
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          <label style={labelStyle}>
+            Name
+            <input type="text" name="name" value={form.name} onChange={handleChange} required style={inputStyle} />
+          </label>
 
-        <label style={labelStyle}>
-          Email
-          <input type="email" name="email" value={form.email} onChange={handleChange} required style={inputStyle} />
-        </label>
+          <label style={labelStyle}>
+            Email
+            <input type="email" name="email" value={form.email} onChange={handleChange} required style={inputStyle} />
+          </label>
 
-        <label style={labelStyle}>
-          Phone Number
-          <input type="tel" name="phone" value={form.phone} onChange={handleChange} required style={inputStyle} />
-        </label>
+          <label style={labelStyle}>
+            Phone Number
+            <input type="tel" name="phone" value={form.phone} onChange={handleChange} required style={inputStyle} />
+          </label>
 
-        <label style={labelStyle}>
-          Service
-          <select name="serviceId" value={form.serviceId} onChange={handleChange} required style={inputStyle}>
-            <option value="">Select a Service</option>
-            {services.map((s) => (
-              <option key={s.id} value={s.id}>
-                {s.name} — ${s.price.toFixed(2)}
-              </option>
-            ))}
-          </select>
-        </label>
+          <label style={labelStyle}>
+            Service
+            <select name="serviceId" value={form.serviceId} onChange={handleChange} required style={inputStyle}>
+              <option value="">Select a Service</option>
+              {services.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.name} — ${s.price.toFixed(2)}
+                </option>
+              ))}
+            </select>
+          </label>
 
-        <label style={labelStyle}>
-          Stylist
-          <select name="stylistId" value={form.stylistId} onChange={handleChange} required style={inputStyle}>
-            <option value="">Select a Stylist</option>
-            {team.map((stylist) => (
-              <option key={stylist.id} value={stylist.id}>
-                {stylist.name}
-              </option>
-            ))}
-          </select>
-        </label>
+          <label style={labelStyle}>
+            Stylist
+            <select name="stylistId" value={form.stylistId} onChange={handleChange} required style={inputStyle}>
+              <option value="">Select a Stylist</option>
+              {team.map((stylist) => (
+                <option key={stylist.id} value={stylist.id}>
+                  {stylist.name}
+                </option>
+              ))}
+            </select>
+          </label>
 
-        <label style={labelStyle}>
-          Date
-          <input type="date" name="date" value={form.date} onChange={handleChange} required style={inputStyle} />
-        </label>
+          <label style={labelStyle}>
+            Date
+            <input type="date" name="date" value={form.date} onChange={handleChange} required style={inputStyle} />
+          </label>
 
-        <label style={labelStyle}>
-          Time
-          <input type="time" name="time" value={form.time} onChange={handleChange} required style={inputStyle} />
-        </label>
+          <label style={labelStyle}>
+            Time
+            <input type="time" name="time" value={form.time} onChange={handleChange} required style={inputStyle} />
+          </label>
 
-        {/* Newsletter Subscription Checkbox */}
-        <label style={{ ...labelStyle, flexDirection: 'row', alignItems: 'center' }}>
-          <input
-            type="checkbox"
-            name="subscribe"
-            checked={form.subscribe}
-            onChange={handleChange}
-            style={{ marginRight: '0.5rem' }}
-          />
-          I’d like to receive newsletters, discounts, or service updates.
-        </label>
+          <label style={{ ...labelStyle, flexDirection: 'row', alignItems: 'center' }}>
+            <input
+              type="checkbox"
+              name="subscribe"
+              checked={form.subscribe}
+              onChange={handleChange}
+              style={{ marginRight: '0.5rem' }}
+            />
+            I’d like to receive newsletters, discounts, or service updates.
+          </label>
 
-        <button type="submit" style={buttonStyle}>
-          Book Now
-        </button>
-      </form>
+          <button type="submit" style={buttonStyle}>
+            Book Now
+          </button>
+        </form>
+      )}
     </div>
   );
 }
