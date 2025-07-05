@@ -7,15 +7,14 @@ function formatDate(dateStr) {
 }
 
 export default function Appointments() {
-  const { appointments, setAppointments } = useAppointments(); // ✅ context usage
+  const { appointments, setAppointments } = useAppointments();
   const [filterDate, setFilterDate] = useState('');
 
-  // Filter appointments by selected date
-  const filteredAppointments = filterDate
-    ? appointments.filter((appt) => appt.date === filterDate)
-    : appointments;
+  // Always exclude cancelled, then filter by date if filterDate is set
+  const filteredAppointments = appointments
+    .filter((appt) => appt.status !== 'Cancelled')
+    .filter((appt) => (filterDate ? appt.date === filterDate : true));
 
-  // Cancel an appointment by id
   function cancelAppointment(id) {
     if (window.confirm('Are you sure you want to cancel this appointment?')) {
       setAppointments((prev) =>
@@ -62,45 +61,36 @@ export default function Appointments() {
           </thead>
           <tbody>
             {filteredAppointments.map((appt) => (
-              <tr
-                key={appt.id}
-                style={{
-                  backgroundColor: appt.status === 'Cancelled' ? '#f8d7da' : 'transparent',
-                }}
-              >
+              <tr key={appt.id}>
                 <td style={{ padding: '0.5rem', border: '1px solid #ccc' }}>{appt.name}</td>
                 <td style={{ padding: '0.5rem', border: '1px solid #ccc' }}>{appt.service}</td>
-                <td style={{ padding: '0.5rem', border: '1px solid #ccc' }}>
-                  {formatDate(appt.date)}
-                </td>
+                <td style={{ padding: '0.5rem', border: '1px solid #ccc' }}>{formatDate(appt.date)}</td>
                 <td style={{ padding: '0.5rem', border: '1px solid #ccc' }}>{appt.time}</td>
                 <td style={{ padding: '0.5rem', border: '1px solid #ccc' }}>{appt.phone}</td>
                 <td
                   style={{
                     padding: '0.5rem',
                     border: '1px solid #ccc',
-                    color: appt.status === 'Cancelled' ? '#721c24' : '#155724',
+                    color: '#155724',
                     fontWeight: '600',
                   }}
                 >
                   {appt.status}
                 </td>
                 <td style={{ padding: '0.5rem', border: '1px solid #ccc' }}>
-                  {appt.status !== 'Cancelled' && (
-                    <button
-                      onClick={() => cancelAppointment(appt.id)}
-                      style={{
-                        padding: '0.3rem 0.7rem',
-                        backgroundColor: '#dc3545',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '4px',
-                        cursor: 'pointer',
-                      }}
-                    >
-                      Cancel
-                    </button>
-                  )}
+                  <button
+                    onClick={() => cancelAppointment(appt.id)}
+                    style={{
+                      padding: '0.3rem 0.7rem',
+                      backgroundColor: '#dc3545',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '4px',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    Cancel
+                  </button>
                 </td>
               </tr>
             ))}
