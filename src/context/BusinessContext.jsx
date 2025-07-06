@@ -1,5 +1,6 @@
-// src/context/BusinessContext.jsx
 import React, { createContext, useState, useEffect, useContext } from "react";
+import { db } from "../firebaseConfig";
+import { doc, setDoc, onSnapshot } from "firebase/firestore";
 
 const BusinessContext = createContext();
 
@@ -19,26 +20,73 @@ const defaultContact = {
   address: "123 Salon Street, City, State ZIP",
 };
 
+// Define the order of days
+const orderedDays = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday",
+];
+
+// Helper to sort an hours object
+function sortHoursObject(hoursObj) {
+  const sorted = {};
+  orderedDays.forEach((day) => {
+    sorted[day] = hoursObj[day] || "Closed";
+  });
+  return sorted;
+}
+
 export function BusinessProvider({ children }) {
   const [hours, setHours] = useState(defaultHours);
   const [contact, setContact] = useState(defaultContact);
+  const [loading, setLoading] = useState(true);
 
-  // Load from localStorage on mount
+  const hoursDocRef = doc(db, "business", "hours");
+  const contactDocRef = doc(db, "business", "contact");
+
   useEffect(() => {
-    const storedHours = localStorage.getItem("businessHours");
-    const storedContact = localStorage.getItem("businessContact");
-    if (storedHours) setHours(JSON.parse(storedHours));
-    if (storedContact) setContact(JSON.parse(storedContact));
+    const unsubscribeHours = onSnapshot(hoursDocRef, (snapshot) => {
+      if (snapshot.exists()) {
+        const sorted = sortHoursObject(snapshot.data());
+        setHours(sorted);
+      } else {
+        setHours(defaultHours);
+      }
+    });
+
+    const unsubscribeContact = onSnapshot(contactDocRef, (snapshot) => {
+      if (snapshot.exists()) {
+        setContact(snapshot.data());
+      } else {
+        setContact(defaultContact);
+      }
+    });
+
+    setLoading(false);
+
+    return () => {
+      unsubscribeHours();
+      unsubscribeContact();
+    };
   }, []);
 
-  // Save updates to localStorage
   useEffect(() => {
-    localStorage.setItem("businessHours", JSON.stringify(hours));
+    if (!loading) {
+      setDoc(hoursDocRef, hours);
+    }
   }, [hours]);
 
   useEffect(() => {
-    localStorage.setItem("businessContact", JSON.stringify(contact));
+    if (!loading) {
+      setDoc(contactDocRef, contact);
+    }
   }, [contact]);
+
+  if (loading) return null;
 
   return (
     <BusinessContext.Provider value={{ hours, setHours, contact, setContact }}>

@@ -221,6 +221,57 @@ hr {
   width: 80%;
 }
 
+/* Container for Business Hours and Cancellation Policy side by side */
+.hours-cancellation-container {
+  display: flex;
+  gap: 2rem;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: center; /* Vertically center children */
+  margin-bottom: 2rem;
+}
+
+/* Business hours block */
+.hours {
+  flex: 1 1 300px;
+  min-width: 280px;
+}
+
+/* Cancellation policy block */
+.cancellation-policy {
+  flex: 1 1 300px;
+  min-width: 280px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Vertically center text inside */
+  text-align: center; /* Center text horizontally */
+  background-color: #f9f9f9; /* Optional: light background */
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.05);
+}
+
+/* Style the list inside hours */
+.hours ul {
+  list-style: none;
+  padding: 0;
+}
+
+.hours li {
+  margin-bottom: 0.4rem;
+  font-weight: 500;
+}
+
+/* Optional: style links inside cancellation policy */
+.cancellation-policy a {
+  color: #6b46c1; /* purple-ish */
+  text-decoration: none;
+}
+
+.cancellation-policy a:hover {
+  text-decoration: underline;
+}
+
 /* Responsive Fixes */
 @media (max-width: 768px) {
   .banner-text h1 {

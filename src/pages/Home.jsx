@@ -12,15 +12,16 @@ export default function Home() {
     navigate('/booking');
   };
 
-  // Helper to get the correct image src
   const getPhotoSrc = (photo) => {
     if (!photo) return "/assets/default-profile.jpg";
     if (photo.startsWith("/assets/") || photo.startsWith("blob:")) {
-      return photo; // already full path or blob URL
+      return photo;
     }
-    // else prepend assets folder
     return `/assets/${photo}`;
   };
+
+  // Ensure weekdays appear in the correct order
+  const orderedDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
   return (
     <>
@@ -80,6 +81,7 @@ export default function Home() {
                 <img 
                   src={getPhotoSrc(member.photo)} 
                   alt={member.name} 
+                  className="team-img"
                 />
                 <h3>{member.name}</h3>
                 <p><strong>Role:</strong> {member.role}</p>
@@ -94,16 +96,26 @@ export default function Home() {
 
       <hr />
 
-      {/* Business Hours */}
-      <section className="hours">
-        <h2>Business Hours</h2>
-        <ul>
-          {Object.entries(hours).map(([day, time]) => (
-            <li key={day}>
-              {day.substring(0,3)}: {time}
-            </li>
-          ))}
-        </ul>
+      {/* Business Hours + Cancellation Policy */}
+      <section className="hours-cancellation-container">
+        <div className="hours">
+          <h2>Business Hours</h2>
+          <ul>
+            {orderedDays.map(day => (
+              <li key={day}>
+                <strong>{day.substring(0, 3)}:</strong> {hours[day] || "Closed"}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="cancellation-policy">
+          <h2>Cancellation Policy</h2>
+          <p>
+            We get it that sometimes things come up and you may need to cancel. Ricki Roberts Hair Studio has a 50% cancellation fee.
+            If you are unable to make the appointment, please kindly notify Ricki Roberts Hair Studio at <a href="tel:8179879261">(817) 987-9261</a> or <a href="mailto:ricquell.muah@gmail.com">ricquell.muah@gmail.com</a> as soon as possible to reschedule.
+          </p>
+        </div>
       </section>
 
       <hr />
