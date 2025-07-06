@@ -3,23 +3,40 @@ import { createContext, useContext, useEffect, useState } from 'react';
 
 const TeamContext = createContext();
 
-export function TeamProvider({ children }) {
-  const [team, setTeam] = useState([]);
+const defaultTeam = [
+  {
+    id: 1,
+    name: "Ricque Roberts",
+    role: "Owner & Master Stylist",
+    photo: "/assets/ricque.jpg",
+    bio: "Passionate about empowering clients through beauty and style.",
+  },
+];
 
-  // Load team from localStorage on mount
+export function TeamProvider({ children }) {
+  const [team, setTeam] = useState(null); // start as null to avoid SSR mismatch
+  const [isClient, setIsClient] = useState(false);
+
+  // Only run this on the client after hydration
   useEffect(() => {
-    const savedTeam = localStorage.getItem('teamMembers');
-    if (savedTeam) {
-      setTeam(JSON.parse(savedTeam));
+    setIsClient(true);
+    const saved = localStorage.getItem("teamMembers");
+    if (saved) {
+      setTeam(JSON.parse(saved));
+    } else {
+      setTeam(defaultTeam); // fallback default
     }
   }, []);
 
-  // Save team to localStorage whenever it changes
+  // Only persist when running on client and team is not null
   useEffect(() => {
-    if (team.length > 0) {
-      localStorage.setItem('teamMembers', JSON.stringify(team));
+    if (isClient && team) {
+      localStorage.setItem("teamMembers", JSON.stringify(team));
     }
-  }, [team]);
+  }, [team, isClient]);
+
+  // Avoid rendering children until hydrated
+  if (!isClient || team === null) return null;
 
   return (
     <TeamContext.Provider value={{ team, setTeam }}>
