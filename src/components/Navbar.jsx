@@ -1,59 +1,36 @@
 import { NavLink } from 'react-router-dom';
+import '../styles/Navbar.css';
 
 export default function Navbar() {
-  const linkStyle = {
-    color: 'white',
-    textDecoration: 'none',
-    padding: '0.25rem 0.5rem',
-  };
-
-  const activeStyle = {
-    fontWeight: 'bold',
-    borderBottom: '2px solid #a77b5a',
-  };
-
   return (
-    <nav style={{ backgroundColor: '#222', padding: '1rem', color: 'white' }}>
-      <h1>Ricki Roberts Hair Studio</h1>
-      <ul style={{ listStyle: 'none', display: 'flex', gap: '1rem', margin: 0, padding: 0 }}>
+    <nav className="navbar">
+      <div className="navbar-logo">
+        <img src="../../logo.jpg" alt="Logo" className="logo-img" />
+        <h1 className="navbar-title">Ricki Roberts Hair Studio</h1>
+      </div>
+      <ul className="navbar-links">
         <li>
-          <NavLink 
-            to="/" 
-            end
-            style={({ isActive }) => (isActive ? { ...linkStyle, ...activeStyle } : linkStyle)}
-          >
+          <NavLink to="/" end className="nav-link">
             Home
           </NavLink>
         </li>
         <li>
-          <NavLink 
-            to="/services" 
-            style={({ isActive }) => (isActive ? { ...linkStyle, ...activeStyle } : linkStyle)}
-          >
+          <NavLink to="/services" className="nav-link">
             Services
           </NavLink>
         </li>
         <li>
-          <NavLink 
-            to="/gallery" 
-            style={({ isActive }) => (isActive ? { ...linkStyle, ...activeStyle } : linkStyle)}
-          >
+          <NavLink to="/gallery" className="nav-link">
             Gallery
           </NavLink>
         </li>
         <li>
-          <NavLink 
-            to="/booking" 
-            style={({ isActive }) => (isActive ? { ...linkStyle, ...activeStyle } : linkStyle)}
-          >
+          <NavLink to="/booking" className="nav-link">
             Booking
           </NavLink>
         </li>
         <li>
-          <NavLink 
-            to="/contact" 
-            style={({ isActive }) => (isActive ? { ...linkStyle, ...activeStyle } : linkStyle)}
-          >
+          <NavLink to="/contact" className="nav-link">
             Contact
           </NavLink>
         </li>
