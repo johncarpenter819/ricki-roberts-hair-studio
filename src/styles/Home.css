@@ -1,29 +1,42 @@
+/* Google Fonts Import */
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script&family=Lato:wght@400;700&display=swap');
+
 /* Reset and base layout */
 html, body {
   margin: 0;
   padding: 0;
   width: 100%;
   overflow-x: hidden;
+  background-color: #E4cec0;
+  color: #7B3307;
+  font-family: 'Lato', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 #root {
   width: 100%;
 }
 
+/* Headings - simple cursive */
+h1, h2, h3 {
+  font-family: 'Dancing Script', cursive;
+  color: #7B3307;
+  margin-bottom: 0.5em;
+  font-weight: 700;
+  text-shadow: none;
+}
+
 /* General section layout */
 section:not(.hero-banner) {
-  padding: 4rem 1rem;
+  padding: 3rem 1rem;
   max-width: 1000px;
   margin: 0 auto;
   text-align: center;
-  color: #4b3b2b;
-}
-
-/* Reuse for headings */
-section h2 {
-  font-size: 2.5rem;
-  margin-bottom: 1.5rem;
-  font-family: 'Poppins', sans-serif;
+  color: #7B3307;
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  box-shadow: none;
 }
 
 /* Hero Banner */
@@ -31,13 +44,15 @@ section h2 {
   position: relative;
   width: 100vw;
   height: 60vh;
-  background-color: #000;
+  background-color: #7B3307;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
   margin: 0;
   padding: 0;
+  overflow: hidden;
+  border-bottom: 5px solid #B8673e;
 }
 
 .banner-image {
@@ -54,42 +69,48 @@ section h2 {
 .banner-text {
   position: relative;
   z-index: 2;
-  color: #fff;
+  color: #FFFFFF;
   max-width: 90%;
   padding: 1rem;
 }
 
 .banner-text h1 {
-  font-size: 4rem;
-  margin-bottom: 1rem;
-  font-family: 'Poppins', sans-serif;
+  font-size: 3.8rem;
+  line-height: 1.1;
 }
 
 .banner-text p {
-  font-size: 1.8rem;
-  margin-bottom: 2rem;
+  font-size: 1.4rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  font-family: 'Lato', sans-serif;
+  color: #FFFFFF;
 }
 
 .banner-text .cta-btn {
-  background-color: #a77b5a;
-  color: white;
+  background-color: #B8673e;
+  color: #FFFFFF;
   border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  font-size: 1.1rem;
-  font-weight: 600;
+  padding: 0.75rem 2.5rem;
+  border-radius: 10px;
+  font-size: 1.15rem;
+  font-weight: 700;
   cursor: pointer;
+  box-shadow: none;
   transition: background-color 0.3s ease;
 }
 
 .banner-text .cta-btn:hover {
-  background-color: #8b6847;
+  background-color: #7B3307;
 }
 
 /* About */
 .about p {
   font-size: 1.2rem;
   line-height: 1.6;
+  max-width: 700px;
+  margin: 0 auto;
+  color: #7B3307;
 }
 
 /* Services */
@@ -102,17 +123,25 @@ section h2 {
 }
 
 .service-card {
-  background-color: #fff;
-  border-radius: 12px;
-  padding: 1.5rem;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  background-color: #FFFFFF;
+  border-radius: 15px;
+  border: 1px solid #B8673e;
+  padding: 1.5rem 1.5rem;
   width: 280px;
+  color: #7B3307;
+  transition: transform 0.2s ease;
+  box-shadow: none;
+}
+
+.service-card:hover {
+  transform: translateY(-6px);
 }
 
 .service-card h3 {
   font-size: 1.5rem;
-  margin-bottom: 0.5rem;
-  color: #6b4c3b;
+  margin-bottom: 1rem;
+  color: #7B3307;
+  font-family: 'Dancing Script', cursive;
 }
 
 /* Team Grid */
@@ -121,7 +150,7 @@ section h2 {
   flex-wrap: wrap;
   justify-content: center;
   align-items: flex-start;
-  gap: 1.5rem;
+  gap: 2rem;
   margin: 2rem auto;
   padding: 0 1rem;
   box-sizing: border-box;
@@ -131,10 +160,9 @@ section h2 {
 
 /* Team Member Card */
 .team-card {
-  background-color: #fff;
-  border: 2px solid #a77b5a;
-  border-radius: 12px;
-  box-shadow: 0 6px 12px rgba(0,0,0,0.05);
+  background-color: #FFFFFF;
+  border: 2px solid #B8673e;
+  border-radius: 15px;
   width: 300px !important;
   min-height: 320px;
   padding: 1.5rem 1rem;
@@ -142,35 +170,35 @@ section h2 {
   display: flex;
   flex-direction: column;
   align-items: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.2s ease;
   flex-shrink: 0;
   box-sizing: border-box;
+  box-shadow: none;
 }
 
 .team-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  transform: translateY(-8px);
 }
 
 .team-card img {
-  width: 120px;
-  height: 120px;
+  width: 130px;
+  height: 130px;
   object-fit: cover;
   border-radius: 50%;
-  margin-bottom: 1rem;
-  border: 3px solid #a77b5a;
+  margin-bottom: 1.2rem;
+  border: 4px solid #B8673e;
 }
 
 .team-card h3 {
-  font-size: 1.25rem;
-  margin: 0 0 0.5rem;
-  color: #4b3b2b;
+  font-size: 1.4rem;
+  margin: 0 0 0.7rem;
+  color: #7B3307;
   word-break: break-word;
 }
 
 .team-card p {
   font-size: 1rem;
-  color: #7b6a58;
+  color: #7B3307;
   margin: 0;
   word-break: break-word;
   text-align: center;
@@ -178,108 +206,146 @@ section h2 {
 }
 
 .team-bio {
-  font-size: 0.95rem;
-  color: #7b6a58;
-  margin-top: 0.5rem;
-  line-height: 1.3;
+  font-size: 1rem;
+  margin-top: 0.7rem;
   min-height: 3em;
   overflow-wrap: break-word;
+  color: #7B3307;
 }
 
-/* Business Hours */
-.hours ul {
-  list-style: none;
-  padding: 0;
-  font-size: 1.1rem;
-  line-height: 2rem;
-}
-
-/* Social */
-.social-icons {
-  display: flex;
-  justify-content: center;
-  gap: 1.5rem;
-  margin-top: 1rem;
-}
-
-.social-icons a img {
-  width: 32px;
-  height: 32px;
-  filter: brightness(0) saturate(100%) invert(20%) sepia(8%) saturate(144%) hue-rotate(356deg) brightness(96%) contrast(88%);
-  transition: transform 0.2s ease;
-}
-
-.social-icons a:hover img {
-  transform: scale(1.1);
-}
-
-/* Horizontal Rule */
-hr {
-  border: none;
-  border-top: 1px solid #ddd;
-  margin: 3rem auto;
-  width: 80%;
-}
-
-/* Container for Business Hours and Cancellation Policy side by side */
+/* Business Hours + Cancellation Policy container */
 .hours-cancellation-container {
   display: flex;
   gap: 2rem;
   justify-content: space-between;
   flex-wrap: wrap;
-  align-items: center; /* Vertically center children */
-  margin-bottom: 2rem;
+  align-items: flex-start;
+  margin-bottom: 3rem;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 1rem;
 }
 
-/* Business hours block */
+/* Business Hours */
 .hours {
-  flex: 1 1 300px;
-  min-width: 280px;
+  flex: 1 1 320px;
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  padding: 1.5rem 2rem;
+  color: #7B3307;
+  border: 1px solid #B8673e;
 }
 
-/* Cancellation policy block */
-.cancellation-policy {
-  flex: 1 1 300px;
-  min-width: 280px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center; /* Vertically center text inside */
-  text-align: center; /* Center text horizontally */
-  background-color: #f9f9f9; /* Optional: light background */
-  padding: 1rem;
-  border-radius: 8px;
-  box-shadow: 0 0 8px rgba(0,0,0,0.05);
+.hours h2 {
+  margin-bottom: 1rem;
+  font-family: 'Dancing Script', cursive;
+  color: #7B3307;
 }
 
-/* Style the list inside hours */
 .hours ul {
   list-style: none;
   padding: 0;
+  font-size: 1.1rem;
+  line-height: 2rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: #7B3307;
 }
 
 .hours li {
-  margin-bottom: 0.4rem;
-  font-weight: 500;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid #e4cec0;
+  padding-bottom: 0.2rem;
+  color: #7B3307;
 }
 
-/* Optional: style links inside cancellation policy */
+/* Cancellation Policy */
+.cancellation-policy {
+  flex: 1 1 320px;
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  padding: 1.8rem 2rem;
+  color: #7B3307;
+  font-size: 1.1rem;
+  line-height: 1.5;
+  font-weight: 600;
+  text-align: center;
+  font-family: 'Lato', sans-serif;
+  letter-spacing: 0.02em;
+  user-select: none;
+  border: 1px solid #B8673e;
+}
+
+.cancellation-policy strong {
+  color: #7B3307;
+}
+
 .cancellation-policy a {
-  color: #6b46c1; /* purple-ish */
+  color: #7B3307;
   text-decoration: none;
+  font-weight: 700;
 }
 
 .cancellation-policy a:hover {
   text-decoration: underline;
 }
 
+/* Social */
+.social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+.social-icons a img {
+  width: 36px;
+  height: 36px;
+  filter: brightness(0) saturate(100%) invert(20%) sepia(30%) saturate(350%) hue-rotate(10deg) brightness(95%) contrast(90%);
+  transition: transform 0.25s ease;
+}
+
+.social-icons a:hover img {
+  transform: scale(1.15);
+}
+
+/* Horizontal Rule */
+hr {
+  border: none;
+  border-top: 1px solid #e4cec0;
+  margin: 3rem auto;
+  width: 80%;
+}
+
+.social-icons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.social-link {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.social-link:hover {
+  transform: scale(1.1);
+}
+
+.social-icon {
+  width: 32px;
+  height: 32px;
+}
+
 /* Responsive Fixes */
 @media (max-width: 768px) {
   .banner-text h1 {
-    font-size: 2.5rem;
+    font-size: 2.7rem;
   }
 
   .banner-text p {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
   }
 
   .hero-banner {
@@ -299,5 +365,15 @@ hr {
     width: 100% !important;
     max-width: 320px;
     margin: 0 auto;
+  }
+
+  .hours-cancellation-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hours, .cancellation-policy {
+    width: 100%;
+    max-width: 400px;
   }
 }

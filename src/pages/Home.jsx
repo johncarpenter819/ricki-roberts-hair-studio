@@ -1,31 +1,41 @@
+// Home.jsx
 import '../styles/Home.css';
 import { useBusiness } from '../context/BusinessContext';
 import { useTeam } from '../context/TeamContext';
 import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { db } from '../firebaseConfig';
+import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
 
 export default function Home() {
   const { hours } = useBusiness();
   const { team } = useTeam();
   const navigate = useNavigate();
 
-  const goToBooking = () => {
-    navigate('/booking');
-  };
+  const [socialLinks, setSocialLinks] = useState([]);
+
+  useEffect(() => {
+    const q = query(collection(db, 'socialLinks'), orderBy('name'));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const fetched = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setSocialLinks(fetched);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const goToBooking = () => navigate('/booking');
 
   const getPhotoSrc = (photo) => {
     if (!photo) return "/assets/default-profile.jpg";
-    if (photo.startsWith("/assets/") || photo.startsWith("blob:")) {
-      return photo;
-    }
+    if (photo.startsWith("/assets/") || photo.startsWith("blob:")) return photo;
     return `/assets/${photo}`;
   };
 
-  // Ensure weekdays appear in the correct order
   const orderedDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
   return (
     <>
-      {/* Hero Banner */}
       <section className="hero-banner">
         <img src="/assets/banner.jpg" alt="Salon Banner" className="banner-image" />
         <div className="banner-text">
@@ -37,7 +47,6 @@ export default function Home() {
 
       <hr />
 
-      {/* About Section */}
       <section className="about">
         <h2>About Us</h2>
         <p>
@@ -48,7 +57,6 @@ export default function Home() {
 
       <hr />
 
-      {/* Services Preview */}
       <section className="services" id="services">
         <h2>Our Services</h2>
         <div className="service-grid">
@@ -69,7 +77,6 @@ export default function Home() {
 
       <hr />
 
-      {/* Meet the Team */}
       <section className="team">
         <h2>Meet the Team</h2>
         <div className="team-grid">
@@ -78,16 +85,10 @@ export default function Home() {
           ) : (
             team.map(member => (
               <div key={member.id} className="team-card">
-                <img 
-                  src={getPhotoSrc(member.photo)} 
-                  alt={member.name} 
-                  className="team-img"
-                />
+                <img src={getPhotoSrc(member.photo)} alt={member.name} className="team-img" />
                 <h3>{member.name}</h3>
                 <p><strong>Role:</strong> {member.role}</p>
-                {member.bio && (
-                  <p className="team-bio"><strong>Bio:</strong> {member.bio}</p>
-                )}
+                {member.bio && <p className="team-bio"><strong>Bio:</strong> {member.bio}</p>}
               </div>
             ))
           )}
@@ -96,7 +97,6 @@ export default function Home() {
 
       <hr />
 
-      {/* Business Hours + Cancellation Policy */}
       <section className="hours-cancellation-container">
         <div className="hours">
           <h2>Business Hours</h2>
@@ -113,20 +113,33 @@ export default function Home() {
           <h2>Cancellation Policy</h2>
           <p>
             We get it that sometimes things come up and you may need to cancel. Ricki Roberts Hair Studio has a 50% cancellation fee.
-            If you are unable to make the appointment, please kindly notify Ricki Roberts Hair Studio at <a href="tel:8179879261">(817) 987-9261</a> or <a href="mailto:ricquell.muah@gmail.com">ricquell.muah@gmail.com</a> as soon as possible to reschedule.
+            If you are unable to make the appointment, please kindly notify us at <a href="tel:8179879261">(817) 987-9261</a> or <a href="mailto:ricquell.muah@gmail.com">ricquell.muah@gmail.com</a>.
           </p>
         </div>
       </section>
 
       <hr />
 
-      {/* Social Links */}
       <section className="social">
         <h2>Follow Us</h2>
         <div className="social-icons">
-          <a href="#"><img src="/icons/instagram.svg" alt="Instagram" /></a>
-          <a href="#"><img src="/icons/facebook.svg" alt="Facebook" /></a>
-          <a href="#"><img src="/icons/tiktok.svg" alt="TikTok" /></a>
+          {socialLinks.length === 0 ? (
+            <p>No social links available.</p>
+          ) : (
+            socialLinks.map(({ id, name, url }) => (
+              <a key={id} href={url} target="_blank" rel="noopener noreferrer" aria-label={name} className="social-link">
+                {name === 'Instagram' && (
+                  <svg className="social-icon" viewBox="0 0 24 24" fill="#E1306C"><path d="M7.75 2h8.5A5.75 5.75 0 0122 7.75v8.5A5.75 5.75 0 0116.25 22h-8.5A5.75 5.75 0 012 16.25v-8.5A5.75 5.75 0 017.75 2zm0 1.5A4.25 4.25 0 003.5 7.75v8.5A4.25 4.25 0 007.75 20.5h8.5A4.25 4.25 0 0020.5 16.25v-8.5A4.25 4.25 0 0016.25 3.5h-8.5zM12 7a5 5 0 110 10 5 5 0 010-10zm0 1.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7zm4.75-.75a.75.75 0 110 1.5.75.75 0 010-1.5z"/></svg>
+                )}
+                {name === 'Facebook' && (
+                  <svg className="social-icon" viewBox="0 0 24 24" fill="#1877F2"><path d="M22 12a10 10 0 10-11.625 9.875v-7H8v-3h2.375v-2.3c0-2.35 1.4-3.65 3.55-3.65 1.03 0 2.1.185 2.1.185v2.31H15.6c-1.24 0-1.63.765-1.63 1.55V12H17l-.5 3h-2.53v7A10.001 10.001 0 0022 12z"/></svg>
+                )}
+                {name === 'TikTok' && (
+                  <svg className="social-icon" viewBox="0 0 24 24" fill="#000000"><path d="M9 3h3v13a3 3 0 11-3-3v-3a6 6 0 106 6V8.5a6.5 6.5 0 004 1.5V7a4.5 4.5 0 01-4-2.5A3.5 3.5 0 0112 1H9v2z"/></svg>
+                )}
+              </a>
+            ))
+          )}
         </div>
       </section>
     </>

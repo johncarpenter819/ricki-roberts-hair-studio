@@ -1,57 +1,99 @@
 import { useState, useEffect } from 'react';
+import { db } from '../firebaseConfig';
+import {
+  collection,
+  onSnapshot,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  doc,
+  query,
+  orderBy,
+  getDocs,
+} from 'firebase/firestore';
 
 const defaultLinks = [
-  { id: 1, name: 'Instagram', url: 'https://instagram.com/', icon: '/icons/instagram.svg' },
-  { id: 2, name: 'Facebook', url: 'https://facebook.com/', icon: '/icons/facebook.svg' },
-  { id: 3, name: 'TikTok', url: 'https://tiktok.com/', icon: '/icons/tiktok.svg' },
+  { name: 'Instagram', url: 'https://instagram.com/', icon: '/icons/instagram.svg' },
+  { name: 'Facebook', url: 'https://facebook.com/', icon: '/icons/facebook.svg' },
+  { name: 'TikTok', url: 'https://tiktok.com/', icon: '/icons/tiktok.svg' },
 ];
 
 export default function SocialLinks() {
   const [links, setLinks] = useState([]);
   const [newName, setNewName] = useState('');
   const [newUrl, setNewUrl] = useState('');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const stored = localStorage.getItem('socialLinks');
-    if (stored) setLinks(JSON.parse(stored));
-    else setLinks(defaultLinks);
+    async function initializeDefaultsIfNeeded() {
+      const colRef = collection(db, 'socialLinks');
+      const snapshot = await getDocs(colRef);
+      if (snapshot.empty) {
+        // Add default links only once if collection is empty
+        for (const link of defaultLinks) {
+          await addDoc(colRef, link);
+        }
+      }
+    }
+
+    initializeDefaultsIfNeeded();
+
+    const q = query(collection(db, 'socialLinks'), orderBy('name'));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const fetchedLinks = snapshot.docs
+        .map(doc => ({ id: doc.id, ...doc.data() }))
+        .filter(link => typeof link.name === 'string' && typeof link.url === 'string');
+      setLinks(fetchedLinks);
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
   }, []);
 
-  function saveLinks(updatedLinks) {
-    setLinks(updatedLinks);
-    localStorage.setItem('socialLinks', JSON.stringify(updatedLinks));
-  }
-
-  function handleAdd() {
+  async function handleAdd() {
     if (!newName.trim() || !newUrl.trim()) return;
+
     const newLink = {
-      id: Date.now(),
       name: newName.trim(),
       url: newUrl.trim(),
-      icon: '/icons/link.svg', // fallback icon for custom links
+      icon: '/icons/link.svg',
     };
-    const updated = [...links, newLink];
-    saveLinks(updated);
-    setNewName('');
-    setNewUrl('');
-  }
 
-  function handleUpdate(id, field, value) {
-    const updated = links.map((link) =>
-      link.id === id ? { ...link, [field]: value } : link
-    );
-    saveLinks(updated);
-  }
-
-  function handleDelete(id) {
-    if (window.confirm('Delete this social link?')) {
-      const updated = links.filter((link) => link.id !== id);
-      saveLinks(updated);
+    try {
+      await addDoc(collection(db, 'socialLinks'), newLink);
+      setNewName('');
+      setNewUrl('');
+      // No need to update state here — onSnapshot listener will update it
+    } catch (err) {
+      alert('Failed to add link: ' + err.message);
     }
   }
 
+  async function handleUpdate(id, field, value) {
+    try {
+      const stringValue = (typeof value === 'string') ? value : (value == null ? '' : String(value));
+      const docRef = doc(db, 'socialLinks', id);
+      await updateDoc(docRef, { [field]: stringValue });
+      // No manual state update — onSnapshot updates state
+    } catch (err) {
+      alert('Failed to update link: ' + err.message);
+    }
+  }
+
+  async function handleDelete(id) {
+    if (!window.confirm('Delete this social link?')) return;
+    try {
+      await deleteDoc(doc(db, 'socialLinks', id));
+      // No manual state update — onSnapshot updates state
+    } catch (err) {
+      alert('Failed to delete link: ' + err.message);
+    }
+  }
+
+  if (loading) return <p>Loading social links...</p>;
+
   return (
-    <div style={{ maxWidth: 600, margin: '2rem auto', padding: '1rem' }}>
+    <div className="admin-container">
       <h2>Social Media Links</h2>
 
       {links.length === 0 && <p>No social links added yet.</p>}
@@ -69,27 +111,23 @@ export default function SocialLinks() {
           >
             <input
               type="text"
-              value={name}
+              value={typeof name === 'string' ? name : ''}
               onChange={(e) => handleUpdate(id, 'name', e.target.value)}
-              style={{ flex: '1', padding: '0.3rem' }}
+              className="admin-input"
+              style={{ flex: '1' }}
             />
             <input
               type="url"
-              value={url}
+              value={typeof url === 'string' ? url : ''}
               onChange={(e) => handleUpdate(id, 'url', e.target.value)}
-              style={{ flex: '3', padding: '0.3rem' }}
+              className="admin-input"
+              style={{ flex: '3' }}
             />
             <button
               onClick={() => handleDelete(id)}
-              style={{
-                backgroundColor: '#dc3545',
-                border: 'none',
-                color: 'white',
-                borderRadius: 4,
-                cursor: 'pointer',
-                padding: '0.3rem 0.6rem',
-              }}
+              className="admin-cancel-button"
               aria-label={`Delete ${name}`}
+              style={{ flexShrink: 0 }}
             >
               ✕
             </button>
@@ -104,25 +142,21 @@ export default function SocialLinks() {
           placeholder="Name (e.g., Instagram)"
           value={newName}
           onChange={(e) => setNewName(e.target.value)}
-          style={{ flex: '1', padding: '0.3rem' }}
+          className="admin-input"
+          style={{ flex: '1' }}
         />
         <input
           type="url"
           placeholder="URL (https://...)"
           value={newUrl}
           onChange={(e) => setNewUrl(e.target.value)}
-          style={{ flex: '2', padding: '0.3rem' }}
+          className="admin-input"
+          style={{ flex: '3' }}
         />
         <button
           onClick={handleAdd}
-          style={{
-            backgroundColor: '#a77b5a',
-            border: 'none',
-            color: 'white',
-            borderRadius: 4,
-            cursor: 'pointer',
-            padding: '0.3rem 1rem',
-          }}
+          className="admin-button"
+          style={{ flexShrink: 0 }}
         >
           Add
         </button>
