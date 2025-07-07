@@ -82,7 +82,7 @@ export default function Home() {
       <hr />
 
       <section
-        className="glass-section"
+        className="glass-about"
         ref={el => (sectionsRef.current[0] = el)}
         tabIndex={-1}
         aria-labelledby="about-us-heading"
@@ -97,7 +97,7 @@ export default function Home() {
       <hr />
 
       <section
-        className="glass-section"
+        className="glass-services"
         id="services"
         ref={el => (sectionsRef.current[1] = el)}
         tabIndex={-1}
@@ -123,25 +123,29 @@ export default function Home() {
       <hr />
 
       <section
-        className="glass-section"
+        className="glass-team"
         ref={el => (sectionsRef.current[2] = el)}
         tabIndex={-1}
         aria-labelledby="team-heading"
       >
         <h2 id="team-heading">Meet the Team</h2>
-        <div className="team-grid">
-          {team.length === 0 ? (
-            <p className="nanum-myeongjo-regular">No team members found.</p>
-          ) : (
-            team.map(member => (
-              <div key={member.id} className="team-card" tabIndex={0} aria-label={`Team member: ${member.name}`}>
-                <img src={getPhotoSrc(member.photo)} alt={`Portrait of ${member.name}`} className="team-img" />
-                <h3>{member.name}</h3>
-                <p className="nanum-myeongjo-regular"><strong>Role:</strong> {member.role}</p>
-                {member.bio && <p className="team-bio nanum-myeongjo-regular"><strong>Bio:</strong> {member.bio}</p>}
-              </div>
-            ))
-          )}
+
+        {/* Added container here */}
+        <div className="team-container">
+          <div className={`team-grid ${team.length === 0 ? 'no-members' : ''}`}>
+            {team.length === 0 ? (
+              <p className="nanum-myeongjo-regular">No team members found.</p>
+            ) : (
+              team.map(member => (
+                <div key={member.id} className="team-card" tabIndex={0} aria-label={`Team member: ${member.name}`}>
+                  <img src={getPhotoSrc(member.photo)} alt={`Portrait of ${member.name}`} className="team-img" />
+                  <h3>{member.name}</h3>
+                  <p className="nanum-myeongjo-regular"><strong>Role:</strong> {member.role}</p>
+                  {member.bio && <p className="team-bio nanum-myeongjo-regular"><strong>Bio:</strong> {member.bio}</p>}
+                </div>
+              ))
+            )}
+          </div>
         </div>
       </section>
 
@@ -175,7 +179,7 @@ export default function Home() {
       <hr />
 
       <section
-        className="glass-section social"
+        className="glass-social"
         ref={el => (sectionsRef.current[4] = el)}
         tabIndex={-1}
         aria-labelledby="social-heading"

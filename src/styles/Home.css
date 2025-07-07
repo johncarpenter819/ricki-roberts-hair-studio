@@ -12,73 +12,119 @@
   --transition: all 0.3s ease-in-out;
   --font-display: 'Imperial Script', cursive;
   --font-body: 'Segoe UI', sans-serif;
-  --texture: url('/assets/texture-overlay.png');
+  --texture: url('../assets/paper-fibers.png');
 }
 
 /* ----------------------------------------
-   BODY BACKGROUND
+   BODY BACKGROUND (Enhanced)
 ------------------------------------------- */
 body {
   margin: 0;
   font-family: var(--font-body);
   background-color: var(--soft-bg);
+
   background-image:
-    radial-gradient(circle at 20% 30%, rgba(184, 103, 62, 0.15), transparent 70%),
-    radial-gradient(circle at 80% 70%, rgba(123, 51, 7, 0.18), transparent 60%),
-    repeating-radial-gradient(circle at center, rgba(184, 103, 62, 0.03) 0, rgba(184, 103, 62, 0.03) 2px, transparent 3px, transparent 6px),
+    radial-gradient(circle at 20% 30%, rgba(184, 103, 62, 0.12), transparent 65%),
+    radial-gradient(circle at 80% 60%, rgba(123, 51, 7, 0.14), transparent 55%),
+    repeating-conic-gradient(from 45deg, rgba(255,255,255,0.015) 0deg 10deg, transparent 10deg 20deg),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.025) 25%, transparent 25%) repeat,
+    linear-gradient(to top, rgba(0, 0, 0, 0.05), transparent),
     var(--texture);
-  background-repeat: no-repeat, no-repeat, repeat, no-repeat;
-  background-size: 600px 600px, 800px 800px, 40px 40px, cover;
-  background-blend-mode: overlay, overlay, overlay, normal;
+
+  background-size:
+    700px 700px,
+    800px 800px,
+    250px 250px,
+    40px 40px,
+    100% 100%,
+    cover;
+
+  background-position:
+    20% 30%,
+    80% 60%,
+    center,
+    0 0,
+    top,
+    center;
+
+  background-blend-mode:
+    overlay,
+    overlay,
+    soft-light,
+    lighten,
+    multiply,
+    normal;
+
   color: var(--deep);
   line-height: 1.6;
   scroll-behavior: smooth;
   position: relative;
   overflow-x: hidden;
-  animation: backgroundShift 60s ease-in-out infinite alternate;
+
+  animation: backgroundDrift 80s ease-in-out infinite alternate;
 }
 
-@keyframes backgroundShift {
-  0% {
-    background-position: 20% 30%, 80% 70%, 0 0, 0 0;
-  }
-  100% {
-    background-position: 30% 40%, 85% 75%, 0 0, 0 0;
-  }
-}
 
+/* --- Floating Glow Blobs --- */
 body::before,
 body::after {
   content: "";
   position: fixed;
-  width: 250px;
-  height: 250px;
+  width: 280px;
+  height: 280px;
   border-radius: 50%;
   pointer-events: none;
-  filter: blur(80px);
-  opacity: 0.25;
+  filter: blur(100px);
+  opacity: 0.22;
   z-index: 0;
-  animation: floatBlob 25s ease-in-out infinite alternate;
-  background: radial-gradient(circle, rgba(184,103,62,0.2) 0%, transparent 70%);
+  animation: floatBlob 35s ease-in-out infinite alternate;
+  background: radial-gradient(circle, rgba(184, 103, 62, 0.18), transparent 70%);
 }
 
 body::before {
-  top: 15vh;
-  left: 10vw;
+  top: 10vh;
+  left: 5vw;
   animation-direction: normal;
 }
 
 body::after {
-  bottom: 10vh;
-  right: 15vw;
+  bottom: 8vh;
+  right: 10vw;
   animation-direction: reverse;
 }
 
 @keyframes floatBlob {
-  0% { transform: translate(0,0) scale(1); }
-  100% { transform: translate(20px, 15px) scale(1.1); }
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    transform: translate(25px, 18px) scale(1.1);
+  }
 }
 
+/* --- Subtle Movement of Gradients --- */
+@keyframes backgroundDrift {
+  0% {
+    background-position:
+      20% 30%,
+      80% 60%,
+      center,
+      0 0,
+      top,
+      center;
+  }
+  100% {
+    background-position:
+      25% 35%,
+      75% 65%,
+      center,
+      20px 20px,
+      bottom,
+      center;
+  }
+}
+
+/* --- Gradient Divider HR Line --- */
 hr {
   border: none;
   height: 1px;
@@ -87,6 +133,7 @@ hr {
   width: 60%;
   box-shadow: 0 2px 6px rgba(123, 51, 7, 0.12);
 }
+
 
 /* ----------------------------------------
    HERO BANNER 
@@ -137,10 +184,26 @@ hr {
   transform: translateY(-3px);
 }
 
+.cta-btn.pulse-glow {
+  animation: pulseGlow 3s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 8px var(--light);
+  }
+  50% {
+    box-shadow: 0 0 20px var(--primary);
+  }
+}
+
 /* ----------------------------------------
-   GLASS SECTIONS 
+   GLASS SECTIONS with unique classes
 ------------------------------------------- */
-.glass-section {
+.glass-about,
+.glass-services,
+.glass-team,
+.glass-social {
   margin: 4rem auto;
   padding: 3rem;
   background:
@@ -160,12 +223,18 @@ hr {
   transition: opacity 1s ease, transform 1s ease;
 }
 
-.glass-section.visible {
+.glass-about.visible,
+.glass-services.visible,
+.glass-team.visible,
+.glass-social.visible {
   opacity: 1;
   transform: translateY(0);
 }
 
-.glass-section h2 {
+.glass-about h2,
+.glass-services h2,
+.glass-team h2,
+.glass-social h2 {
   font-family: var(--font-display);
   font-size: 2.6rem;
   color: var(--primary);
@@ -174,7 +243,9 @@ hr {
   position: relative;
 }
 
-.glass-section h2::after {
+.glass-about h2::after,
+.glass-services h2::after,
+.glass-team h2::after {
   content: '';
   width: 60px;
   height: 4px;
@@ -182,6 +253,66 @@ hr {
   display: block;
   margin: 0.5rem auto 1.5rem;
   border-radius: 2px;
+}
+
+/* For social section, no underline, add border bottom instead */
+.glass-social h2 {
+  border-bottom: 4px solid var(--primary);
+  display: block;
+  width: fit-content;
+  margin: 0 auto 2rem auto;
+  padding-bottom: 0.25rem;
+  border-radius: 2px;
+  margin-bottom: 2rem;
+}
+
+.glass-social h2::after {
+  content: none;
+}
+
+.glass-social .social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-top: 0;
+  padding: 0;
+}
+
+.social-link {
+  background: var(--light);
+  padding: 0.75rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+  cursor: pointer;
+  width: 48px;
+  height: 48px;
+}
+
+.social-link:hover {
+  transform: scale(1.15);
+  background-color: var(--accent-bg);
+}
+
+.social-icon {
+  width: 24px;
+  height: 24px;
+  fill: var(--primary);
+}
+
+/* ----------------------------------------
+   SERVICE & TEAM CONTAINER
+------------------------------------------- */
+.team-container {
+  max-width: 1200%; /* widen container */
+  width: 100%;
+  margin: 2rem auto 0 auto; /* center horizontally with margin-top */
+  padding: 0 1.5rem; /* horizontal padding */
+  box-sizing: border-box;
 }
 
 /* ----------------------------------------
@@ -195,20 +326,31 @@ hr {
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   padding-bottom: 1rem;
-  scroll-padding-left: 2rem;
+  scroll-padding-left: 1.5rem; /* align with container padding */
   max-width: 100%;
   margin-top: 2rem;
+  min-height: auto; /* remove fixed height */
+  overflow-y: visible;
+
+  /* Scrollbar styling */
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary) transparent;
 }
 
 .service-grid::-webkit-scrollbar,
 .team-grid::-webkit-scrollbar {
-  display: none;
+  height: 8px;
 }
 
-.service-grid,
-.team-grid {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+.service-grid::-webkit-scrollbar-thumb,
+.team-grid::-webkit-scrollbar-thumb {
+  background-color: var(--primary);
+  border-radius: 10px;
+}
+
+.service-grid::-webkit-scrollbar-track,
+.team-grid::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 .service-card,
@@ -223,8 +365,13 @@ hr {
   transition: var(--transition);
   opacity: 0;
   transform: translateY(20px);
-  overflow: hidden;
+  overflow: visible;
   border: 1.5px solid rgba(123, 51, 7, 0.15);
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 .service-card::before,
@@ -266,18 +413,149 @@ hr {
   background: linear-gradient(to bottom, #fceee8, var(--accent-bg));
 }
 
-.service-card h3 {
+.service-card h3,
+.team-card h3 {
   color: var(--deep);
   font-family: var(--font-display);
   font-size: 1.6rem;
   margin-top: 0;
+  margin-bottom: 0.5rem;
 }
 
-.service-card p {
+.service-card p,
+.team-card p {
   font-size: 1rem;
   color: #4a2a1a;
   margin-top: 0.5rem;
 }
+
+.team-img {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 1rem;
+  box-shadow: 0 0 10px rgba(123, 51, 7, 0.3);
+}
+
+.team-bio {
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
+/* Fix large empty height in team-grid by removing min-height */
+/* And center "No members" message */
+.team-grid.no-members {
+  min-height: auto;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  padding: 2rem;
+  color: var(--deep);
+  font-style: italic;
+  font-size: 1.1rem;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .service-grid,
+  .team-grid {
+    display: block;
+    overflow-x: visible;
+  }
+  .service-card,
+  .team-card {
+    width: 100%;
+    margin-bottom: 1.5rem;
+  }
+}
+
+
+/* ----------------------------------------
+   HOURS & CANCELLATION POLICY CONTAINER
+------------------------------------------- */
+.hours-cancellation-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  max-width: 1100px;
+  margin: 4rem auto;
+  padding: 3rem;
+  background: 
+    linear-gradient(to bottom, rgba(228, 206, 192, 0.9), rgba(227, 184, 174, 0.9)),
+    var(--texture);
+  background-blend-mode: multiply;
+  border-radius: var(--radius);
+  backdrop-filter: blur(12px);
+  box-shadow:
+    inset 0 0 30px rgba(123, 51, 7, 0.3),
+    inset 0 10px 30px rgba(123, 51, 7, 0.15),
+    var(--shadow);
+  border: 1.5px solid rgba(123, 51, 7, 0.35);
+  color: var(--deep);
+  user-select: none;
+}
+
+.hours,
+.cancellation-policy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.hours h2,
+.cancellation-policy h2 {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  color: var(--primary);
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 5px rgba(123, 51, 7, 0.3);
+}
+
+.hours ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  width: 200px;
+}
+
+.hours ul li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(123, 51, 7, 0.15);
+}
+
+.hours ul li:last-child {
+  border-bottom: none;
+}
+
+.cancellation-policy p {
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  line-height: 1.5;
+  max-width: 360px;
+  margin: 0 auto;
+  color: var(--deep);
+}
+
+/* Responsive stacking on small screens */
+@media (max-width: 768px) {
+  .hours-cancellation-container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 2rem;
+  }
+
+  .hours,
+  .cancellation-policy {
+    max-width: 90%;
+  }
+}
+
+
 
 /* ----------------------------------------
    FOOTER & UTILITY
@@ -334,7 +612,10 @@ h1, h2, h3, h4, h5, h6,
     padding: 0.7rem 1.4rem;
   }
 
-  .glass-section h2 {
+  .glass-about h2,
+  .glass-services h2,
+  .glass-team h2,
+  .glass-social h2 {
     font-size: 2rem;
   }
 
@@ -349,5 +630,10 @@ h1, h2, h3, h4, h5, h6,
   .team-grid {
     display: block;
     overflow-x: visible;
+  }
+
+  .hours-cancellation-container {
+    grid-template-columns: 1fr;
+    padding: 2rem;
   }
 }
