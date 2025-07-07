@@ -7,6 +7,7 @@ export default function ServicesEditor() {
   const [newServicePrice, setNewServicePrice] = useState('');
   const [newServiceCategory, setNewServiceCategory] = useState('');
   const [newServiceDuration, setNewServiceDuration] = useState('');
+  const [newServiceDescription, setNewServiceDescription] = useState('');
 
   function addService() {
     if (!newServiceName || !newServicePrice || !newServiceCategory || !newServiceDuration) return;
@@ -16,12 +17,14 @@ export default function ServicesEditor() {
       price: parseFloat(newServicePrice),
       category: newServiceCategory,
       duration: newServiceDuration,
+      description: newServiceDescription,
     };
     setServices([...services, newService]);
     setNewServiceName('');
     setNewServicePrice('');
     setNewServiceCategory('');
     setNewServiceDuration('');
+    setNewServiceDescription('');
   }
 
   function updateService(id, key, value) {
@@ -43,15 +46,16 @@ export default function ServicesEditor() {
         <table className="admin-table">
           <thead>
             <tr>
-              <th>Service Name</th>
+              <th>Name</th>
               <th>Category</th>
               <th>Duration</th>
               <th>Price ($)</th>
+              <th>Description</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {services.map(({ id, name, price, category, duration }) => (
+            {services.map(({ id, name, price, category, duration, description }) => (
               <tr key={id}>
                 <td>
                   <input
@@ -85,6 +89,15 @@ export default function ServicesEditor() {
                     value={price}
                     onChange={(e) => updateService(id, 'price', e.target.value)}
                     className="admin-input"
+                  />
+                </td>
+                <td>
+                  <textarea
+                    value={description || ''}
+                    onChange={(e) => updateService(id, 'description', e.target.value)}
+                    className="admin-input"
+                    placeholder="Service description"
+                    rows={2}
                   />
                 </td>
                 <td>
@@ -126,6 +139,15 @@ export default function ServicesEditor() {
                   value={newServicePrice}
                   onChange={(e) => setNewServicePrice(e.target.value)}
                   className="admin-input"
+                />
+              </td>
+              <td>
+                <textarea
+                  placeholder="New service description"
+                  value={newServiceDescription}
+                  onChange={(e) => setNewServiceDescription(e.target.value)}
+                  className="admin-input"
+                  rows={2}
                 />
               </td>
               <td>
