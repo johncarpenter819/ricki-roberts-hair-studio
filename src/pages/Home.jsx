@@ -26,29 +26,33 @@ export default function Home() {
     return () => unsubscribe();
   }, []);
 
-  // Scroll fade-in with IntersectionObserver
+  // Scroll fade-in with IntersectionObserver for sections, service cards, and team cards
   useEffect(() => {
-    const sections = sectionsRef.current;
-    if (!sections) return;
+    const allObservedElements = [
+      ...sectionsRef.current,
+      ...document.querySelectorAll('.service-card'),
+      ...document.querySelectorAll('.team-card'),
+    ];
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, {
-      threshold: 0.15,
-    });
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
 
-    sections.forEach(section => {
-      if (section) observer.observe(section);
+    allObservedElements.forEach((el) => {
+      if (el) observer.observe(el);
     });
 
     return () => {
-      sections.forEach(section => {
-        if (section) observer.unobserve(section);
+      allObservedElements.forEach((el) => {
+        if (el) observer.unobserve(el);
       });
     };
   }, []);
@@ -69,7 +73,7 @@ export default function Home() {
         <div className="hero-content-container">
           <div className="banner-text">
             <h1 className="glow-text">Welcome to Ricki Roberts Hair Studio</h1>
-            <p>Style. Confidence. Community.</p>
+            <p className="nanum-myeongjo-regular">Style. Confidence. Community.</p>
             <button className="cta-btn pulse-glow" onClick={goToBooking}>Book Now</button>
           </div>
         </div>
@@ -84,7 +88,7 @@ export default function Home() {
         aria-labelledby="about-us-heading"
       >
         <h2 id="about-us-heading">About Us</h2>
-        <p>
+        <p className="nanum-myeongjo-regular">
           At Ricki Roberts Hair Studio, we’re dedicated to delivering stylish,
           confident results while creating a warm and welcoming environment.
         </p>
@@ -103,15 +107,15 @@ export default function Home() {
         <div className="service-grid">
           <div className="service-card" tabIndex={0} aria-label="Haircuts Service">
             <h3>Haircuts</h3>
-            <p>Custom cuts tailored to your style and preferences.</p>
+            <p className="nanum-myeongjo-regular">Custom cuts tailored to your style and preferences.</p>
           </div>
           <div className="service-card" tabIndex={0} aria-label="Color Service">
             <h3>Color</h3>
-            <p>Vibrant color, highlights, and balayage.</p>
+            <p className="nanum-myeongjo-regular">Vibrant color, highlights, and balayage.</p>
           </div>
           <div className="service-card" tabIndex={0} aria-label="Styling Service">
             <h3>Styling</h3>
-            <p>Perfect looks for events, photoshoots, or daily glam.</p>
+            <p className="nanum-myeongjo-regular">Perfect looks for events, photoshoots, or daily glam.</p>
           </div>
         </div>
       </section>
@@ -127,14 +131,14 @@ export default function Home() {
         <h2 id="team-heading">Meet the Team</h2>
         <div className="team-grid">
           {team.length === 0 ? (
-            <p>No team members found.</p>
+            <p className="nanum-myeongjo-regular">No team members found.</p>
           ) : (
             team.map(member => (
               <div key={member.id} className="team-card" tabIndex={0} aria-label={`Team member: ${member.name}`}>
                 <img src={getPhotoSrc(member.photo)} alt={`Portrait of ${member.name}`} className="team-img" />
                 <h3>{member.name}</h3>
-                <p><strong>Role:</strong> {member.role}</p>
-                {member.bio && <p className="team-bio"><strong>Bio:</strong> {member.bio}</p>}
+                <p className="nanum-myeongjo-regular"><strong>Role:</strong> {member.role}</p>
+                {member.bio && <p className="team-bio nanum-myeongjo-regular"><strong>Bio:</strong> {member.bio}</p>}
               </div>
             ))
           )}
@@ -152,7 +156,7 @@ export default function Home() {
           <h2 id="business-hours-heading">Business Hours</h2>
           <ul>
             {orderedDays.map(day => (
-              <li key={day}>
+              <li key={day} className="nanum-myeongjo-regular">
                 <strong>{day.substring(0, 3)}:</strong> {hours[day] || "Closed"}
               </li>
             ))}
@@ -161,7 +165,7 @@ export default function Home() {
 
         <div className="cancellation-policy" aria-labelledby="cancellation-policy-heading">
           <h2 id="cancellation-policy-heading">Cancellation Policy</h2>
-          <p>
+          <p className="nanum-myeongjo-regular">
             We get it that sometimes things come up and you may need to cancel. Ricki Roberts Hair Studio has a 50% cancellation fee.
             If you are unable to make the appointment, please kindly notify us at <a href="tel:8179879261">(817) 987-9261</a> or <a href="mailto:ricquell.muah@gmail.com">ricquell.muah@gmail.com</a>.
           </p>
@@ -179,7 +183,7 @@ export default function Home() {
         <h2 id="social-heading">Follow Us</h2>
         <div className="social-icons">
           {socialLinks.length === 0 ? (
-            <p>No social links available.</p>
+            <p className="nanum-myeongjo-regular">No social links available.</p>
           ) : (
             socialLinks.map(({ id, name, url }) => (
               <a
