@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Imperial+Script&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo&display=swap');
 
 :root {
@@ -10,35 +10,31 @@
   --radius: 16px;
   --shadow: 0 8px 20px rgba(123, 51, 7, 0.25);
   --transition: all 0.3s ease-in-out;
-  --font-display: 'Playfair Display', serif;
+  --font-display: 'Imperial Script', cursive;
   --font-body: 'Segoe UI', sans-serif;
   --texture: url('/assets/texture-overlay.png');
 }
 
 /* ----------------------------------------
-   BODY BACKGROUND: layered with moving gradients & texture 
+   BODY BACKGROUND
 ------------------------------------------- */
 body {
   margin: 0;
   font-family: var(--font-body);
   background-color: var(--soft-bg);
-
   background-image:
     radial-gradient(circle at 20% 30%, rgba(184, 103, 62, 0.15), transparent 70%),
     radial-gradient(circle at 80% 70%, rgba(123, 51, 7, 0.18), transparent 60%),
     repeating-radial-gradient(circle at center, rgba(184, 103, 62, 0.03) 0, rgba(184, 103, 62, 0.03) 2px, transparent 3px, transparent 6px),
     var(--texture);
-
   background-repeat: no-repeat, no-repeat, repeat, no-repeat;
   background-size: 600px 600px, 800px 800px, 40px 40px, cover;
   background-blend-mode: overlay, overlay, overlay, normal;
-
   color: var(--deep);
   line-height: 1.6;
   scroll-behavior: smooth;
   position: relative;
   overflow-x: hidden;
-
   animation: backgroundShift 60s ease-in-out infinite alternate;
 }
 
@@ -51,7 +47,6 @@ body {
   }
 }
 
-/* Glowing warm blurred blobs behind content */
 body::before,
 body::after {
   content: "";
@@ -159,9 +154,7 @@ hr {
     inset 0 10px 30px rgba(123, 51, 7, 0.15),
     var(--shadow);
   max-width: 1100px;
-
   border: 1.5px solid rgba(123, 51, 7, 0.35);
-
   opacity: 0;
   transform: translateY(30px);
   transition: opacity 1s ease, transform 1s ease;
@@ -192,7 +185,7 @@ hr {
 }
 
 /* ----------------------------------------
-   SERVICES & TEAM HORIZONTAL SCROLL CAROUSEL
+   SERVICE & TEAM CARDS
 ------------------------------------------- */
 .service-grid,
 .team-grid {
@@ -207,11 +200,11 @@ hr {
   margin-top: 2rem;
 }
 
-/* Hide scrollbar but keep scroll */
 .service-grid::-webkit-scrollbar,
 .team-grid::-webkit-scrollbar {
   display: none;
 }
+
 .service-grid,
 .team-grid {
   -ms-overflow-style: none;
@@ -220,7 +213,7 @@ hr {
 
 .service-card,
 .team-card {
-  flex: 0 0 280px; /* fixed width cards */
+  flex: 0 0 280px;
   scroll-snap-align: center;
   position: relative;
   background: linear-gradient(to bottom, var(--accent-bg), #f6dfd6);
@@ -234,7 +227,6 @@ hr {
   border: 1.5px solid rgba(123, 51, 7, 0.15);
 }
 
-/* Rustic diagonal stripes overlay */
 .service-card::before,
 .team-card::before {
   content: "";
@@ -287,120 +279,8 @@ hr {
   margin-top: 0.5rem;
 }
 
-.team-card {
-  background: var(--light);
-  text-align: center;
-  border: 1px solid var(--accent-bg);
-  cursor: grab;
-  user-select: none;
-}
-
-.team-card:active {
-  cursor: grabbing;
-}
-
-.team-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 12px 25px rgba(184, 103, 62, 0.3);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-
-.team-img {
-  width: 100%;
-  height: 220px;
-  object-fit: cover;
-  border-radius: var(--radius);
-  margin-bottom: 1rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-.team-card h3 {
-  color: var(--primary);
-  font-size: 1.4rem;
-  margin: 0.5rem 0;
-}
-
-.team-card p {
-  font-size: 0.95rem;
-  color: #5c3b2a;
-}
-
-.team-bio {
-  font-style: italic;
-  margin-top: 0.5rem;
-}
-
 /* ----------------------------------------
-   HOURS AND CANCELLATION POLICY 
-------------------------------------------- */
-.hours-cancellation-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3rem;
-  background-color: var(--accent-bg);
-  padding: 3rem;
-  border-radius: var(--radius);
-  margin: 4rem auto;
-  max-width: 1100px;
-  box-shadow: var(--shadow);
-  color: var(--deep);
-  border: 1.5px solid rgba(123, 51, 7, 0.3);
-}
-
-.hours ul {
-  list-style: none;
-  padding-left: 0;
-}
-
-.hours li {
-  margin-bottom: 0.7rem;
-  font-size: 1rem;
-}
-
-.cancellation-policy a {
-  color: var(--primary);
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.cancellation-policy a:hover {
-  text-decoration: underline;
-}
-
-/* ----------------------------------------
-   SOCIAL ICONS 
-------------------------------------------- */
-.social-icons {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  flex-wrap: wrap;
-  margin-top: 1.5rem;
-}
-
-.social-link {
-  background: var(--light);
-  padding: 0.75rem;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: var(--transition);
-  box-shadow: var(--shadow);
-}
-
-.social-link:hover {
-  transform: scale(1.12);
-  background-color: var(--accent-bg);
-}
-
-.social-icon {
-  width: 32px;
-  height: 32px;
-}
-
-/* ----------------------------------------
-   FOOTER
+   FOOTER & UTILITY
 ------------------------------------------- */
 footer {
   background: var(--deep);
@@ -417,18 +297,19 @@ footer p {
 }
 
 /* ----------------------------------------
-   FONTS
+   HEADINGS OVERRIDE
 ------------------------------------------- */
 h1, h2, h3, h4, h5, h6,
 #about-us-heading,
 #services-heading,
 #team-heading,
 #social-heading {
-  font-family: 'Dancing Script', cursive;
+  font-family: 'Imperial Script', cursive;
 }
 
-.nanum-myeongjo-regular {
-  font-family: "Nanum Myeongjo", serif;
+/* Optional class */
+.imperial-script-regular {
+  font-family: "Imperial Script", cursive;
   font-weight: 400;
   font-style: normal;
 }
@@ -444,10 +325,6 @@ h1, h2, h3, h4, h5, h6,
 }
 
 @media (max-width: 768px) {
-  .hours-cancellation-container {
-    grid-template-columns: 1fr;
-  }
-
   .hero-banner h1 {
     font-size: 2.3rem;
   }
@@ -457,26 +334,20 @@ h1, h2, h3, h4, h5, h6,
     padding: 0.7rem 1.4rem;
   }
 
-  .team-img {
-    height: 180px;
-  }
-
   .glass-section h2 {
     font-size: 2rem;
   }
 
-  /* Fallback for horizontal scroll on small screens */
+  .service-card,
+  .team-card {
+    width: 100%;
+    flex: none;
+    margin-bottom: 1.5rem;
+  }
+
   .service-grid,
   .team-grid {
     display: block;
     overflow-x: visible;
-  }
-
-  .service-card,
-  .team-card {
-    flex: none;
-    width: 100%;
-    margin-bottom: 1.5rem;
-    scroll-snap-align: none;
   }
 }
