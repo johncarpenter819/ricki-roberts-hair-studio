@@ -108,7 +108,7 @@ export default function Home() {
     setShowAllReviews((prev) => {
       const newShowAll = !prev;
       if (prev) {
-        // Scrolling back to reviews section on collapse
+        // Scroll back to reviews section when collapsing
         reviewsRef.current?.scrollIntoView({ behavior: 'smooth' });
       }
       return newShowAll;
@@ -227,11 +227,24 @@ export default function Home() {
               <p className="nanum-myeongjo-regular">No team members found.</p>
             ) : (
               team.map(member => (
-                <div key={member.id} className="team-card" tabIndex={0} aria-label={`Team member: ${member.name}`}>
-                  <img src={getPhotoSrc(member.photo)} alt={`Portrait of ${member.name}`} className="team-img" />
+                <div
+                  key={member.id}
+                  className="team-card"
+                  tabIndex={0}
+                  aria-label={`Team member: ${member.name}`}
+                >
+                  <img
+                    src={getPhotoSrc(member.photo)}
+                    alt={`Portrait of ${member.name}`}
+                    className="team-photo"
+                  />
                   <h3>{member.name}</h3>
                   <p className="nanum-myeongjo-regular"><strong>Role:</strong> {member.role}</p>
-                  {member.bio && <p className="team-bio nanum-myeongjo-regular"><strong>Bio:</strong> {member.bio}</p>}
+                  {member.bio && (
+                    <p className="team-bio nanum-myeongjo-regular">
+                      <strong>Bio:</strong> {member.bio}
+                    </p>
+                  )}
                 </div>
               ))
             )}
@@ -249,7 +262,15 @@ export default function Home() {
         <div className="hours" aria-labelledby="business-hours-heading">
           <h2 id="business-hours-heading">Business Hours</h2>
           <ul>
-            {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map(day => (
+            {[
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday",
+              "Saturday",
+              "Sunday",
+            ].map(day => (
               <li key={day} className="nanum-myeongjo-regular">
                 <strong>{day.substring(0, 3)}:</strong> {hours[day] || "Closed"}
               </li>
@@ -257,11 +278,16 @@ export default function Home() {
           </ul>
         </div>
 
-        <div className="cancellation-policy" aria-labelledby="cancellation-policy-heading">
+        <div
+          className="cancellation-policy"
+          aria-labelledby="cancellation-policy-heading"
+        >
           <h2 id="cancellation-policy-heading">Cancellation Policy</h2>
           <p className="nanum-myeongjo-regular">
             We get it that sometimes things come up and you may need to cancel. Ricki Roberts Hair Studio has a 50% cancellation fee.
-            If you are unable to make the appointment, please kindly notify us at <a href="tel:8179879261">(817) 987-9261</a> or <a href="mailto:ricquell.muah@gmail.com">ricquell.muah@gmail.com</a>.
+            If you are unable to make the appointment, please kindly notify us at{' '}
+            <a href="tel:8179879261">(817) 987-9261</a> or{' '}
+            <a href="mailto:ricquell.muah@gmail.com">ricquell.muah@gmail.com</a>.
           </p>
         </div>
       </section>
@@ -289,14 +315,25 @@ export default function Home() {
                 className="social-link"
               >
                 {name === 'Instagram' && (
-                  <svg className="social-icon" viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-                    <circle cx="12" cy="12" r="3.5" />
-                    <line x1="17.5" y1="6.5" x2="17.5" y2="6.5" />
+                  <svg
+                    className="social-icon"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor"
+                  >
+                    <rect width="24" height="24" rx="5" ry="5" fill="none" />
+                    <path d="M7.75 2h8.5A5.75 5.75 0 0122 7.75v8.5A5.75 5.75 0 0116.25 22h-8.5A5.75 5.75 0 012 16.25v-8.5A5.75 5.75 0 017.75 2zM12 7.25a4.75 4.75 0 100 9.5 4.75 4.75 0 000-9.5zm0 7.75a3 3 0 110-6 3 3 0 010 6zm4.75-8.5a1.25 1.25 0 11-2.5 0 1.25 1.25 0 012.5 0z" />
                   </svg>
                 )}
+
                 {name === 'Facebook' && (
-                  <svg className="social-icon" viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+                  <svg
+                    className="social-icon"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
                     <path d="M22.675 0h-21.35C.593 0 0 .593 0 1.326v21.348C0 23.406.593 24 1.325 24h11.495v-9.294H9.691v-3.622h3.129V8.413c0-3.1 1.894-4.788 4.659-4.788 1.325 0 2.464.099 2.795.143v3.24l-1.918.001c-1.504 0-1.796.715-1.796 1.764v2.314h3.588l-.467 3.622h-3.121V24h6.116c.73 0 1.324-.594 1.324-1.326V1.326C24 .593 23.406 0 22.675 0z" />
                   </svg>
                 )}
