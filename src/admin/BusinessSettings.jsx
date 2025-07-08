@@ -3,7 +3,7 @@ import { useBusiness } from "../context/BusinessContext";
 import '../styles/AdminPortal.css'; // import shared admin styles
 
 export default function BusinessSettings() {
-  const { hours, setHours, contact, setContact } = useBusiness();
+  const { hours, setHours, contact, setContact, about, setAbout } = useBusiness();
   const [message, setMessage] = useState("");
 
   const handleHourChange = (day, value) => {
@@ -14,8 +14,12 @@ export default function BusinessSettings() {
     setContact((prev) => ({ ...prev, [field]: value }));
   };
 
+  const handleAboutChange = (value) => {
+    setAbout(value);
+  };
+
   const handleSave = () => {
-    setMessage("Business hours and contact info saved!");
+    setMessage("Business hours, contact info, and About Us saved!");
     setTimeout(() => setMessage(""), 3000);
   };
 
@@ -71,6 +75,15 @@ export default function BusinessSettings() {
           className="admin-textarea"
         />
       </label>
+
+      <h3>About Us</h3>
+      <textarea
+        value={about}
+        onChange={(e) => handleAboutChange(e.target.value)}
+        rows={5}
+        className="admin-textarea"
+        style={{ width: '100%', marginBottom: '1rem' }}
+      />
 
       <button onClick={handleSave} className="admin-button" style={{ marginTop: '1rem' }}>
         Save

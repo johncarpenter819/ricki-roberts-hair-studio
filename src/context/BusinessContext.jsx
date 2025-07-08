@@ -20,6 +20,8 @@ const defaultContact = {
   address: "123 Salon Street, City, State ZIP",
 };
 
+const defaultAbout = "At Ricki Roberts Hair Studio, we’re dedicated to delivering stylish, confident results while creating a warm and welcoming environment.";
+
 // Define the order of days
 const orderedDays = [
   "Monday",
@@ -43,10 +45,12 @@ function sortHoursObject(hoursObj) {
 export function BusinessProvider({ children }) {
   const [hours, setHours] = useState(defaultHours);
   const [contact, setContact] = useState(defaultContact);
+  const [about, setAbout] = useState(defaultAbout);
   const [loading, setLoading] = useState(true);
 
   const hoursDocRef = doc(db, "business", "hours");
   const contactDocRef = doc(db, "business", "contact");
+  const aboutDocRef = doc(db, "business", "about");
 
   useEffect(() => {
     const unsubscribeHours = onSnapshot(hoursDocRef, (snapshot) => {
@@ -66,30 +70,49 @@ export function BusinessProvider({ children }) {
       }
     });
 
+    const unsubscribeAbout = onSnapshot(aboutDocRef, (snapshot) => {
+      if (snapshot.exists()) {
+        const data = snapshot.data();
+        setAbout(data.text || defaultAbout);
+      } else {
+        setAbout(defaultAbout);
+      }
+    });
+
     setLoading(false);
 
     return () => {
       unsubscribeHours();
       unsubscribeContact();
+      unsubscribeAbout();
     };
   }, []);
 
+  // Write hours updates to Firestore
   useEffect(() => {
     if (!loading) {
       setDoc(hoursDocRef, hours);
     }
   }, [hours]);
 
+  // Write contact updates to Firestore
   useEffect(() => {
     if (!loading) {
       setDoc(contactDocRef, contact);
     }
   }, [contact]);
 
+  // Write about updates to Firestore
+  useEffect(() => {
+    if (!loading) {
+      setDoc(aboutDocRef, { text: about });
+    }
+  }, [about]);
+
   if (loading) return null;
 
   return (
-    <BusinessContext.Provider value={{ hours, setHours, contact, setContact }}>
+    <BusinessContext.Provider value={{ hours, setHours, contact, setContact, about, setAbout }}>
       {children}
     </BusinessContext.Provider>
   );

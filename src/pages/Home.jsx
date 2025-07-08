@@ -6,15 +6,17 @@ import { useState, useEffect, useRef } from 'react';
 import { db } from '../firebaseConfig';
 import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
 import { getServiceCategories } from '../utils/firestore';
+import reviewsData from '../data/reviews.json';
 
 export default function Home() {
-  const { hours } = useBusiness();
+  const { hours, about } = useBusiness();
   const { team } = useTeam();
   const navigate = useNavigate();
 
   const [socialLinks, setSocialLinks] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loadingCategories, setLoadingCategories] = useState(true);
+  const reviews = reviewsData;
 
   const sectionsRef = useRef([]);
 
@@ -47,6 +49,7 @@ export default function Home() {
       ...sectionsRef.current,
       ...document.querySelectorAll('.service-card'),
       ...document.querySelectorAll('.team-card'),
+      ...document.querySelectorAll('.review-card'),
     ];
 
     if (allObservedElements.length === 0) return;
@@ -97,8 +100,6 @@ export default function Home() {
     return `/assets/${photo}`;
   };
 
-  const orderedDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-
   return (
     <>
       <section className="hero-banner" aria-label="Salon Banner and Welcome">
@@ -121,12 +122,37 @@ export default function Home() {
       >
         <h2 id="about-us-heading">About Us</h2>
         <p className="nanum-myeongjo-regular">
-          At Ricki Roberts Hair Studio, we’re dedicated to delivering stylish,
-          confident results while creating a warm and welcoming environment.
+          {about || "Welcome to our salon! Our story will appear here soon."}
         </p>
       </section>
 
       <hr />
+
+      {/* ✅ Cleaned-up Reviews Section */}
+      <section
+        className="glass-reviews"
+        ref={el => (sectionsRef.current[1.5] = el)}
+        tabIndex={-1}
+        aria-labelledby="reviews-heading"
+      >
+        <h2 id="reviews-heading">Ratings & Reviews</h2>
+        <div className="reviews-container">
+          {reviews.length === 0 ? (
+            <p className="nanum-myeongjo-regular">No reviews available.</p>
+          ) : (
+            reviews.map((review, i) => (
+              <div key={i} className="review-card nanum-myeongjo-regular">
+                <p className="review-text">"{review.text}"</p>
+                <p className="review-meta">
+                  <span className="review-stars">{'⭐️'.repeat(review.stars)}</span>
+                  <span className="review-date">{review.date}</span> ·{' '}
+                  <span className="review-author">{review.name}</span>
+                </p>
+              </div>
+            ))
+          )}
+        </div>
+      </section>
 
       <section
         className="glass-services"
@@ -196,7 +222,7 @@ export default function Home() {
         <div className="hours" aria-labelledby="business-hours-heading">
           <h2 id="business-hours-heading">Business Hours</h2>
           <ul>
-            {orderedDays.map(day => (
+            {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map(day => (
               <li key={day} className="nanum-myeongjo-regular">
                 <strong>{day.substring(0, 3)}:</strong> {hours[day] || "Closed"}
               </li>
@@ -236,24 +262,14 @@ export default function Home() {
                 className="social-link"
               >
                 {name === 'Instagram' && (
-                  <svg
-                    className="social-icon"
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
+                  <svg className="social-icon" viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
                     <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
                     <circle cx="12" cy="12" r="3.5" />
                     <line x1="17.5" y1="6.5" x2="17.5" y2="6.5" />
                   </svg>
                 )}
                 {name === 'Facebook' && (
-                  <svg
-                    className="social-icon"
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
+                  <svg className="social-icon" viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
                     <path d="M22.675 0h-21.35C.593 0 0 .593 0 1.326v21.348C0 23.406.593 24 1.325 24h11.495v-9.294H9.691v-3.622h3.129V8.413c0-3.1 1.894-4.788 4.659-4.788 1.325 0 2.464.099 2.795.143v3.24l-1.918.001c-1.504 0-1.796.715-1.796 1.764v2.314h3.588l-.467 3.622h-3.121V24h6.116c.73 0 1.324-.594 1.324-1.326V1.326C24 .593 23.406 0 22.675 0z" />
                   </svg>
                 )}
