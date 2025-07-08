@@ -1,6 +1,10 @@
 // src/utils/firestore.js
 import { db } from "../firebaseConfig";
-import { doc, setDoc, getDoc } from "firebase/firestore";
+import {
+  doc,
+  setDoc,
+  getDoc
+} from "firebase/firestore";
 
 export async function saveBusinessData(hours, contact) {
   await setDoc(doc(db, "settings", "business"), {
@@ -16,4 +20,22 @@ export async function getBusinessData() {
   } else {
     return null;
   }
+}
+
+// ✅ Get unique service categories from Firestore
+export async function getServiceCategories() {
+  const servicesDocRef = doc(db, 'business', 'services');
+  const snapshot = await getDoc(servicesDocRef);
+  if (!snapshot.exists()) return [];
+
+  const data = snapshot.data();
+  if (!Array.isArray(data.items)) return [];
+
+  const categories = [...new Set(
+    data.items
+      .map(item => item?.category?.trim())
+      .filter(Boolean)
+  )];
+
+  return categories;
 }

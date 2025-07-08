@@ -1,3 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Imperial+Script&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo&display=swap');
+
+:root {
+  --primary: #b8673e;
+  --deep: #7b3307;
+  --light: #ffffff;
+  --soft-bg: #e4cec0;
+  --accent-bg: #e3b8ae;
+  --radius: 16px;
+  --shadow: 0 8px 20px rgba(123, 51, 7, 0.25);
+  --transition: all 0.3s ease-in-out;
+  --font-display: 'Imperial Script', cursive;
+  --font-body: 'Segoe UI', sans-serif;
+  --texture: url('../assets/paper-fibers.png');
+}
+
 html, body, #root {
   height: 100%;
   margin: 0;

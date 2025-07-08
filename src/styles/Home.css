@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Imperial+Script&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Imperial+Script&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo&display=swap');
 
 :root {
@@ -13,7 +13,7 @@
   --font-display: 'Imperial Script', cursive;
   --font-body: 'Segoe UI', sans-serif;
   --texture: url('../assets/paper-fibers.png');
-}
+} */
 /* ----------------------------------------
    BODY BACKGROUND (Finalized)
 ------------------------------------------- */
@@ -273,38 +273,85 @@ hr {
   content: none;
 }
 
+/* ----------------------------------------
+   FOLLOW US LINKS & ICONS (updated)
+------------------------------------------- */
 .glass-social .social-icons {
   display: flex;
   justify-content: center;
-  gap: 2rem;
+  gap: 1.5rem;
   flex-wrap: wrap;
   margin-top: 0;
   padding: 0;
 }
 
 .social-link {
-  background: var(--light);
-  padding: 0.75rem;
-  border-radius: 50%;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  box-shadow: var(--shadow);
-  transition: var(--transition);
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: 2px solid var(--primary);
+  border-radius: 50%;
   cursor: pointer;
-  width: 48px;
-  height: 48px;
+  transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+  color: var(--primary);
+  box-shadow: none;
+  position: relative;
+  text-decoration: none;
 }
 
 .social-link:hover {
-  transform: scale(1.15);
-  background-color: var(--accent-bg);
+  background-color: var(--primary);
+  color: var(--light);
+  border-color: var(--primary);
+  transform: scale(1.1);
 }
 
 .social-icon {
-  width: 24px;
-  height: 24px;
-  fill: var(--primary);
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+  stroke: none;
+  transition: fill 0.3s ease;
+  pointer-events: none;
+}
+
+.social-link:hover .social-icon {
+  fill: var(--light);
+}
+
+/* Instagram icon fill on hover */
+.social-link[href*="instagram"]:hover .social-icon {
+  fill: #e1306c;
+}
+
+/* Facebook icon fill on hover */
+.social-link[href*="facebook"]:hover .social-icon {
+  fill: #1877F2;
+}
+
+/* Optional: Add subtle pulsing glow on hover */
+.social-link:hover::after {
+  content: "";
+  position: absolute;
+  top: -10px; left: -10px; right: -10px; bottom: -10px;
+  border-radius: 50%;
+  box-shadow: 0 0 12px var(--primary);
+  opacity: 0.5;
+  animation: pulseGlow 2.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Reuse pulseGlow keyframe */
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 8px var(--light);
+  }
+  50% {
+    box-shadow: 0 0 20px var(--primary);
+  }
 }
 
 /* ----------------------------------------
@@ -569,74 +616,50 @@ footer {
   padding: 2rem;
   text-align: center;
   font-size: 0.9rem;
+  user-select: none;
   font-family: var(--font-body);
-  margin-top: 5rem;
+  letter-spacing: 0.02em;
 }
 
-footer p {
-  margin: 0;
+footer a {
+  color: var(--accent-bg);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
 }
 
-/* ----------------------------------------
-   HEADINGS OVERRIDE
-------------------------------------------- */
-h1, h2, h3, h4, h5, h6,
-#about-us-heading,
-#services-heading,
-#team-heading,
-#social-heading {
-  font-family: 'Imperial Script', cursive;
+footer a:hover {
+  color: var(--light);
 }
 
-/* Optional class */
-.imperial-script-regular {
-  font-family: "Imperial Script", cursive;
-  font-weight: 400;
-  font-style: normal;
+/* Utility classes */
+.text-center {
+  text-align: center;
 }
 
-/* ----------------------------------------
-   RESPONSIVE
-------------------------------------------- */
-@media (max-width: 1024px) {
-  .service-card,
-  .team-card {
-    flex: 0 0 240px;
-  }
+.mb-1 {
+  margin-bottom: 1rem;
 }
 
-@media (max-width: 768px) {
-  .hero-banner h1 {
-    font-size: 2.3rem;
-  }
-
-  .cta-btn {
-    font-size: 1rem;
-    padding: 0.7rem 1.4rem;
-  }
-
-  .glass-about h2,
-  .glass-services h2,
-  .glass-team h2,
-  .glass-social h2 {
-    font-size: 2rem;
-  }
-
-  .service-card,
-  .team-card {
-    width: 100%;
-    flex: none;
-    margin-bottom: 1.5rem;
-  }
-
-  .service-grid,
-  .team-grid {
-    display: block;
-    overflow-x: visible;
-  }
-
-  .hours-cancellation-container {
-    grid-template-columns: 1fr;
-    padding: 2rem;
-  }
+.mb-2 {
+  margin-bottom: 2rem;
 }
+
+/* Scrollbar Styling for all overflow containers */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 4px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+/* End of CSS */

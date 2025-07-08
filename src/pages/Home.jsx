@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
 import { db } from '../firebaseConfig';
 import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
+import { getServiceCategories } from '../utils/firestore';
 
 export default function Home() {
   const { hours } = useBusiness();
@@ -12,8 +13,9 @@ export default function Home() {
   const navigate = useNavigate();
 
   const [socialLinks, setSocialLinks] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [loadingCategories, setLoadingCategories] = useState(true);
 
-  // Refs for scroll animations
   const sectionsRef = useRef([]);
 
   useEffect(() => {
@@ -22,11 +24,24 @@ export default function Home() {
       const fetched = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setSocialLinks(fetched);
     });
-
     return () => unsubscribe();
   }, []);
 
-  // Scroll fade-in with IntersectionObserver for sections, service cards, and team cards
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        const result = await getServiceCategories();
+        setCategories(result);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+        setCategories([]);
+      } finally {
+        setLoadingCategories(false);
+      }
+    }
+    fetchCategories();
+  }, []);
+
   useEffect(() => {
     const allObservedElements = [
       ...sectionsRef.current,
@@ -34,12 +49,14 @@ export default function Home() {
       ...document.querySelectorAll('.team-card'),
     ];
 
+    if (allObservedElements.length === 0) return;
+
     const observer = new IntersectionObserver(
-      (entries) => {
+      (entries, obs) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add('visible');
-            observer.unobserve(entry.target);
+            obs.unobserve(entry.target);
           }
         });
       },
@@ -50,12 +67,27 @@ export default function Home() {
       if (el) observer.observe(el);
     });
 
+    allObservedElements.forEach((el) => {
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const inViewport =
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.right <= (window.innerWidth || document.documentElement.clientWidth);
+
+      if (inViewport) {
+        el.classList.add('visible');
+        observer.unobserve(el);
+      }
+    });
+
     return () => {
       allObservedElements.forEach((el) => {
         if (el) observer.unobserve(el);
       });
     };
-  }, []);
+  }, [categories, team]);
 
   const goToBooking = () => navigate('/booking');
 
@@ -105,18 +137,25 @@ export default function Home() {
       >
         <h2 id="services-heading">Our Services</h2>
         <div className="service-grid">
-          <div className="service-card" tabIndex={0} aria-label="Haircuts Service">
-            <h3>Haircuts</h3>
-            <p className="nanum-myeongjo-regular">Custom cuts tailored to your style and preferences.</p>
-          </div>
-          <div className="service-card" tabIndex={0} aria-label="Color Service">
-            <h3>Color</h3>
-            <p className="nanum-myeongjo-regular">Vibrant color, highlights, and balayage.</p>
-          </div>
-          <div className="service-card" tabIndex={0} aria-label="Styling Service">
-            <h3>Styling</h3>
-            <p className="nanum-myeongjo-regular">Perfect looks for events, photoshoots, or daily glam.</p>
-          </div>
+          {loadingCategories ? (
+            <p className="nanum-myeongjo-regular">Loading services...</p>
+          ) : categories.length === 0 ? (
+            <p className="nanum-myeongjo-regular">No services found.</p>
+          ) : (
+            categories.map((category, index) => (
+              <div
+                key={`${category}-${index}`}
+                className="service-card"
+                tabIndex={0}
+                aria-label={`${category} service`}
+              >
+                <h3>{category}</h3>
+                <p className="nanum-myeongjo-regular">
+                  Explore our expert {category.toLowerCase()} offerings tailored just for you.
+                </p>
+              </div>
+            ))
+          )}
         </div>
       </section>
 
@@ -129,8 +168,6 @@ export default function Home() {
         aria-labelledby="team-heading"
       >
         <h2 id="team-heading">Meet the Team</h2>
-
-        {/* Added container here */}
         <div className="team-container">
           <div className={`team-grid ${team.length === 0 ? 'no-members' : ''}`}>
             {team.length === 0 ? (
@@ -199,13 +236,26 @@ export default function Home() {
                 className="social-link"
               >
                 {name === 'Instagram' && (
-                  <svg className="social-icon" viewBox="0 0 24 24" fill="#E1306C" aria-hidden="true"><path d="M7.75 2h8.5A5.75 5.75 0 0122 7.75v8.5A5.75 5.75 0 0116.25 22h-8.5A5.75 5.75 0 012 16.25v-8.5A5.75 5.75 0 017.75 2zm0 1.5A4.25 4.25 0 003.5 7.75v8.5A4.25 4.25 0 007.75 20.5h8.5A4.25 4.25 0 0020.5 16.25v-8.5A4.25 4.25 0 0016.25 3.5h-8.5zM12 7a5 5 0 110 10 5 5 0 010-10zm0 1.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7zm4.75-.75a.75.75 0 110 1.5.75.75 0 010-1.5z"/></svg>
+                  <svg
+                    className="social-icon"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                    <circle cx="12" cy="12" r="3.5" />
+                    <line x1="17.5" y1="6.5" x2="17.5" y2="6.5" />
+                  </svg>
                 )}
                 {name === 'Facebook' && (
-                  <svg className="social-icon" viewBox="0 0 24 24" fill="#1877F2" aria-hidden="true"><path d="M22 12a10 10 0 10-11.625 9.875v-7H8v-3h2.375v-2.3c0-2.35 1.4-3.65 3.55-3.65 1.03 0 2.1.185 2.1.185v2.31H15.6c-1.24 0-1.63.765-1.63 1.55V12H17l-.5 3h-2.53v7A10.001 10.001 0 0022 12z"/></svg>
-                )}
-                {name === 'TikTok' && (
-                  <svg className="social-icon" viewBox="0 0 24 24" fill="#000000" aria-hidden="true"><path d="M9 3h3v13a3 3 0 11-3-3v-3a6 6 0 106 6V8.5a6.5 6.5 0 004 1.5V7a4.5 4.5 0 01-4-2.5A3.5 3.5 0 0112 1H9v2z"/></svg>
+                  <svg
+                    className="social-icon"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M22.675 0h-21.35C.593 0 0 .593 0 1.326v21.348C0 23.406.593 24 1.325 24h11.495v-9.294H9.691v-3.622h3.129V8.413c0-3.1 1.894-4.788 4.659-4.788 1.325 0 2.464.099 2.795.143v3.24l-1.918.001c-1.504 0-1.796.715-1.796 1.764v2.314h3.588l-.467 3.622h-3.121V24h6.116c.73 0 1.324-.594 1.324-1.326V1.326C24 .593 23.406 0 22.675 0z" />
+                  </svg>
                 )}
               </a>
             ))

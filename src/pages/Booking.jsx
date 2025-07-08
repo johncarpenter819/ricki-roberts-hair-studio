@@ -1,3 +1,4 @@
+import '../styles/Booking.css';
 import { useState, useEffect } from 'react';
 import { useServices } from '../context/ServicesContext';
 import { useAppointments } from '../context/AppointmentsContext';
@@ -27,14 +28,12 @@ export default function Booking() {
     subscribe: false,
   });
 
-  // Hydration flag
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
     setHydrated(true);
   }, []);
 
-  // Load appointments from localStorage once on mount
   useEffect(() => {
     const savedAppointments = localStorage.getItem('appointments');
     if (savedAppointments) {
@@ -42,7 +41,6 @@ export default function Booking() {
     }
   }, [setAppointments]);
 
-  // Save appointments to localStorage whenever they change
   useEffect(() => {
     if (appointments.length > 0) {
       localStorage.setItem('appointments', JSON.stringify(appointments));
@@ -60,13 +58,8 @@ export default function Booking() {
     const selectedService = services.find((s) => s.id === parseInt(form.serviceId));
     const selectedStylist = team.find((t) => t.id === parseInt(form.stylistId));
 
-    if (!selectedService) {
-      alert('Please select a valid service.');
-      return;
-    }
-
-    if (!selectedStylist) {
-      alert('Please select a stylist.');
+    if (!selectedService || !selectedStylist) {
+      alert('Please select a valid service and stylist.');
       return;
     }
 
@@ -100,42 +93,63 @@ export default function Booking() {
   };
 
   return (
-    <div
-      style={{
-        maxWidth: '600px',
-        margin: '3rem auto',
-        padding: '2rem',
-        backgroundColor: '#f7f3ef',
-        borderRadius: '12px',
-        boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-      }}
-    >
-      <h2 style={{ color: '#4b3b2b', textAlign: 'center', marginBottom: '1.5rem' }}>
-        Book an Appointment
-      </h2>
+    <div className={`booking-page ${hydrated ? 'visible' : ''}`}>
+      <h1 className="booking-title">Book an Appointment</h1>
 
       {!hydrated ? (
         <p>Loading form...</p>
       ) : (
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          <label style={labelStyle}>
+        <form className="booking-form" onSubmit={handleSubmit}>
+
+          <label className="booking-label" htmlFor="name">
             Name
-            <input type="text" name="name" value={form.name} onChange={handleChange} required style={inputStyle} />
+            <input
+              id="name"
+              className="booking-input"
+              type="text"
+              name="name"
+              value={form.name}
+              onChange={handleChange}
+              required
+            />
           </label>
 
-          <label style={labelStyle}>
+          <label className="booking-label" htmlFor="email">
             Email
-            <input type="email" name="email" value={form.email} onChange={handleChange} required style={inputStyle} />
+            <input
+              id="email"
+              className="booking-input"
+              type="email"
+              name="email"
+              value={form.email}
+              onChange={handleChange}
+              required
+            />
           </label>
 
-          <label style={labelStyle}>
+          <label className="booking-label" htmlFor="phone">
             Phone Number
-            <input type="tel" name="phone" value={form.phone} onChange={handleChange} required style={inputStyle} />
+            <input
+              id="phone"
+              className="booking-input"
+              type="tel"
+              name="phone"
+              value={form.phone}
+              onChange={handleChange}
+              required
+            />
           </label>
 
-          <label style={labelStyle}>
+          <label className="booking-label" htmlFor="serviceId">
             Service
-            <select name="serviceId" value={form.serviceId} onChange={handleChange} required style={inputStyle}>
+            <select
+              id="serviceId"
+              className="booking-select"
+              name="serviceId"
+              value={form.serviceId}
+              onChange={handleChange}
+              required
+            >
               <option value="">Select a Service</option>
               {services.map((s) => (
                 <option key={s.id} value={s.id}>
@@ -145,9 +159,16 @@ export default function Booking() {
             </select>
           </label>
 
-          <label style={labelStyle}>
+          <label className="booking-label" htmlFor="stylistId">
             Stylist
-            <select name="stylistId" value={form.stylistId} onChange={handleChange} required style={inputStyle}>
+            <select
+              id="stylistId"
+              className="booking-select"
+              name="stylistId"
+              value={form.stylistId}
+              onChange={handleChange}
+              required
+            >
               <option value="">Select a Stylist</option>
               {team.map((stylist) => (
                 <option key={stylist.id} value={stylist.id}>
@@ -157,28 +178,44 @@ export default function Booking() {
             </select>
           </label>
 
-          <label style={labelStyle}>
+          <label className="booking-label" htmlFor="date">
             Date
-            <input type="date" name="date" value={form.date} onChange={handleChange} required style={inputStyle} />
-          </label>
-
-          <label style={labelStyle}>
-            Time
-            <input type="time" name="time" value={form.time} onChange={handleChange} required style={inputStyle} />
-          </label>
-
-          <label style={{ ...labelStyle, flexDirection: 'row', alignItems: 'center' }}>
             <input
+              id="date"
+              className="booking-input"
+              type="date"
+              name="date"
+              value={form.date}
+              onChange={handleChange}
+              required
+            />
+          </label>
+
+          <label className="booking-label" htmlFor="time">
+            Time
+            <input
+              id="time"
+              className="booking-input"
+              type="time"
+              name="time"
+              value={form.time}
+              onChange={handleChange}
+              required
+            />
+          </label>
+
+          <label className="checkbox-label" htmlFor="subscribe">
+            <input
+              id="subscribe"
               type="checkbox"
               name="subscribe"
               checked={form.subscribe}
               onChange={handleChange}
-              style={{ marginRight: '0.5rem' }}
             />
             I’d like to receive newsletters, discounts, or service updates.
           </label>
 
-          <button type="submit" style={buttonStyle}>
+          <button type="submit" className="cta-btn">
             Book Now
           </button>
         </form>
@@ -186,32 +223,3 @@ export default function Booking() {
     </div>
   );
 }
-
-const inputStyle = {
-  padding: '0.6rem',
-  fontSize: '1rem',
-  borderRadius: '6px',
-  border: '1px solid #ccc',
-  backgroundColor: '#fff',
-  marginTop: '0.3rem',
-};
-
-const labelStyle = {
-  color: '#4b3b2b',
-  fontWeight: '600',
-  display: 'flex',
-  flexDirection: 'column',
-};
-
-const buttonStyle = {
-  padding: '0.75rem',
-  backgroundColor: '#a77b5a',
-  color: 'white',
-  fontWeight: 'bold',
-  fontSize: '1rem',
-  border: 'none',
-  borderRadius: '8px',
-  cursor: 'pointer',
-  marginTop: '1rem',
-  transition: 'background-color 0.3s',
-};
