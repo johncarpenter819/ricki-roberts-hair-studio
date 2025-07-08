@@ -18,7 +18,10 @@ export default function Home() {
   const [loadingCategories, setLoadingCategories] = useState(true);
   const reviews = reviewsData;
 
+  const [showAllReviews, setShowAllReviews] = useState(false);
+
   const sectionsRef = useRef([]);
+  const reviewsRef = useRef(null);
 
   useEffect(() => {
     const q = query(collection(db, 'socialLinks'), orderBy('name'));
@@ -100,6 +103,18 @@ export default function Home() {
     return `/assets/${photo}`;
   };
 
+  // Toggle reviews and scroll to top if collapsing
+  const toggleReviews = () => {
+    setShowAllReviews((prev) => {
+      const newShowAll = !prev;
+      if (prev) {
+        // Scrolling back to reviews section on collapse
+        reviewsRef.current?.scrollIntoView({ behavior: 'smooth' });
+      }
+      return newShowAll;
+    });
+  };
+
   return (
     <>
       <section className="hero-banner" aria-label="Salon Banner and Welcome">
@@ -128,7 +143,6 @@ export default function Home() {
 
       <hr />
 
-      {/* ✅ Cleaned-up Reviews Section */}
       <section
         className="glass-reviews"
         ref={el => (sectionsRef.current[1.5] = el)}
@@ -136,11 +150,11 @@ export default function Home() {
         aria-labelledby="reviews-heading"
       >
         <h2 id="reviews-heading">Ratings & Reviews</h2>
-        <div className="reviews-container">
+        <div id="reviews-container" className="reviews-container" ref={reviewsRef}>
           {reviews.length === 0 ? (
             <p className="nanum-myeongjo-regular">No reviews available.</p>
           ) : (
-            reviews.map((review, i) => (
+            (showAllReviews ? reviews : reviews.slice(0, 10)).map((review, i) => (
               <div key={i} className="review-card nanum-myeongjo-regular">
                 <p className="review-text">"{review.text}"</p>
                 <p className="review-meta">
@@ -152,6 +166,19 @@ export default function Home() {
             ))
           )}
         </div>
+        {reviews.length > 10 && (
+          <div className="reviews-button-container">
+            <button
+              className="cta-btn"
+              onClick={toggleReviews}
+              aria-expanded={showAllReviews}
+              aria-controls="reviews-container"
+              style={{ marginTop: '1.5rem' }}
+            >
+              {showAllReviews ? 'Show Less Reviews' : `Show All Reviews (${reviews.length})`}
+            </button>
+          </div>
+        )}
       </section>
 
       <section
