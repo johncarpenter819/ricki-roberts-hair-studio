@@ -27,8 +27,8 @@
 }
 
 .logo-img:hover {
-  transform: scale(1.05);
-  filter: drop-shadow(0 2px 8px rgba(184, 103, 62, 0.4));
+  transform: scale(1.08);
+  filter: drop-shadow(0 4px 15px rgba(184, 103, 62, 0.7)) brightness(1.05);
 }
 
 

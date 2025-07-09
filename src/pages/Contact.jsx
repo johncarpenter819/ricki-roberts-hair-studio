@@ -47,7 +47,7 @@ const Contact = () => {
 
   return (
     <div className={`contact-page ${hydrated ? 'visible' : ''}`}>
-      <h1>Ask Ricki Robertson a Question</h1>
+      <h1>Ask Ricki Roberts a Question</h1>
 
       <form className="contact-form" onSubmit={handleSubmit}>
         <label>
