@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useServices } from '../context/ServicesContext';
 import { useAppointments } from '../context/AppointmentsContext';
 import { useTeam } from '../context/TeamContext';
+import emailjs from '@emailjs/browser';
 
 const BUSINESS_HOURS = {
   start: 9.5, // 9:30 AM as decimal hours
@@ -97,6 +98,27 @@ export default function Booking() {
   };
 
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+  // EmailJS confirmation sender
+  const sendConfirmationEmail = (appointment) => {
+    const templateParams = {
+      to_name: appointment.name,
+      to_email: appointment.email,
+      service: appointment.service,
+      stylist: appointment.stylist,
+      date: appointment.date,
+      time: appointment.time,
+      phone: appointment.phone,
+    };
+
+    emailjs.send('service_wn6pbqr', 'template_1mva669', templateParams, '6gOkwHvGmFWzYR83o')
+      .then(() => {
+        console.log('Confirmation email sent successfully!');
+      })
+      .catch((error) => {
+        console.error('Failed to send confirmation email:', error);
+      });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -216,6 +238,9 @@ export default function Booking() {
     };
 
     setAppointments([...appointments, newAppointment]);
+
+    // Send confirmation email after successful booking
+    sendConfirmationEmail(newAppointment);
 
     alert(`Thank you, ${form.name}! Your ${selectedService.name} with ${selectedStylist.name} is booked.`);
 
