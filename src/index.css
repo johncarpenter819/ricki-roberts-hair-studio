@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Imperial+Script&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo&display=swap');
 
 :root {
@@ -10,8 +10,8 @@
   --radius: 16px;
   --shadow: 0 8px 20px rgba(123, 51, 7, 0.25);
   --transition: all 0.3s ease-in-out;
-  --font-display: 'Imperial Script', cursive;
-  --font-body: 'Segoe UI', sans-serif;
+  --font-display: 'Dancing Script', cursive;
+  --font-body: 'Nanum Myeongjo', serif;
   --texture: url('../assets/paper-fibers.png');
 }
 
@@ -36,4 +36,30 @@ body {
 /* Make sure App content grows */
 main, .app-content {
   flex-grow: 1;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --radius: 20px;
+  }
+
+  body {
+    font-size: 1.1rem;
+  }
+
+  .app-content {
+    padding: 2rem;
+  }
+}
+
+/* Laptop/Desktop Styles */
+@media (min-width: 1024px) {
+  body {
+    font-size: 1.2rem;
+  }
+
+  .app-content {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
 }

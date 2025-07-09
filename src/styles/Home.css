@@ -18,10 +18,54 @@
 /* ----------------------------------------
    BODY BACKGROUND (Finalized)
 ------------------------------------------- */
-body {
+html, body, #root {
+  height: 100%;
+  min-height: 100vh;
+  width: 100%;
   margin: 0;
+  padding: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  /* texture and base background */
+  background-image: url('/texture3.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-blend-mode: multiply;
+
+  position: relative;
+  color: var(--deep);
   font-family: var(--font-body);
-  background-color: var(--soft-bg);
+  line-height: 1.6;
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+/* Stronger warm overlay with multiple colors & blend */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -2;
+
+  /* Use multiple layered semi-transparent gradients to create a rich warm tint */
+  background-image:
+    linear-gradient(135deg, rgba(184, 103, 62, 0.45), rgba(123, 51, 7, 0.6)),
+    radial-gradient(circle at 25% 30%, rgba(228, 206, 192, 0.4), transparent 70%),
+    radial-gradient(circle at 80% 60%, rgba(227, 184, 174, 0.3), transparent 70%);
+  background-blend-mode: screen;
+}
+
+/* Layered subtle textures and highlights */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
 
   background-image:
     radial-gradient(circle at 20% 30%, rgba(184, 103, 62, 0.12), transparent 65%),
@@ -58,84 +102,39 @@ body {
     0 0,
     top;
 
-  background-repeat: no-repeat, no-repeat, repeat, repeat, repeat;
-  background-blend-mode: overlay, overlay, soft-light, lighten, multiply;
+  background-repeat:
+    no-repeat,
+    no-repeat,
+    repeat,
+    repeat,
+    repeat;
 
-  color: var(--deep);
-  line-height: 1.6;
-  scroll-behavior: smooth;
-  position: relative;
-  overflow-x: hidden;
-
-  animation: backgroundDrift 80s ease-in-out infinite alternate;
+  background-blend-mode:
+    overlay,
+    overlay,
+    soft-light,
+    lighten,
+    multiply;
 }
 
-/* Floating radial blobs for depth and glow */
-body::before,
-body::after {
-  content: "";
-  position: fixed;
-  width: 240px;
-  height: 240px;
-  border-radius: 50%;
-  pointer-events: none;
-  filter: blur(80px);
-  opacity: 0.2;
-  z-index: 0;
-  animation: floatBlob 30s ease-in-out infinite alternate;
-  background: radial-gradient(circle, rgba(184, 103, 62, 0.15), transparent 70%);
+/* Sections background so texture shows through */
+section {
+  background: rgba(255 255 255 / 0.75);
+  border-radius: 12px;
+  padding: 1.5rem 2rem;
+  margin-bottom: 3rem;
 }
 
-body::before {
-  top: 12vh;
-  left: 10vw;
-}
-
-body::after {
-  bottom: 15vh;
-  right: 15vw;
-  animation-direction: reverse;
-}
-
-/* Drift animation for base background layers */
-@keyframes backgroundDrift {
-  0% {
-    background-position:
-      20% 30%,
-      80% 60%,
-      0 0,
-      0 0,
-      top;
-  }
-  100% {
-    background-position:
-      25% 35%,
-      85% 65%,
-      5px 5px,
-      -10px -10px,
-      top;
-  }
-}
-
-/* Subtle floating effect for glows */
-@keyframes floatBlob {
-  0% {
-    transform: translate(0, 0) scale(1);
-  }
-  100% {
-    transform: translate(30px, 20px) scale(1.1);
-  }
-}
-
-/* --- Gradient Divider HR Line --- */
+/* HR line */
 hr {
   border: none;
   height: 1px;
-  background: linear-gradient(to right, transparent, var(--primary), transparent);
+  background: linear-gradient(to right, transparent, var(--primary, #7b3307), transparent);
   margin: 3rem auto;
   width: 60%;
   box-shadow: 0 2px 6px rgba(123, 51, 7, 0.12);
 }
+
 
 /* ----------------------------------------
    HERO BANNER 

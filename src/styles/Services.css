@@ -1,4 +1,14 @@
 :root {
+  --primary: #b8673e;
+  --deep: #7b3307;
+  --light: #ffffff;
+  --soft-bg: #e4cec0;
+  --accent-bg: #e3b8ae;
+  --radius: 16px;
+  --shadow: 0 8px 20px rgba(123, 51, 7, 0.25);
+  --transition: all 0.3s ease-in-out;
+  --font-display: 'Imperial Script', cursive;
+  --font-body: 'Segoe UI', sans-serif;
   --texture: url('../assets/paper-fibers.png');
 }
 
@@ -8,6 +18,23 @@
   padding: 1.5rem;
   color: var(--deep);
   font-family: var(--font-body);
+
+  /* Texture background with glass effect */
+  background:
+    linear-gradient(to bottom, rgba(228, 206, 192, 0.9), rgba(227, 184, 174, 0.9)),
+    var(--texture);
+  background-blend-mode: multiply;
+
+  backdrop-filter: blur(12px);
+
+  border-radius: var(--radius);
+  box-shadow:
+    inset 0 0 30px rgba(123, 51, 7, 0.3),
+    inset 0 10px 30px rgba(123, 51, 7, 0.15),
+    0 6px 18px rgba(0, 0, 0, 0.1);
+
+  border: 1.5px solid rgba(123, 51, 7, 0.35);
+  box-sizing: border-box;
 }
 
 .services-heading {
@@ -15,8 +42,8 @@
   margin-bottom: 3rem;
   font-family: var(--font-display);
   color: var(--primary);
-  font-size: 4rem;        /* stays same */
-  font-weight: 800;       /* stays same */
+  font-size: 4rem;
+  font-weight: 800;
 }
 
 .no-services-message {
@@ -58,32 +85,41 @@
   margin-top: 1rem;
 }
 
+/* Service item card with white background and consistent shadow */
 .service-item-card {
   display: flex;
   flex-direction: row;
-  background: var(--glass-bg, rgba(255,255,255,0.05));
+  background: #ffffff;
   border-radius: 12px;
-  overflow: hidden;
+  overflow: visible; /* Allow image to overflow on hover */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  background-image: var(--texture);
-  background-repeat: repeat;
-  background-size: auto;
+  transition: transform 0.3s ease;
+  position: relative; /* For absolute positioning of expanded image */
 }
 
 .service-item-card:hover {
   transform: scale(1.02);
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.15);
+  /* box-shadow stays the same on hover */
 }
 
 .service-item-image {
+  position: relative;
+  z-index: 1;
   width: 140px;
-  height: 140px;
+  height: 260px;
   flex-shrink: 0;
   background: var(--accent-bg);
   overflow: hidden;
   border-top-left-radius: 12px;
   border-bottom-left-radius: 12px;
+  transition: width 0.3s ease, transform 0.3s ease;
+}
+
+.service-item-card:hover .service-item-image {
+  width: 350px; /* Expand width to ~2.5 times */
+  transform: translateX(-210px); /* Move left by the increase */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  z-index: 10; /* Bring above other content */
 }
 
 .service-item-image img {
@@ -114,7 +150,6 @@
   margin-bottom: 0.7rem;
 }
 
-/* Changed h4 to h3 here */
 .service-item-header h3 {
   font-size: 1.4rem;
   color: var(--primary);

@@ -13,9 +13,18 @@ export default function Services() {
     return acc;
   }, {});
 
+  // Format duration string
+  function formatDuration(duration) {
+    if (!duration) return '';
+    // If duration already contains letters, assume it's formatted correctly
+    if (/[a-zA-Z]/.test(duration)) return duration;
+    // Else append " mins"
+    return `${duration} mins`;
+  }
+
   // Placeholder for cart logic
   function handleAddToCart(service) {
-    console.log('Add to cart:', service); // Replace with your real cart logic
+    console.log('Add to cart:', service);
   }
 
   return (
@@ -41,7 +50,11 @@ export default function Services() {
                   <div className="service-item-content">
                     <div className="service-item-header">
                       <h3>{name}</h3>
-                      {duration && <span className="service-duration">({duration})</span>}
+                      {duration && (
+                        <span className="service-duration">
+                          ({formatDuration(duration)})
+                        </span>
+                      )}
                     </div>
                     {description && (
                       <p className="service-description">{description}</p>
@@ -52,7 +65,7 @@ export default function Services() {
                         className="add-to-cart-btn"
                         onClick={() => handleAddToCart({ id, name, price })}
                       >
-                        Add to Cart
+                        Book Now!
                       </button>
                     </div>
                   </div>
