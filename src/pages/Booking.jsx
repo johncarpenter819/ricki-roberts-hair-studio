@@ -4,12 +4,63 @@ import { useServices } from '../context/ServicesContext';
 import { useAppointments } from '../context/AppointmentsContext';
 import { useTeam } from '../context/TeamContext';
 
+const BUSINESS_HOURS = {
+  start: 9.5, // 9:30 AM as decimal hours
+  end: 17,    // 5:00 PM
+};
+const BUFFER_MINUTES = 10;
+
 function formatTimeTo12Hour(time24) {
   const [hour, minute] = time24.split(':');
-  const hourNum = parseInt(hour);
+  const hourNum = parseInt(hour, 10);
   const ampm = hourNum >= 12 ? 'PM' : 'AM';
   const hour12 = hourNum % 12 || 12;
   return `${hour12}:${minute} ${ampm}`;
+}
+
+function toMinutes(timeStr) {
+  if (!timeStr) return null;
+  const [hour, minute] = timeStr.split(':').map(Number);
+  return hour * 60 + minute;
+}
+
+function toTimeString(minutes) {
+  const hour = Math.floor(minutes / 60);
+  const min = minutes % 60;
+  return `${hour.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')}`;
+}
+
+function findNextAvailableSlot(startDate, duration, stylistId, appointments, earliestStart = null, maxDays = 30) {
+  const totalDuration = duration + BUFFER_MINUTES;
+  const openMins = BUSINESS_HOURS.start * 60;
+  const closeMins = BUSINESS_HOURS.end * 60;
+  let dateCursor = new Date(startDate);
+
+  for (let dayOffset = 0; dayOffset < maxDays; dayOffset++) {
+    const dateStr = dateCursor.toISOString().slice(0, 10);
+
+    const dayAppts = appointments
+      .filter(a => a.date === dateStr && a.stylistId === stylistId && a.status === 'Confirmed')
+      .map(a => {
+        const startMins = toMinutes(a.rawTime || a.time);
+        const dur = parseInt(a.duration, 10) || 60;
+        return { start: startMins, end: startMins + dur + BUFFER_MINUTES };
+      })
+      .sort((a, b) => a.start - b.start);
+
+    let searchStart = earliestStart !== null && dateStr === startDate ? earliestStart : openMins;
+
+    for (let start = searchStart; start + totalDuration <= closeMins; start += 5) {
+      const conflict = dayAppts.some(appt => !(start + totalDuration <= appt.start || start >= appt.end));
+      if (!conflict) {
+        return { date: dateStr, time: toTimeString(start) };
+      }
+    }
+
+    dateCursor.setDate(dateCursor.getDate() + 1);
+  }
+
+  return null;
 }
 
 export default function Booking() {
@@ -30,36 +81,121 @@ export default function Booking() {
 
   const [hydrated, setHydrated] = useState(false);
 
+  useEffect(() => setHydrated(true), []);
   useEffect(() => {
-    setHydrated(true);
-  }, []);
-
-  useEffect(() => {
-    const savedAppointments = localStorage.getItem('appointments');
-    if (savedAppointments) {
-      setAppointments(JSON.parse(savedAppointments));
-    }
+    const saved = localStorage.getItem('appointments');
+    if (saved) setAppointments(JSON.parse(saved));
   }, [setAppointments]);
 
   useEffect(() => {
-    if (appointments.length > 0) {
-      localStorage.setItem('appointments', JSON.stringify(appointments));
-    }
+    localStorage.setItem('appointments', JSON.stringify(appointments));
   }, [appointments]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setForm({ ...form, [name]: type === 'checkbox' ? checked : value });
+    setForm(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
   };
+
+  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const selectedService = services.find((s) => s.id === parseInt(form.serviceId));
-    const selectedStylist = team.find((t) => t.id === parseInt(form.stylistId));
+    if (!validateEmail(form.email)) {
+      alert('Please enter a valid email address.');
+      return;
+    }
+
+    const selectedService = services.find(s => s.id === parseInt(form.serviceId));
+    const selectedStylist = team.find(t => t.id === parseInt(form.stylistId));
 
     if (!selectedService || !selectedStylist) {
       alert('Please select a valid service and stylist.');
+      return;
+    }
+
+    if (!form.date || !form.time) {
+      alert('Please select a valid date and time.');
+      return;
+    }
+
+    const requestedStart = toMinutes(form.time);
+    const duration = parseInt(selectedService.duration, 10);
+    if (isNaN(duration)) {
+      alert('Service duration is invalid.');
+      return;
+    }
+
+    const requestedEnd = requestedStart + duration;
+    const dateStr = form.date;
+
+    // Conflict check
+    let conflict = appointments.some(appt => {
+      if (
+        appt.stylistId !== selectedStylist.id ||
+        appt.date !== dateStr ||
+        appt.status !== 'Confirmed'
+      ) return false;
+
+      const apptStart = toMinutes(appt.rawTime || appt.time);
+      const apptDuration = parseInt(appt.duration, 10) || 60;
+      const apptEnd = apptStart + apptDuration + BUFFER_MINUTES;
+
+      return !(requestedEnd <= apptStart || requestedStart >= apptEnd);
+    });
+
+    if (conflict) {
+      const overlappingAppts = appointments.filter(appt => {
+        if (
+          appt.stylistId !== selectedStylist.id ||
+          appt.date !== dateStr ||
+          appt.status !== 'Confirmed'
+        ) return false;
+
+        const apptStart = toMinutes(appt.rawTime || appt.time);
+        const apptDuration = parseInt(appt.duration, 10) || 60;
+        return !(requestedEnd <= apptStart || requestedStart >= apptStart + apptDuration + BUFFER_MINUTES);
+      });
+
+      const latestEnd = Math.max(...overlappingAppts.map(appt => {
+        const apptStart = toMinutes(appt.rawTime || appt.time);
+        const apptDuration = parseInt(appt.duration, 10) || 60;
+        return apptStart + apptDuration + BUFFER_MINUTES;
+      }));
+
+      const foundSlot = findNextAvailableSlot(
+        dateStr,
+        duration,
+        selectedStylist.id,
+        appointments,
+        latestEnd
+      );
+
+      if (foundSlot) {
+        alert(`${form.name}, the selected time conflicts with an existing appointment.\nSuggested next available slot: ${foundSlot.date} at ${formatTimeTo12Hour(foundSlot.time)}`);
+      } else {
+        alert(`${form.name}, no available slots in the next 30 days. Please choose another date or stylist.`);
+      }
+
+      return;
+    }
+
+    // Business hour validation
+    if (requestedStart < BUSINESS_HOURS.start * 60 || requestedEnd > BUSINESS_HOURS.end * 60) {
+      const foundSlot = findNextAvailableSlot(
+        dateStr,
+        duration,
+        selectedStylist.id,
+        appointments,
+        BUSINESS_HOURS.start * 60
+      );
+
+      if (foundSlot) {
+        alert(`${form.name}, this appointment duration exceeds the hours of operation.\nSuggested next available slot: ${foundSlot.date} at ${formatTimeTo12Hour(foundSlot.time)}`);
+      } else {
+        alert(`${form.name}, this appointment duration exceeds the hours of operation, and no available slots were found in the next 30 days.`);
+      }
+
       return;
     }
 
@@ -70,8 +206,11 @@ export default function Booking() {
       phone: form.phone,
       service: selectedService.name,
       stylist: selectedStylist.name,
+      stylistId: selectedStylist.id,
       date: form.date,
       time: formatTimeTo12Hour(form.time),
+      rawTime: form.time,
+      duration,
       status: 'Confirmed',
       subscribe: form.subscribe,
     };
@@ -95,12 +234,10 @@ export default function Booking() {
   return (
     <div className={`booking-page ${hydrated ? 'visible' : ''}`}>
       <h1 className="booking-title">Book an Appointment</h1>
-
       {!hydrated ? (
         <p>Loading form...</p>
       ) : (
-        <form className="booking-form" onSubmit={handleSubmit}>
-
+        <form className="booking-form" onSubmit={handleSubmit} noValidate>
           <label className="booking-label" htmlFor="name">
             Name
             <input
@@ -151,7 +288,7 @@ export default function Booking() {
               required
             >
               <option value="">Select a Service</option>
-              {services.map((s) => (
+              {services.map(s => (
                 <option key={s.id} value={s.id}>
                   {s.name} — ${s.price.toFixed(2)}
                 </option>
@@ -170,7 +307,7 @@ export default function Booking() {
               required
             >
               <option value="">Select a Stylist</option>
-              {team.map((stylist) => (
+              {team.map(stylist => (
                 <option key={stylist.id} value={stylist.id}>
                   {stylist.name}
                 </option>
@@ -215,9 +352,7 @@ export default function Booking() {
             I’d like to receive newsletters, discounts, or service updates.
           </label>
 
-          <button type="submit" className="cta-btn">
-            Book Now
-          </button>
+          <button type="submit" className="cta-btn">Book Now</button>
         </form>
       )}
     </div>
