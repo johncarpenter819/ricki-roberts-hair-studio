@@ -188,6 +188,8 @@ export default function Home() {
         )}
       </section>
 
+      <hr />
+
       <section
         className="glass-services"
         id="services"

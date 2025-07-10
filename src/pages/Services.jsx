@@ -1,9 +1,11 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useServices } from '../context/ServicesContext';
 import '../styles/Services.css';
 
 export default function Services() {
   const { services } = useServices();
+  const navigate = useNavigate();
 
   // Group services by category
   const groupedServices = services.reduce((acc, service) => {
@@ -13,18 +15,19 @@ export default function Services() {
     return acc;
   }, {});
 
-  // Format duration string
   function formatDuration(duration) {
     if (!duration) return '';
-    // If duration already contains letters, assume it's formatted correctly
     if (/[a-zA-Z]/.test(duration)) return duration;
-    // Else append " mins"
     return `${duration} mins`;
   }
 
-  // Placeholder for cart logic
-  function handleAddToCart(service) {
-    console.log('Add to cart:', service);
+  // 🔁 REPLACED: handleAddToCart → handleBookNow
+  function handleBookNow(service) {
+    navigate('/booking', {
+      state: {
+        preselectedService: service.name,
+      },
+    });
   }
 
   return (
@@ -63,7 +66,7 @@ export default function Services() {
                       <span className="service-price">${price.toFixed(2)}</span>
                       <button
                         className="add-to-cart-btn"
-                        onClick={() => handleAddToCart({ id, name, price })}
+                        onClick={() => handleBookNow({ id, name })}
                       >
                         Book Now!
                       </button>

@@ -1,13 +1,14 @@
 import '../styles/Booking.css';
 import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useServices } from '../context/ServicesContext';
 import { useAppointments } from '../context/AppointmentsContext';
 import { useTeam } from '../context/TeamContext';
 import emailjs from '@emailjs/browser';
 
 const BUSINESS_HOURS = {
-  start: 9.5, // 9:30 AM as decimal hours
-  end: 17,    // 5:00 PM
+  start: 9.5,
+  end: 17,
 };
 const BUFFER_MINUTES = 10;
 
@@ -65,6 +66,7 @@ function findNextAvailableSlot(startDate, duration, stylistId, appointments, ear
 }
 
 export default function Booking() {
+  const location = useLocation();
   const { services } = useServices();
   const { appointments, setAppointments } = useAppointments();
   const { team } = useTeam();
@@ -83,6 +85,21 @@ export default function Booking() {
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => setHydrated(true), []);
+
+  // ⬇️ Prefill service if passed from navigation
+  useEffect(() => {
+    const preselectedName = location.state?.preselectedService;
+    if (preselectedName && services.length > 0) {
+      const matchedService = services.find(s => s.name === preselectedName);
+      if (matchedService) {
+        setForm(prev => ({
+          ...prev,
+          serviceId: matchedService.id.toString()
+        }));
+      }
+    }
+  }, [location.state, services]);
+
   useEffect(() => {
     const saved = localStorage.getItem('appointments');
     if (saved) setAppointments(JSON.parse(saved));
@@ -99,7 +116,6 @@ export default function Booking() {
 
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  // EmailJS confirmation sender
   const sendConfirmationEmail = (appointment) => {
     const templateParams = {
       to_name: appointment.name,
@@ -112,12 +128,8 @@ export default function Booking() {
     };
 
     emailjs.send('service_wn6pbqr', 'template_1mva669', templateParams, '6gOkwHvGmFWzYR83o')
-      .then(() => {
-        console.log('Confirmation email sent successfully!');
-      })
-      .catch((error) => {
-        console.error('Failed to send confirmation email:', error);
-      });
+      .then(() => console.log('Confirmation email sent!'))
+      .catch((error) => console.error('Email send failed:', error));
   };
 
   const handleSubmit = (e) => {
@@ -151,7 +163,6 @@ export default function Booking() {
     const requestedEnd = requestedStart + duration;
     const dateStr = form.date;
 
-    // Conflict check
     let conflict = appointments.some(appt => {
       if (
         appt.stylistId !== selectedStylist.id ||
@@ -202,7 +213,6 @@ export default function Booking() {
       return;
     }
 
-    // Business hour validation
     if (requestedStart < BUSINESS_HOURS.start * 60 || requestedEnd > BUSINESS_HOURS.end * 60) {
       const foundSlot = findNextAvailableSlot(
         dateStr,
@@ -215,7 +225,7 @@ export default function Booking() {
       if (foundSlot) {
         alert(`${form.name}, this appointment duration exceeds the hours of operation.\nSuggested next available slot: ${foundSlot.date} at ${formatTimeTo12Hour(foundSlot.time)}`);
       } else {
-        alert(`${form.name}, this appointment duration exceeds the hours of operation, and no available slots were found in the next 30 days.`);
+        alert(`${form.name}, this appointment duration exceeds business hours and no alternate slots were found.`);
       }
 
       return;
@@ -238,8 +248,6 @@ export default function Booking() {
     };
 
     setAppointments([...appointments, newAppointment]);
-
-    // Send confirmation email after successful booking
     sendConfirmationEmail(newAppointment);
 
     alert(`Thank you, ${form.name}! Your ${selectedService.name} with ${selectedStylist.name} is booked.`);

@@ -15,7 +15,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <ServicesProvider>
         <AppointmentsProvider>
           <TeamProvider>
-            <ReviewsProvider>  {/* Wrap App with ReviewsProvider */}
+            <ReviewsProvider>  
               <App />
             </ReviewsProvider>
           </TeamProvider>

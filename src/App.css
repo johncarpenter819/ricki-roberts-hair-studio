@@ -1,84 +1,164 @@
-.hero {
-  height: 100vh; /* full viewport height */
+/* Ensure the root elements fill the full height */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Layout wrapper as flex column, fills viewport height */
+.layout-wrapper {
   display: flex;
-  justify-content: center; /* horizontal centering */
-  align-items: center;     /* vertical centering */
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Main content grows to fill space between header and footer */
+.layout-content {
+  flex-grow: 1;
+  padding: 1rem 2rem; /* optional, adjust as needed */
+  background-color: #f9f6f2;
+}
+
+footer {
+  background-color: #a77b5a;
+  color: white;
   text-align: center;
-  padding: 0 1rem;
-  background: url('/assets/salon-hero.jpg') center/cover no-repeat;
-  background-color: #f7f3ef; /* fallback color */
-  box-shadow: inset 0 0 0 1000px rgba(247, 243, 239, 0.85); /* light overlay */
-  flex-direction: column; /* stack children vertically */
-  gap: 1rem;             /* spacing between children */
+  padding: 1rem 0;
+  box-shadow: 0 -2px 5px rgba(0,0,0,0.15);
+  font-weight: 600;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+/* Dashboard container */
+.dashboard-container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 1.5rem 2rem;
+  background-color: #f9f6f2;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
   color: #4b3b2b;
 }
 
-.hero-content {
-  max-width: 700px;
-  width: 100%;
-}
-
-/* Heading */
-.hero h1 {
-  font-size: 4rem;
+.dashboard-container h2 {
   margin-bottom: 0.5rem;
-  font-weight: 700;
-  font-family: 'Poppins', sans-serif;
-  color: #6b4c3b;
-  line-height: 1.1;
 }
 
-/* Subheading */
-.hero p {
-  font-size: 1.5rem;
-  margin-bottom: 2rem;
-  font-weight: 400;
-  color: #7a6551;
-}
-
-/* CTA Button */
-.cta-btn {
-  background-color: #a77b5a;
-  color: #fff;
-  font-size: 1.25rem;
-  padding: 0.85rem 3rem;
-  border: none;
-  border-radius: 30px;
-  cursor: pointer;
+.dashboard-container p {
+  margin-bottom: 1.5rem;
   font-weight: 600;
-  transition: background-color 0.3s ease;
-  box-shadow: 0 6px 12px rgba(167, 123, 90, 0.5);
+  font-size: 1.1rem;
 }
 
-.cta-btn:hover {
-  background-color: #8b6649;
-  box-shadow: 0 8px 16px rgba(139, 102, 73, 0.6);
+/* Dashboard table */
+.dashboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 8px rgba(0,0,0,0.05);
+  table-layout: fixed;
+  min-width: 700px; /* increased to accommodate widths */
 }
 
-/* Responsive - Tablets */
+.dashboard-table thead tr {
+  background-color: #a77b5a;
+  color: white;
+  text-align: left;
+}
+
+.dashboard-table th,
+.dashboard-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e2ddd8;
+  vertical-align: middle;
+  word-break: break-word;
+  white-space: nowrap;
+}
+
+/* Fixed min-width and column order for table columns */
+.dashboard-table th:nth-child(1),
+.dashboard-table td:nth-child(1) {
+  min-width: 180px; /* Name */
+}
+
+.dashboard-table th:nth-child(2),
+.dashboard-table td:nth-child(2) {
+  min-width: 160px; /* Stylist */
+}
+
+.dashboard-table th:nth-child(3),
+.dashboard-table td:nth-child(3) {
+  min-width: 180px; /* Service */
+}
+
+.dashboard-table th:nth-child(4),
+.dashboard-table td:nth-child(4) {
+  min-width: 140px; /* Time */
+}
+
+.dashboard-table tbody tr:hover {
+  background-color: #f0e9df;
+}
+
+/* Responsive for smaller screens */
 @media (max-width: 768px) {
-  .hero h1 {
-    font-size: 3rem;
-  }
-  .hero p {
-    font-size: 1.25rem;
-  }
-  .cta-btn {
-    font-size: 1.1rem;
-    padding: 0.75rem 2.5rem;
+  .dashboard-table th,
+  .dashboard-table td {
+    padding: 0.5rem 0.6rem;
+    font-size: 0.9rem;
+    white-space: normal;
   }
 }
 
-/* Responsive - Mobile */
-@media (max-width: 480px) {
-  .hero h1 {
-    font-size: 2.2rem;
-  }
-  .hero p {
-    font-size: 1rem;
-  }
-  .cta-btn {
-    font-size: 1rem;
-    padding: 0.65rem 2rem;
-  }
+/* Login form styles */
+.login-container {
+  max-width: 320px;
+  margin: 4rem auto;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-family: Arial, sans-serif;
+}
+
+.login-form label {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 12px;
+  box-sizing: border-box;
+  border: 1px solid #999;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.login-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #a77b5a;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.login-button:hover {
+  background-color: #8b6649;
+}
+
+.error-message {
+  color: red;
+  margin-top: 12px;
+  font-weight: 600;
 }

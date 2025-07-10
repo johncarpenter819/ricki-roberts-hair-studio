@@ -62,14 +62,14 @@ const Contact = () => {
       from_name: form.name,
       from_email: form.email,
       message: form.message,
-      to_email: contact.email,
+      to_email: contact.email, // 👈 dynamically from admin
     };
 
     emailjs.send(
-      'YOUR_SERVICE_ID',
-      'YOUR_TEMPLATE_ID',
+      import.meta.env.VITE_EMAILJS_SERVICE_ID,
+      import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
       templateParams,
-      'YOUR_PUBLIC_KEY'
+      import.meta.env.VITE_EMAILJS_PUBLIC_KEY
     )
       .then(() => {
         setStatus('Message sent successfully!');

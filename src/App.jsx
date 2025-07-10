@@ -11,7 +11,6 @@ import Services from './pages/Services';
 import Booking from './pages/Booking';
 import Contact from './pages/Contact';
 
-
 export default function App() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -36,21 +35,25 @@ export default function App() {
 
   return (
     <BusinessProvider>
-      {isAdminRoute && isLoggedIn ? (
-        <AdminNavbar onLogout={handleAdminLogout} />
-      ) : (
-        <Navbar />
-      )}
+      <div className="layout-wrapper">
+        {isAdminRoute && isLoggedIn ? (
+          <AdminNavbar onLogout={handleAdminLogout} />
+        ) : (
+          <Navbar />
+        )}
 
-      <Routes>
-        <Route path="/admin/*" element={<Admin onLogin={handleAdminLogin} />} />
-        <Route path="/" element={<Home />} />
-        <Route path="/services" element={<Services />} />
-        <Route path="/booking" element={<Booking />} />
-        <Route path="/contact" element={<Contact />} />
-      </Routes>
+        <main className="layout-content">
+          <Routes>
+            <Route path="/admin/*" element={<Admin onLogin={handleAdminLogin} />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/booking" element={<Booking />} />
+            <Route path="/contact" element={<Contact />} />
+          </Routes>
+        </main>
 
-      <Footer />
+        <Footer />
+      </div>
     </BusinessProvider>
   );
 }

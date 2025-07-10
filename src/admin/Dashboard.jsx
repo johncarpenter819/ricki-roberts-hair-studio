@@ -35,21 +35,11 @@ export default function Dashboard() {
       ) : (
         <table className="dashboard-table">
           <thead>
-            <tr>
-              <th>Name</th>
-              <th>Stylist</th> {/* Added Stylist column */}
-              <th>Service</th>
-              <th>Time</th>
-            </tr>
+            <tr><th>Name</th><th>Stylist</th><th>Service</th><th>Time</th></tr>
           </thead>
           <tbody>
             {todaysAppointments.map(({ id, name, stylist, service, time }) => (
-              <tr key={id}>
-                <td>{name}</td>
-                <td>{stylist || '—'}</td> {/* Show stylist or dash */}
-                <td>{service}</td>
-                <td>{time}</td>
-              </tr>
+              <tr key={id}><td>{name}</td><td>{stylist || '—'}</td><td>{service}</td><td>{time}</td></tr>
             ))}
           </tbody>
         </table>
