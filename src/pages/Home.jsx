@@ -17,7 +17,6 @@ export default function Home() {
   const [categories, setCategories] = useState([]);
   const [loadingCategories, setLoadingCategories] = useState(true);
   const reviews = reviewsData;
-
   const [showAllReviews, setShowAllReviews] = useState(false);
 
   const sectionsRef = useRef([]);
@@ -103,12 +102,10 @@ export default function Home() {
     return `/assets/${photo}`;
   };
 
-  // Toggle reviews and scroll to top if collapsing
   const toggleReviews = () => {
     setShowAllReviews((prev) => {
       const newShowAll = !prev;
       if (prev) {
-        // Scroll back to reviews section when collapsing
         reviewsRef.current?.scrollIntoView({ behavior: 'smooth' });
       }
       return newShowAll;
@@ -156,12 +153,13 @@ export default function Home() {
           ) : (
             (showAllReviews ? reviews : reviews.slice(0, 10)).map((review, i) => (
               <div key={i} className="review-card nanum-myeongjo-regular">
-                <p className="review-text">"{review.text}"</p>
+                {review.stars && (
+                  <div className="review-stars">{'⭐️'.repeat(review.stars)}</div>
+                )}
                 <p className="review-meta">
-                  <span className="review-stars">{'⭐️'.repeat(review.stars)}</span>
-                  <span className="review-date">{review.date}</span> ·{' '}
-                  <span className="review-author">{review.name}</span>
+                  <strong>{review.name}</strong> — <span>{review.date}</span>
                 </p>
+                <p className="review-text">"{review.text}"</p>
               </div>
             ))
           )}
@@ -263,13 +261,7 @@ export default function Home() {
           <h2 id="business-hours-heading">Business Hours</h2>
           <ul>
             {[
-              "Monday",
-              "Tuesday",
-              "Wednesday",
-              "Thursday",
-              "Friday",
-              "Saturday",
-              "Sunday",
+              "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
             ].map(day => (
               <li key={day} className="nanum-myeongjo-regular">
                 <strong>{day.substring(0, 3)}:</strong> {hours[day] || "Closed"}
@@ -278,10 +270,7 @@ export default function Home() {
           </ul>
         </div>
 
-        <div
-          className="cancellation-policy"
-          aria-labelledby="cancellation-policy-heading"
-        >
+        <div className="cancellation-policy" aria-labelledby="cancellation-policy-heading">
           <h2 id="cancellation-policy-heading">Cancellation Policy</h2>
           <p className="nanum-myeongjo-regular">
             We get it that sometimes things come up and you may need to cancel. Ricki Roberts Hair Studio has a 50% cancellation fee.
@@ -315,25 +304,13 @@ export default function Home() {
                 className="social-link"
               >
                 {name === 'Instagram' && (
-                  <svg
-                    className="social-icon"
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                  >
+                  <svg className="social-icon" viewBox="0 0 24 24" aria-hidden="true">
                     <rect width="24" height="24" rx="5" ry="5" fill="none" />
                     <path d="M7.75 2h8.5A5.75 5.75 0 0122 7.75v8.5A5.75 5.75 0 0116.25 22h-8.5A5.75 5.75 0 012 16.25v-8.5A5.75 5.75 0 017.75 2zM12 7.25a4.75 4.75 0 100 9.5 4.75 4.75 0 000-9.5zm0 7.75a3 3 0 110-6 3 3 0 010 6zm4.75-8.5a1.25 1.25 0 11-2.5 0 1.25 1.25 0 012.5 0z" />
                   </svg>
                 )}
-
                 {name === 'Facebook' && (
-                  <svg
-                    className="social-icon"
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
+                  <svg className="social-icon" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M22.675 0h-21.35C.593 0 0 .593 0 1.326v21.348C0 23.406.593 24 1.325 24h11.495v-9.294H9.691v-3.622h3.129V8.413c0-3.1 1.894-4.788 4.659-4.788 1.325 0 2.464.099 2.795.143v3.24l-1.918.001c-1.504 0-1.796.715-1.796 1.764v2.314h3.588l-.467 3.622h-3.121V24h6.116c.73 0 1.324-.594 1.324-1.326V1.326C24 .593 23.406 0 22.675 0z" />
                   </svg>
                 )}

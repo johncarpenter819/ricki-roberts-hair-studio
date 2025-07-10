@@ -8,6 +8,9 @@ import {
   getDocs,
   query,
   orderBy,
+  where,
+  updateDoc,
+  serverTimestamp,
 } from "firebase/firestore";
 
 // ✅ Save business data (hours + contact info)
@@ -48,14 +51,33 @@ export async function getServiceCategories() {
   return categories;
 }
 
-// ✅ Get customer reviews from Firestore (ordered by most recent)
+// ✅ Get APPROVED reviews only (or legacy reviews with no 'approved' field)
 export async function getReviews() {
   const reviewsRef = collection(db, "reviews");
-  const q = query(reviewsRef, orderBy("date", "desc"));
+  const q = query(reviewsRef, orderBy("timestamp", "desc")); // timestamp is more reliable
 
   const snapshot = await getDocs(q);
-  return snapshot.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
-  }));
+  return snapshot.docs
+    .map((doc) => ({ id: doc.id, ...doc.data() }))
+    .filter((review) => review.approved === true || review.approved === undefined);
+}
+
+// ✅ Get PENDING reviews (for admin approval)
+export async function getPendingReviews() {
+  const reviewsRef = collection(db, "reviews");
+  const q = query(reviewsRef, orderBy("timestamp", "desc"));
+
+  const snapshot = await getDocs(q);
+  return snapshot.docs
+    .map((doc) => ({ id: doc.id, ...doc.data() }))
+    .filter((review) => review.approved === false);
+}
+
+// ✅ Approve a review (sets approved:true and optional published timestamp)
+export async function approveReview(reviewId) {
+  const reviewRef = doc(db, "reviews", reviewId);
+  await updateDoc(reviewRef, {
+    approved: true,
+    publishedAt: serverTimestamp(), // optional: track when review was published
+  });
 }

@@ -428,3 +428,30 @@
     white-space: normal;
   }
 }
+
+.review-approval-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.review-card {
+  background: #fff8f5;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  border: 1px solid #e0c7b5;
+}
+
+.review-card p {
+  margin: 0.4rem 0;
+}
+
+.review-card .admin-button {
+  margin-top: 0.8rem;
+  background-color: #b8673e;
+  color: white;
+  font-weight: bold;
+}
+
