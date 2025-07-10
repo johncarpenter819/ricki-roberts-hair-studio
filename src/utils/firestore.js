@@ -110,3 +110,17 @@ export async function deleteReview(reviewId) {
     throw error;
   }
 }
+
+// ✅ Get all service names (for use in review form dropdown)
+export async function getServiceNames() {
+  const servicesDocRef = doc(db, "business", "services");
+  const snapshot = await getDoc(servicesDocRef);
+  if (!snapshot.exists()) return [];
+
+  const data = snapshot.data();
+  if (!Array.isArray(data.items)) return [];
+
+  return data.items
+    .map((item) => item?.name?.trim())
+    .filter(Boolean);
+}

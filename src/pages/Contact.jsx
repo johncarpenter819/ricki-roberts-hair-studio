@@ -3,17 +3,18 @@ import { useBusiness } from '../context/BusinessContext';
 import emailjs from '@emailjs/browser';
 import { db } from '../firebaseConfig';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { getServiceNames } from '../utils/firestore';
 import '../styles/Contact.css';
 
 const Contact = () => {
   const { contact } = useBusiness();
+
   const [form, setForm] = useState({ name: '', email: '', message: '' });
   const [status, setStatus] = useState('');
   const [hydrated, setHydrated] = useState(false);
 
-  // Example static lists - replace or fetch dynamically as needed
-  const services = ['Cut', 'Color', 'Styling', 'Treatment', 'Highlights'];
-  const stylists = ['Ricki Roberts', 'John Doe', 'Anna Smith'];
+  const [services, setServices] = useState([]);
+  const [stylists, setStylists] = useState([]);
 
   const [reviewForm, setReviewForm] = useState({
     name: '',
@@ -26,6 +27,25 @@ const Contact = () => {
 
   useEffect(() => {
     setHydrated(true);
+
+    async function fetchData() {
+      // Services from Firestore
+      const serviceNames = await getServiceNames();
+      setServices(serviceNames);
+
+      // Stylists from localStorage (saved via Team Editor)
+      try {
+        const teamRaw = localStorage.getItem("teamMembers");
+        const team = teamRaw ? JSON.parse(teamRaw) : [];
+        const names = team.map((member) => member.name).filter(Boolean);
+        setStylists(names);
+      } catch (err) {
+        console.error("Failed to parse team members:", err);
+        setStylists([]);
+      }
+    }
+
+    fetchData();
   }, []);
 
   const handleChange = (e) => {
@@ -65,7 +85,6 @@ const Contact = () => {
   const handleReviewSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate required fields
     if (
       !reviewForm.stars ||
       !reviewForm.text.trim() ||
@@ -85,7 +104,7 @@ const Contact = () => {
         stylist: reviewForm.stylist,
         date: new Date().toLocaleDateString(),
         timestamp: serverTimestamp(),
-        approved: false, // <-- NEW: mark review as pending approval
+        approved: false,
       });
       setReviewStatus('Thank you for leaving a review!');
       setReviewForm({ name: '', stars: '', text: '', service: '', stylist: '' });
@@ -141,14 +160,14 @@ const Contact = () => {
               onChange={handleReviewChange}
               required
             >
-              <option value="" disabled>
-                Select a service
-              </option>
-              {services.map((svc) => (
-                <option key={svc} value={svc}>
-                  {svc}
-                </option>
-              ))}
+              <option value="" disabled>Select a service</option>
+              {services.length === 0 ? (
+                <option disabled>Loading services...</option>
+              ) : (
+                services.map((svc) => (
+                  <option key={svc} value={svc}>{svc}</option>
+                ))
+              )}
             </select>
           </label>
 
@@ -160,14 +179,14 @@ const Contact = () => {
               onChange={handleReviewChange}
               required
             >
-              <option value="" disabled>
-                Select stylist
-              </option>
-              {stylists.map((sty) => (
-                <option key={sty} value={sty}>
-                  {sty}
-                </option>
-              ))}
+              <option value="" disabled>Select stylist</option>
+              {stylists.length === 0 ? (
+                <option disabled>Loading stylists...</option>
+              ) : (
+                stylists.map((sty) => (
+                  <option key={sty} value={sty}>{sty}</option>
+                ))
+              )}
             </select>
           </label>
 
@@ -185,7 +204,13 @@ const Contact = () => {
 
           <label>
             Your Review <span style={{ color: 'red' }}>*</span>
-            <textarea name="text" rows="5" required value={reviewForm.text} onChange={handleReviewChange} />
+            <textarea
+              name="text"
+              rows="5"
+              required
+              value={reviewForm.text}
+              onChange={handleReviewChange}
+            />
           </label>
 
           <button type="submit" className="cta-btn">Submit Review</button>
