@@ -12,106 +12,21 @@ import {
   updateDoc,
   serverTimestamp,
   deleteDoc,
+  addDoc,
 } from "firebase/firestore";
 
 // ✅ Save business data (hours + contact info)
 export async function saveBusinessData(hours, contact) {
-  await setDoc(doc(db, "settings", "business"), {
-    hours,
-    contact,
-  });
+  await setDoc(doc(db, "settings", "business"), { hours, contact });
 }
 
 // ✅ Get business data (hours + contact info)
 export async function getBusinessData() {
   const docSnap = await getDoc(doc(db, "settings", "business"));
-  if (docSnap.exists()) {
-    return docSnap.data();
-  } else {
-    return null;
-  }
+  return docSnap.exists() ? docSnap.data() : null;
 }
 
-// ✅ Get unique service categories from Firestore
-export async function getServiceCategories() {
-  const servicesDocRef = doc(db, "business", "services");
-  const snapshot = await getDoc(servicesDocRef);
-  if (!snapshot.exists()) return [];
-
-  const data = snapshot.data();
-  if (!Array.isArray(data.items)) return [];
-
-  const categories = [
-    ...new Set(
-      data.items
-        .map((item) => item?.category?.trim())
-        .filter(Boolean)
-    ),
-  ];
-
-  return categories;
-}
-
-// ✅ Get APPROVED reviews only (or legacy reviews with no 'approved' field)
-export async function getReviews() {
-  const reviewsRef = collection(db, "reviews");
-  const q = query(reviewsRef, orderBy("timestamp", "desc")); // timestamp is more reliable
-
-  const snapshot = await getDocs(q);
-  return snapshot.docs
-    .map((doc) => ({ id: doc.id, ...doc.data() }))
-    .filter((review) => review.approved === true || review.approved === undefined);
-}
-
-// ✅ Get PENDING reviews (for admin approval)
-export async function getPendingReviews() {
-  const reviewsRef = collection(db, "reviews");
-  const q = query(reviewsRef, orderBy("timestamp", "desc"));
-
-  const snapshot = await getDocs(q);
-  return snapshot.docs
-    .map((doc) => ({ id: doc.id, ...doc.data() }))
-    .filter((review) => review.approved === false);
-}
-
-// ✅ Get APPROVED reviews only (explicitly)
-export async function getApprovedReviews() {
-  const reviewsRef = collection(db, "reviews");
-  const q = query(reviewsRef, where("approved", "==", true), orderBy("timestamp", "desc"));
-
-  const snapshot = await getDocs(q);
-  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-}
-
-// ✅ Get ALL reviews (pending + approved) for admin
-export async function getAllReviews() {
-  const reviewsRef = collection(db, "reviews");
-  const q = query(reviewsRef, orderBy("timestamp", "desc"));
-
-  const snapshot = await getDocs(q);
-  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-}
-
-// ✅ Approve a review (sets approved:true and optional published timestamp)
-export async function approveReview(reviewId) {
-  const reviewRef = doc(db, "reviews", reviewId);
-  await updateDoc(reviewRef, {
-    approved: true,
-    publishedAt: serverTimestamp(), // optional: track when review was published
-  });
-}
-
-// ✅ Delete a review by ID
-export async function deleteReview(reviewId) {
-  try {
-    await deleteDoc(doc(db, "reviews", reviewId));
-  } catch (error) {
-    console.error("Error deleting review:", error);
-    throw error;
-  }
-}
-
-// ✅ Get all service names (for use in review form dropdown)
+// ✅ Get unique service names from Firestore
 export async function getServiceNames() {
   const servicesDocRef = doc(db, "business", "services");
   const snapshot = await getDoc(servicesDocRef);
@@ -120,7 +35,81 @@ export async function getServiceNames() {
   const data = snapshot.data();
   if (!Array.isArray(data.items)) return [];
 
-  return data.items
+  const names = data.items
     .map((item) => item?.name?.trim())
     .filter(Boolean);
+
+  return [...new Set(names)];
+}
+
+// ✅ Get approved reviews (explicitly or legacy with no 'approved' flag)
+export async function getReviews() {
+  const reviewsRef = collection(db, "reviews");
+  const q = query(reviewsRef, orderBy("timestamp", "desc"));
+  const snapshot = await getDocs(q);
+
+  return snapshot.docs
+    .map((doc) => ({ id: doc.id, ...doc.data() }))
+    .filter((r) => r.timestamp && (r.approved === true || r.approved === undefined));
+}
+
+// ✅ Get pending reviews
+export async function getPendingReviews() {
+  const reviewsRef = collection(db, "reviews");
+  const q = query(reviewsRef, orderBy("timestamp", "desc"));
+  const snapshot = await getDocs(q);
+
+  return snapshot.docs
+    .map((doc) => ({ id: doc.id, ...doc.data() }))
+    .filter((r) => r.approved === false && r.timestamp);
+}
+
+// ✅ Get approved reviews only
+export async function getApprovedReviews() {
+  const reviewsRef = collection(db, "reviews");
+  const q = query(reviewsRef, where("approved", "==", true), orderBy("timestamp", "desc"));
+  const snapshot = await getDocs(q);
+
+  return snapshot.docs
+    .map((doc) => ({ id: doc.id, ...doc.data() }))
+    .filter((r) => r.timestamp); // ensure sorted
+}
+
+// ✅ Get ALL reviews for admin (approved + pending)
+export async function getAllReviews() {
+  const reviewsRef = collection(db, "reviews");
+  const q = query(reviewsRef, orderBy("timestamp", "desc"));
+  const snapshot = await getDocs(q);
+
+  return snapshot.docs
+    .map((doc) => ({ id: doc.id, ...doc.data() }))
+    .filter((r) => r.timestamp); // make sure timestamp exists
+}
+
+// ✅ Submit new review
+export async function submitReview(data) {
+  return await addDoc(collection(db, "reviews"), {
+    ...data,
+    timestamp: serverTimestamp(),
+    approved: false,
+  });
+}
+
+// ✅ Approve a review
+export async function approveReview(reviewId) {
+  const reviewRef = doc(db, "reviews", reviewId);
+  await updateDoc(reviewRef, {
+    approved: true,
+    publishedAt: serverTimestamp(),
+  });
+}
+
+// ✅ Delete a review
+export async function deleteReview(reviewId) {
+  try {
+    await deleteDoc(doc(db, "reviews", reviewId));
+  } catch (err) {
+    console.error("Error deleting review:", err);
+    throw err;
+  }
 }

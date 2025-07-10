@@ -29,18 +29,17 @@ const Contact = () => {
     setHydrated(true);
 
     async function fetchData() {
-      // Services from Firestore
-      const serviceNames = await getServiceNames();
-      setServices(serviceNames);
-
-      // Stylists from localStorage (saved via Team Editor)
       try {
+        const serviceNames = await getServiceNames();
+        setServices(serviceNames);
+
         const teamRaw = localStorage.getItem("teamMembers");
         const team = teamRaw ? JSON.parse(teamRaw) : [];
         const names = team.map((member) => member.name).filter(Boolean);
         setStylists(names);
       } catch (err) {
-        console.error("Failed to parse team members:", err);
+        console.error("Failed loading dynamic fields:", err);
+        setServices([]);
         setStylists([]);
       }
     }

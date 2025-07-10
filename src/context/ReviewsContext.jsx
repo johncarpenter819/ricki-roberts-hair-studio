@@ -18,42 +18,29 @@ export function ReviewsProvider({ children }) {
   useEffect(() => {
     setLoading(true);
 
-    // Firestore query: approved reviews ordered by timestamp desc
     const q = query(
       collection(db, "reviews"),
       orderBy("timestamp", "desc")
     );
 
-    // Real-time listener
     const unsubscribe = onSnapshot(
       q,
       (snapshot) => {
-        // Filter approved reviews only
+        // Firestore approved reviews only
         const approvedReviews = snapshot.docs
           .map(doc => ({ id: doc.id, ...doc.data() }))
           .filter(r => r.approved === true || r.approved === undefined);
 
-        // Sort descending by timestamp or date if timestamp missing
+        // Sort Firestore reviews descending by timestamp or date
         approvedReviews.sort((a, b) => {
           const ta = a.timestamp?.toMillis?.() || new Date(a.date).getTime() || 0;
           const tb = b.timestamp?.toMillis?.() || new Date(b.date).getTime() || 0;
           return tb - ta;
         });
 
-        // Merge logic: if approved reviews exist, replace first legacy review with newest Firestore one
-        let mergedReviews = [...reviewsData];
-        if (approvedReviews.length > 0) {
-          // Replace first legacy review
-          mergedReviews[0] = approvedReviews[0];
-          // Append rest of approved reviews (excluding the first which replaced legacy)
-          if (approvedReviews.length > 1) {
-            mergedReviews = [
-              mergedReviews[0],
-              ...approvedReviews.slice(1),
-              ...mergedReviews.slice(1),
-            ];
-          }
-        }
+        // Combine: Firestore reviews (new, approved) first, then all legacy reviews appended
+        // No deduplication between legacy and Firestore since legacy lacks ids and should not be removed
+        const mergedReviews = [...approvedReviews, ...reviewsData];
 
         setReviews(mergedReviews);
         setLoading(false);

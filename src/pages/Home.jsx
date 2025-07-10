@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
 import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
-import { getServiceCategories } from '../utils/firestore';
+import { getServiceNames } from '../utils/firestore';
 import { useReviews } from '../context/ReviewsContext';
 
 export default function Home() {
@@ -16,8 +16,8 @@ export default function Home() {
   const { reviews, loading: loadingReviews, error: reviewsError } = useReviews();
 
   const [socialLinks, setSocialLinks] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [loadingCategories, setLoadingCategories] = useState(true);
+  const [services, setServices] = useState([]);
+  const [loadingServices, setLoadingServices] = useState(true);
   const [showAllReviews, setShowAllReviews] = useState(false);
 
   const sectionsRef = useRef([]);
@@ -33,18 +33,18 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    async function fetchCategories() {
+    async function fetchServices() {
       try {
-        const result = await getServiceCategories();
-        setCategories(result);
+        const result = await getServiceNames();
+        setServices(result);
       } catch (error) {
-        console.error('Error fetching categories:', error);
-        setCategories([]);
+        console.error('Error fetching services:', error);
+        setServices([]);
       } finally {
-        setLoadingCategories(false);
+        setLoadingServices(false);
       }
     }
-    fetchCategories();
+    fetchServices();
   }, []);
 
   useEffect(() => {
@@ -93,7 +93,7 @@ export default function Home() {
         if (el) observer.unobserve(el);
       });
     };
-  }, [categories, team]);
+  }, [services, team]);
 
   const goToBooking = () => navigate('/booking');
 
@@ -197,21 +197,21 @@ export default function Home() {
       >
         <h2 id="services-heading">Our Services</h2>
         <div className="service-grid">
-          {loadingCategories ? (
+          {loadingServices ? (
             <p className="nanum-myeongjo-regular">Loading services...</p>
-          ) : categories.length === 0 ? (
+          ) : services.length === 0 ? (
             <p className="nanum-myeongjo-regular">No services found.</p>
           ) : (
-            categories.map((category, index) => (
+            services.map((service, index) => (
               <div
-                key={`${category}-${index}`}
+                key={`${service}-${index}`}
                 className="service-card"
                 tabIndex={0}
-                aria-label={`${category} service`}
+                aria-label={`${service} service`}
               >
-                <h3>{category}</h3>
+                <h3>{service}</h3>
                 <p className="nanum-myeongjo-regular">
-                  Explore our expert {category.toLowerCase()} offerings tailored just for you.
+                  Explore our expert {service.toLowerCase()} offerings tailored just for you.
                 </p>
               </div>
             ))
