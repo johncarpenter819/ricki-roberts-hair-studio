@@ -6,8 +6,10 @@ import '../styles/AdminPortal.css';
 export default function BusinessSettings() {
   const { hours, setHours, contact, setContact, about, setAbout } = useBusiness();
   const [message, setMessage] = useState("");
-
   const [allReviews, setAllReviews] = useState([]);
+
+  // Track hovered review id and tooltip position for full text display
+  const [hoveredReview, setHoveredReview] = useState({ id: null, x: 0, y: 0 });
 
   useEffect(() => {
     fetchAllReviews();
@@ -49,6 +51,20 @@ export default function BusinessSettings() {
     }
   };
 
+  // On mouse enter, get bounding rect and save id + position for tooltip
+  const handleMouseEnter = (id, event) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    setHoveredReview({
+      id,
+      x: rect.right + 10, // show tooltip slightly right of cell
+      y: rect.top,
+    });
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredReview({ id: null, x: 0, y: 0 });
+  };
+
   return (
     <div className="admin-container">
       <h2>Business Settings</h2>
@@ -79,34 +95,85 @@ export default function BusinessSettings() {
       {allReviews.length === 0 ? (
         <p style={{ fontStyle: "italic" }}>No reviews found.</p>
       ) : (
-        <div className="review-approval-list">
-          {allReviews.map((review) => (
-            <div key={review.id} className="review-card">
-              <p><strong>Name:</strong> {review.name || "Anonymous"}</p>
-              <p><strong>Service:</strong> {review.service}</p>
-              <p><strong>Stylist:</strong> {review.stylist}</p>
-              <p><strong>Rating:</strong> {review.stars} ⭐</p>
-              <p><strong>Review:</strong> {review.text}</p>
-              <p>
-                <strong>Status:</strong>{" "}
-                {review.approved ? (
-                  <span style={{ color: "green" }}>Approved</span>
-                ) : (
-                  <span style={{ color: "orange" }}>Pending</span>
-                )}
-              </p>
-              <div style={{ display: "flex", gap: "1rem" }}>
-                {!review.approved && (
-                  <button onClick={() => handleApprove(review.id)} className="admin-button">
-                    Approve
-                  </button>
-                )}
-                <button onClick={() => handleDelete(review.id)} className="admin-button admin-button-deny">
-                  Delete
-                </button>
-              </div>
+        <div className="admin-reviews-table-wrapper" style={{ position: "relative" }}>
+          <table className="admin-table reviews-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Service</th>
+                <th>Stylist</th>
+                <th>Stars</th>
+                <th>Review</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {allReviews.map((review) => (
+                <tr key={review.id}>
+                  <td>{review.name || "Anonymous"}</td>
+                  <td>{review.service}</td>
+                  <td>{review.stylist}</td>
+                  <td>{review.stars} ⭐</td>
+                  <td
+                    className="review-cell"
+                    onMouseEnter={(e) => handleMouseEnter(review.id, e)}
+                    onMouseLeave={handleMouseLeave}
+                    style={{ position: "relative" }}
+                  >
+                    {review.text.length > 40
+                      ? review.text.slice(0, 40) + "…"
+                      : review.text}
+                  </td>
+                  <td style={{ color: review.approved ? "green" : "orange" }}>
+                    {review.approved ? "Approved" : "Pending"}
+                  </td>
+                  <td>
+                    {!review.approved && (
+                      <button
+                        onClick={() => handleApprove(review.id)}
+                        className="admin-button"
+                      >
+                        Approve
+                      </button>
+                    )}
+                    <button
+                      onClick={() => handleDelete(review.id)}
+                      className="admin-button admin-button-deny"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          {/* Tooltip shown outside table cell to prevent clipping */}
+          {hoveredReview.id && (
+            <div
+              className="review-tooltip"
+              style={{
+                position: "fixed",
+                top: hoveredReview.y + "px",
+                left: hoveredReview.x + "px",
+                zIndex: 9999,
+                maxWidth: "320px",
+                background: "#fff7ef",
+                padding: "0.75rem 1rem",
+                borderRadius: "8px",
+                boxShadow: "0 4px 15px rgba(0,0,0,0.1)",
+                color: "#4b3b2b",
+                fontSize: "0.9rem",
+                lineHeight: 1.4,
+                whiteSpace: "normal",
+                wordWrap: "break-word",
+                pointerEvents: "none",
+              }}
+            >
+              {allReviews.find((r) => r.id === hoveredReview.id)?.text}
             </div>
-          ))}
+          )}
         </div>
       )}
 

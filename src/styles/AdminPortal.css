@@ -64,10 +64,18 @@
   width: 100%;
 }
 
-.admin-table thead tr {
+/* Fix table header hover: keep brown background and white text */
+.admin-table.reviews-table thead tr,
+.admin-table.reviews-table thead tr th {
   background-color: #a77b5a;
   color: white;
-  text-align: left;
+  cursor: default;
+}
+
+.admin-table.reviews-table thead tr:hover,
+.admin-table.reviews-table thead tr th:hover {
+  background-color: #a77b5a !important;
+  color: white !important;
 }
 
 .admin-table th,
@@ -154,9 +162,9 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  width: 97%;      /* full width to align with container */
-  max-width: none;  /* remove max-width to avoid centering */
-  margin-left: 0;   /* align left */
+  width: 97%;
+  max-width: none;
+  margin-left: 0;
   margin-right: 0;
 }
 
@@ -193,8 +201,8 @@
 
 .team-info input,
 .team-info textarea {
-  width: 100%;    /* full width inputs for alignment */
-  max-width: 600px; /* optional max-width to keep inputs from stretching too wide */
+  width: 100%;
+  max-width: 600px;
 }
 
 .team-info textarea {
@@ -233,13 +241,13 @@
 }
 
 .team-member-buttons button {
-  all: unset; /* completely resets default styles */
+  all: unset;
   box-sizing: border-box;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 70px; /* fixed width */
-  height: 36px; /* fixed height */
+  width: 70px;
+  height: 36px;
   font-size: 1rem;
   font-weight: 700;
   font-family: inherit;
@@ -335,7 +343,6 @@
 }
 
 /* Services Section styled like Team Editor */
-
 .services {
   max-width: 60%;
   margin: 2rem auto;
@@ -436,22 +443,79 @@
   margin-bottom: 2rem;
 }
 
-.review-card {
-  background: #fff8f5;
-  padding: 1rem 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-  border: 1px solid #e0c7b5;
+.admin-reviews-table-wrapper {
+  overflow-x: auto;
+  margin-bottom: 2rem;
 }
 
-.review-card p {
-  margin: 0.4rem 0;
+.admin-table.reviews-table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-.review-card .admin-button {
-  margin-top: 0.8rem;
-  background-color: #b8673e;
+.admin-table.reviews-table th,
+.admin-table.reviews-table td {
+  padding: 0.75rem;
+  border: 1px solid var(--deep);
+  text-align: left;
+  vertical-align: top;
+}
+
+.admin-table.reviews-table thead tr {
+  background-color: #a77b5a;
   color: white;
-  font-weight: bold;
 }
+
+.admin-table.reviews-table tbody tr:hover {
+  background-color: #f9f9f9;
+}
+
+/* Button styles */
+.admin-button {
+  padding: 0.4rem 0.8rem;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.admin-button-deny {
+  background-color: #f44336;
+  color: white;
+}
+
+.admin-button-deny:hover {
+  background-color: #d32f2f;
+}
+
+/* Review cell and preview tooltip */
+.review-cell {
+  position: relative;    /* Needed for tooltip positioning */
+  max-width: 300px;      /* Keep the truncated preview width */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  color: inherit;
+}
+
+/* Tooltip container */
+.review-tooltip {
+  position: absolute;
+  top: 100%;             /* Directly below the cell */
+  left: 0;
+  z-index: 9999;         /* Make sure it's on top */
+  width: 320px;
+  background: #fff7ef;
+  color: #4b3b2b;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  font-size: 0.9rem;
+  line-height: 1.4;
+  white-space: normal;   /* Wrap text */
+  word-wrap: break-word;
+  pointer-events: none;  /* So it doesn't interfere with mouse */
+}
+
+
 
