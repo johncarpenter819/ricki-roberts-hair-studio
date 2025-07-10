@@ -5,8 +5,9 @@ import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { AppointmentsProvider } from './context/AppointmentsContext';
 import { ServicesProvider } from './context/ServicesContext';
-import './index.css';
 import { TeamProvider } from './context/TeamContext';
+import { ReviewsProvider } from './context/ReviewsContext'; // <-- import ReviewsProvider
+import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <BrowserRouter>
@@ -14,8 +15,10 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <ServicesProvider>
         <AppointmentsProvider>
           <TeamProvider>
-           <App />
-         </TeamProvider>
+            <ReviewsProvider>  {/* Wrap App with ReviewsProvider */}
+              <App />
+            </ReviewsProvider>
+          </TeamProvider>
         </AppointmentsProvider>
       </ServicesProvider>
     </AuthProvider>

@@ -3,20 +3,21 @@ import { useBusiness } from '../context/BusinessContext';
 import { useTeam } from '../context/TeamContext';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
-import { db } from '../firebaseConfig';
 import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
+import { db } from '../firebaseConfig';
 import { getServiceCategories } from '../utils/firestore';
-import reviewsData from '../data/reviews.json';
+import { useReviews } from '../context/ReviewsContext';
 
 export default function Home() {
   const { hours, about } = useBusiness();
   const { team } = useTeam();
   const navigate = useNavigate();
 
+  const { reviews, loading: loadingReviews, error: reviewsError } = useReviews();
+
   const [socialLinks, setSocialLinks] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loadingCategories, setLoadingCategories] = useState(true);
-  const reviews = reviewsData;
   const [showAllReviews, setShowAllReviews] = useState(false);
 
   const sectionsRef = useRef([]);
@@ -98,7 +99,7 @@ export default function Home() {
 
   const getPhotoSrc = (photo) => {
     if (!photo) return "/assets/default-profile.jpg";
-    if (photo.startsWith("/assets/") || photo.startsWith("blob:")) return photo;
+    if (photo.startsWith("/assets/")) return photo;
     return `/assets/${photo}`;
   };
 
@@ -147,35 +148,43 @@ export default function Home() {
         aria-labelledby="reviews-heading"
       >
         <h2 id="reviews-heading">Ratings & Reviews</h2>
-        <div id="reviews-container" className="reviews-container" ref={reviewsRef}>
-          {reviews.length === 0 ? (
-            <p className="nanum-myeongjo-regular">No reviews available.</p>
-          ) : (
-            (showAllReviews ? reviews : reviews.slice(0, 10)).map((review, i) => (
-              <div key={i} className="review-card nanum-myeongjo-regular">
-                {review.stars && (
-                  <div className="review-stars">{'⭐️'.repeat(review.stars)}</div>
-                )}
-                <p className="review-meta">
-                  <strong>{review.name}</strong> — <span>{review.date}</span>
-                </p>
-                <p className="review-text">"{review.text}"</p>
+
+        {loadingReviews && <p className="nanum-myeongjo-regular">Loading reviews...</p>}
+        {reviewsError && <p className="nanum-myeongjo-regular" style={{color: 'red'}}>Failed to load reviews.</p>}
+
+        {!loadingReviews && !reviewsError && (
+          <>
+            <div id="reviews-container" className="reviews-container" ref={reviewsRef}>
+              {reviews.length === 0 ? (
+                <p className="nanum-myeongjo-regular">No reviews available.</p>
+              ) : (
+                (showAllReviews ? reviews : reviews.slice(0, 10)).map((review, i) => (
+                  <div key={review.id || i} className="review-card nanum-myeongjo-regular">
+                    {review.stars && (
+                      <div className="review-stars">{'⭐️'.repeat(review.stars)}</div>
+                    )}
+                    <p className="review-meta">
+                      <strong>{review.name}</strong> — <span>{review.date}</span>
+                    </p>
+                    <p className="review-text">"{review.text}"</p>
+                  </div>
+                ))
+              )}
+            </div>
+            {reviews.length > 10 && (
+              <div className="reviews-button-container">
+                <button
+                  className="cta-btn"
+                  onClick={toggleReviews}
+                  aria-expanded={showAllReviews}
+                  aria-controls="reviews-container"
+                  style={{ marginTop: '1.5rem' }}
+                >
+                  {showAllReviews ? 'Show Less Reviews' : `Show All Reviews (${reviews.length})`}
+                </button>
               </div>
-            ))
-          )}
-        </div>
-        {reviews.length > 10 && (
-          <div className="reviews-button-container">
-            <button
-              className="cta-btn"
-              onClick={toggleReviews}
-              aria-expanded={showAllReviews}
-              aria-controls="reviews-container"
-              style={{ marginTop: '1.5rem' }}
-            >
-              {showAllReviews ? 'Show Less Reviews' : `Show All Reviews (${reviews.length})`}
-            </button>
-          </div>
+            )}
+          </>
         )}
       </section>
 
