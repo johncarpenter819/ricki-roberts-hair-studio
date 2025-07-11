@@ -19,7 +19,6 @@
   color: var(--deep);
   font-family: var(--font-body);
 
-  /* Texture background with glass effect */
   background:
     linear-gradient(to bottom, rgba(228, 206, 192, 0.9), rgba(227, 184, 174, 0.9)),
     var(--texture);
@@ -91,15 +90,14 @@
   flex-direction: row;
   background: #ffffff;
   border-radius: 12px;
-  overflow: visible; /* Allow image to overflow on hover */
+  overflow: visible;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   transition: transform 0.3s ease;
-  position: relative; /* For absolute positioning of expanded image */
+  position: relative;
 }
 
 .service-item-card:hover {
   transform: scale(1.02);
-  /* box-shadow stays the same on hover */
 }
 
 .service-item-image {
@@ -116,10 +114,10 @@
 }
 
 .service-item-card:hover .service-item-image {
-  width: 350px; /* Expand width to ~2.5 times */
-  transform: translateX(-210px); /* Move left by the increase */
+  width: 350px;
+  transform: translateX(-210px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-  z-index: 10; /* Bring above other content */
+  z-index: 10;
 }
 
 .service-item-image img {
@@ -200,6 +198,242 @@
 }
 
 .add-to-cart-btn:hover {
-  background-color: var(--primary-dark, #a45212);
+  background-color: #a45212; /* darker shade */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+
+/* ===== RESPONSIVE STYLES ===== */
+
+/* Tablets and smaller laptops */
+@media (max-width: 1024px) {
+  .services-container {
+    max-width: 90%;
+    padding: 1rem 1.5rem;
+  }
+
+  .services-heading {
+    font-size: 3rem;
+    margin-bottom: 2rem;
+  }
+
+  .services-category-section {
+    padding: 1.5rem 2rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .services-category-title {
+    font-size: 2.2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .service-item-card {
+    flex-direction: column;
+  }
+
+  .service-item-image {
+    width: 100%;
+    height: 220px;
+    border-radius: 12px 12px 0 0;
+    transform: none !important; /* prevent hover expand on smaller screens */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  .service-item-card:hover .service-item-image {
+    width: 100%;
+    transform: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  .service-item-image img {
+    border-radius: 12px 12px 0 0;
+  }
+
+  .service-item-content {
+    padding: 1rem 1.2rem;
+  }
+}
+
+/* Medium phones and large phones */
+@media (max-width: 768px) {
+  .services-container {
+    max-width: 95%;
+    margin: 2rem auto;
+    padding: 1rem 1rem;
+  }
+
+  .services-heading {
+    font-size: 2.4rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .services-category-section {
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .services-category-title {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+  }
+
+  .service-item-card {
+    flex-direction: column;
+  }
+
+  .service-item-image {
+    width: 100%;
+    height: 180px;
+    border-radius: 12px 12px 0 0;
+    transform: none !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.07);
+  }
+
+  .service-item-card:hover .service-item-image {
+    width: 100%;
+    transform: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.07);
+  }
+
+  .service-item-content {
+    padding: 0.8rem 1rem;
+  }
+
+  .service-item-header h3 {
+    font-size: 1.2rem;
+  }
+
+  .service-duration {
+    font-size: 0.9rem;
+  }
+
+  .service-description {
+    font-size: 0.95rem;
+    min-height: 3rem;
+  }
+
+  .service-price {
+    font-size: 1rem;
+  }
+
+  .add-to-cart-btn {
+    font-size: 0.95rem;
+    padding: 0.4rem 1rem;
+  }
+}
+
+/* Small phones and smaller */
+@media (max-width: 480px) {
+  .services-container {
+    margin: 1.5rem auto;
+    padding: 0.75rem 1rem;
+  }
+
+  .services-heading {
+    font-size: 1.9rem;
+    margin-bottom: 1rem;
+  }
+
+  .services-category-section {
+    padding: 1rem 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .services-category-title {
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .service-item-card {
+    flex-direction: column;
+  }
+
+  .service-item-image {
+    width: 100%;
+    height: 140px;
+    border-radius: 12px 12px 0 0;
+    transform: none !important;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+  }
+
+  .service-item-card:hover .service-item-image {
+    width: 100%;
+    transform: none;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+  }
+
+  .service-item-content {
+    padding: 0.6rem 0.8rem;
+  }
+
+  .service-item-header h3 {
+    font-size: 1.1rem;
+  }
+
+  .service-duration {
+    font-size: 0.85rem;
+  }
+
+  .service-description {
+    font-size: 0.9rem;
+    min-height: 2.5rem;
+  }
+
+  .service-price {
+    font-size: 0.95rem;
+  }
+
+  .add-to-cart-btn {
+    font-size: 0.9rem;
+    padding: 0.35rem 0.9rem;
+  }
+}
+
+/* Extra small phones (e.g. iPhone SE) */
+@media (max-width: 360px) {
+  .services-container {
+    margin: 1rem auto;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .services-heading {
+    font-size: 1.6rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .services-category-section {
+    padding: 0.8rem 0.8rem;
+    margin-bottom: 1rem;
+  }
+
+  .services-category-title {
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .service-item-image {
+    height: 120px;
+  }
+
+  .service-item-header h3 {
+    font-size: 1rem;
+  }
+
+  .service-duration {
+    font-size: 0.8rem;
+  }
+
+  .service-description {
+    font-size: 0.85rem;
+    min-height: 2rem;
+  }
+
+  .service-price {
+    font-size: 0.9rem;
+  }
+
+  .add-to-cart-btn {
+    font-size: 0.85rem;
+    padding: 0.3rem 0.75rem;
+  }
 }

@@ -18,8 +18,11 @@ html, body, #root {
   flex-grow: 1;
   padding: 1rem 2rem; /* optional, adjust as needed */
   background-color: #f9f6f2;
+  /* Added padding-bottom from previous .main-content rule for consistent spacing above footer */
+  padding-bottom: 2rem;
 }
 
+/* Footer styles */
 footer {
   background-color: #a77b5a;
   color: white;
@@ -29,9 +32,11 @@ footer {
   font-weight: 600;
   user-select: none;
   flex-shrink: 0;
+  width: 100%; /* Ensure footer takes full width */
+  box-sizing: border-box; /* Include padding in width calculation */
 }
 
-/* Dashboard container */
+/* Dashboard container (from your original app.css) */
 .dashboard-container {
   max-width: 900px;
   margin: 2rem auto;
@@ -40,6 +45,7 @@ footer {
   border-radius: 12px;
   box-shadow: 0 4px 16px rgba(0,0,0,0.1);
   color: #4b3b2b;
+  min-height: 60vh;
 }
 
 .dashboard-container h2 {
@@ -104,17 +110,7 @@ footer {
   background-color: #f0e9df;
 }
 
-/* Responsive for smaller screens */
-@media (max-width: 768px) {
-  .dashboard-table th,
-  .dashboard-table td {
-    padding: 0.5rem 0.6rem;
-    font-size: 0.9rem;
-    white-space: normal;
-  }
-}
-
-/* Login form styles */
+/* Login form styles (from your original app.css) */
 .login-container {
   max-width: 320px;
   margin: 4rem auto;
@@ -161,4 +157,518 @@ footer {
   color: red;
   margin-top: 12px;
   font-weight: 600;
+}
+
+/* --- Admin Page Specific Styles (Merged from previous index.css) --- */
+
+/* Container shared by all admin pages */
+.admin-container,
+.social-links-container {
+  max-width: 1200px;
+  margin: 2rem auto 3rem auto; /* extra bottom margin for spacing above footer */
+  padding: 1.5rem 2rem;
+  background-color: #f9f6f2;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  /* font-family property is already set on body/html */
+  color: #4b3b2b;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+}
+
+/* Toolbar shared */
+.admin-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.admin-toolbar label {
+  font-weight: 600;
+}
+
+/* Inputs */
+.admin-input,
+.admin-select {
+  padding: 0.4rem 0.6rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  max-width: 180px;
+  background-color: #fff;
+  margin-top: 0.3rem;
+  box-sizing: border-box;
+}
+
+/* Buttons */
+.social-links-add-button {
+  background-color: #a77b5a;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  user-select: none;
+}
+
+.social-links-add-button:hover {
+  background-color: #8b6847;
+}
+
+/* Cancel/Delete buttons */
+.admin-cancel-button,
+.social-links-delete-button {
+  padding: 0.3rem 0.7rem;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+  flex-shrink: 0;
+}
+
+.admin-cancel-button:hover,
+.social-links-delete-button:hover {
+  background-color: #b02a37;
+}
+
+/* List style reset and flex for list items */
+.social-links-list,
+.admin-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.social-links-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Inputs inside the list items */
+.social-links-list input.admin-input {
+  flex-shrink: 0;
+}
+
+.social-links-list input.name-input {
+  flex: 1;
+}
+
+.social-links-list input.url-input {
+  flex: 3;
+}
+
+.social-links-add-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  align-items: center;
+}
+
+/* Admin table overrides */
+/* Note: .admin-container already has width: 100%; */
+
+.admin-counts {
+  margin-bottom: 1rem;
+  font-weight: 600;
+  display: flex;
+  gap: 2rem;
+  font-size: 1.1rem;
+}
+
+.admin-table-wrapper {
+  overflow-x: auto;
+  width: 100%;
+  -webkit-overflow-scrolling: touch;
+}
+
+.admin-table {
+  border-collapse: collapse;
+  box-shadow: 0 0 8px rgba(0,0,0,0.05);
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  width: 100%;
+  table-layout: auto;
+}
+
+.admin-table.reviews-table thead tr,
+.admin-table.reviews-table thead tr th {
+  background-color: #a77b5a;
+  color: white;
+  cursor: default;
+}
+
+.admin-table.reviews-table thead tr:hover,
+.admin-table.reviews-table thead tr th:hover {
+  background-color: #a77b5a !important;
+  color: white !important;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e2ddd8;
+  vertical-align: middle;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-table tbody tr:hover {
+  background-color: #f0e9df;
+}
+
+.admin-status-cell {
+  font-weight: 600;
+  color: #155724;
+}
+
+.admin-label {
+  display: flex;
+  flex-direction: column;
+  color: #4b3b2b;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.admin-textarea {
+  margin-top: 0.5rem;
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-family: inherit;
+  resize: vertical;
+  background-color: #fff;
+  width: 100%;
+}
+
+.business-button {
+  background-color: #a77b5a;
+  color: white;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.3s ease;
+  display: inline-block;
+  text-align: center;
+  white-space: nowrap;
+  margin-top: 0.3rem;
+  margin-left: 10px;
+}
+
+.business-button:hover {
+  background-color: #8b6847;
+}
+
+.business-button-deny {
+  background-color: #f44336;
+  color: white;
+}
+
+.business-button-deny:hover {
+  background-color: #d32f2f;
+}
+
+.admin-message {
+  color: green;
+  margin-top: 1rem;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+/* Team Editor */
+.team-list {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 97%;
+  max-width: none;
+}
+
+.team-member {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 1rem;
+  width: 100%;
+  padding: 1.5rem;
+  padding-bottom: 4rem;
+  background-color: #fff;
+  border: 2px solid #a77b5a;
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.05);
+}
+
+.team-photo {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid #a77b5a;
+  flex-shrink: 0;
+}
+
+.team-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.team-info input,
+.team-info textarea {
+  width: 100%;
+  max-width: 600px;
+}
+
+.team-info textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.choose-photo {
+  background-color: #a77b5a;
+  color: white;
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s ease;
+  display: inline-block;
+  text-align: center;
+  user-select: none;
+  white-space: nowrap;
+  max-width: 200px;
+}
+
+.choose-photo:hover {
+  background-color: #8b6847;
+}
+
+.team-member-buttons {
+  position: absolute;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  display: flex;
+  gap: 0.75rem;
+}
+
+.team-member-buttons button {
+  /* This 'all: unset;' is fine here for standardizing buttons in this container */
+  all: unset;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  height: 36px;
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: inherit;
+  text-align: center;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.team-member-buttons .delete-button {
+  background-color: #dc3545;
+  color: white;
+}
+
+.team-member-buttons .delete-button:hover {
+  background-color: #b02a37;
+}
+
+.file-input {
+  display: none;
+}
+
+.upload-button,
+.add-member-button {
+  background-color: #a77b5a;
+  color: white;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.3s ease;
+  display: inline-block;
+  text-align: center;
+  white-space: nowrap;
+  margin-top: 0.3rem;
+  margin-left: 10px;
+  height: 42px; /* matching height */
+  line-height: 1.3;
+  min-width: 120px; /* matching width */
+}
+
+.upload-button:hover,
+.add-member-button:hover {
+  background-color: #8b6847;
+}
+
+/* -------------------------
+   NEW BUTTON STYLES HERE
+-------------------------- */
+.new-link-button,
+.add-services-button {
+  background-color: #a77b5a;
+  color: white;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.3s ease;
+  display: inline-block;
+  text-align: center;
+  white-space: nowrap;
+  margin-top: 0.5rem;
+  height: 42px;
+  line-height: 1.3;
+  min-width: 120px;
+}
+
+.new-link-button:hover,
+.add-services-button:hover {
+  background-color: #8b6847;
+}
+
+/* Style fix for team-editor-save-button */
+/* Removed 'all: unset;' from here as it was redundant/conflicting with direct styles */
+.team-editor-save-button {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  height: 36px;
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: inherit;
+  text-align: center;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  background-color: #a77b5a; /* Applying desired background */
+  color: white; /* Applying desired text color */
+}
+
+.team-editor-save-button:hover {
+  background-color: #8b6847;
+}
+
+/* Responsive for smaller screens (from your original app.css) */
+@media (max-width: 768px) {
+  .dashboard-table th,
+  .dashboard-table td {
+    padding: 0.5rem 0.6rem;
+    font-size: 0.9rem;
+    white-space: normal;
+  }
+
+  .contact-page {
+    width: 90vw;
+    max-width: 400px;
+    margin: 1.5rem auto;
+    padding: 1.5rem 1.5rem;
+    border-radius: 12px;
+    box-shadow: none;
+  }
+
+  .contact-page h1 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .contact-page h2 {
+    font-size: 1.6rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .contact-page-split {
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .contact-left,
+  .contact-right {
+    padding: 1.5rem 1.5rem;
+    border: 1px solid rgba(123, 51, 7, 0.2);
+    box-shadow: none;
+    border-radius: 12px;
+  }
+
+  .contact-form input,
+  .contact-form textarea,
+  .contact-form select {
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+  }
+
+  .contact-form button,
+  .cta-btn {
+    min-width: 140px;
+    font-size: 1rem;
+    padding: 0.75rem 1.5rem;
+  }
+}
+
+/* For really small phones (from your original app.css) */
+@media (max-width: 400px) {
+  .contact-page {
+    width: 95vw;
+    padding: 1rem 1rem;
+  }
+
+  .contact-page h1 {
+    font-size: 1.6rem;
+  }
+
+  .contact-page h2 {
+    font-size: 1.3rem;
+  }
+
+  .contact-form input,
+  .contact-form textarea,
+  .contact-form select {
+    font-size: 0.95rem;
+    padding: 0.65rem 0.9rem;
+  }
+
+  .contact-form button,
+  .cta-btn {
+    min-width: 120px;
+    font-size: 0.9rem;
+    padding: 0.65rem 1.2rem;
+  }
 }

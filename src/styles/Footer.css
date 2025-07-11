@@ -1,6 +1,6 @@
 .footer {
-  background-color: #b8673e; /* your --primary warm brown */
-  color: #fff;               /* white text for contrast */
+  background-color: #b8673e; 
+  color: #fff;               
   text-align: center;
   padding: 1.5rem 2rem;
   font-family: 'Segoe UI', sans-serif;
@@ -10,7 +10,7 @@
   border-top-right-radius: 16px;
   user-select: none;
 
-  flex-shrink: 0; /* prevent footer from shrinking */
+  flex-shrink: 0; 
 }
 
 .footer p {
