@@ -1,5 +1,5 @@
 /* @import url('https://fonts.googleapis.com/css2?family=Imperial+Script&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo&display=swap'); */
 
 :root {
   --primary: #b8673e;
@@ -40,7 +40,7 @@ html, body, #root {
   font-family: var(--font-body);
   line-height: 1.6;
   scroll-behavior: smooth;
-  overflow-x: hidden;
+  overflow-x: hidden; /* Prevent horizontal scroll */
 }
 
 /* Adjusting .layout-wrapper and .layout-content for sticky footer */
@@ -57,7 +57,6 @@ html, body, #root {
   flex-direction: column; /* Adjust as needed for your content */
   /* You can optionally add padding or margin here if you want space around your main content */
 }
-
 
 /* Stronger warm overlay with multiple colors & blend */
 body::before {
@@ -139,6 +138,11 @@ section {
   border-radius: 12px;
   padding: 1.5rem 2rem;
   margin-bottom: 3rem;
+  box-sizing: border-box; /* Include padding in the element's total width and height */
+  width: 90%; /* Default for smaller screens, will be adjusted */
+  max-width: 1200px; /* Max width for large screens */
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* HR line */
@@ -149,4 +153,154 @@ hr {
   margin: 3rem auto;
   width: 60%;
   box-shadow: 0 2px 6px rgba(123, 51, 7, 0.12);
+}
+
+/* ----------------------------------------
+   RESPONSIVE DESIGN WITH MEDIA QUERIES
+------------------------------------------- */
+
+/* Small Phones (e.g., up to 480px) */
+@media (max-width: 480px) {
+  html, body, #root {
+    font-size: 14px; /* Slightly smaller base font size */
+  }
+
+  section {
+    padding: 1rem 1.25rem; /* Reduced padding for sections */
+    margin-bottom: 2rem;
+    width: 95%; /* Wider on small screens */
+  }
+
+  hr {
+    margin: 2rem auto;
+    width: 80%; /* Wider HR on small screens */
+  }
+
+  body::before {
+    /* Adjust gradients for smaller screens if needed, or keep as is */
+    background-image:
+      linear-gradient(135deg, rgba(184, 103, 62, 0.5), rgba(123, 51, 7, 0.65)),
+      radial-gradient(circle at 50% 40%, rgba(228, 206, 192, 0.3), transparent 80%);
+  }
+
+  body::after {
+    background-size:
+      400px 400px,
+      500px 500px,
+      20px 20px,
+      60px 60px,
+      100% 100%; /* Adjust background sizes for smaller screens */
+  }
+}
+
+/* Medium Phones and Portrait Tablets (e.g., 481px to 768px) */
+@media (min-width: 481px) and (max-width: 768px) {
+  html, body, #root {
+    font-size: 15px;
+  }
+
+  section {
+    padding: 1.25rem 1.75rem;
+    margin-bottom: 2.5rem;
+    width: 90%;
+  }
+
+  hr {
+    margin: 2.5rem auto;
+    width: 70%;
+  }
+
+  body::after {
+    background-size:
+      550px 550px,
+      650px 650px,
+      25px 25px,
+      70px 70px,
+      100% 100%;
+  }
+}
+
+/* Landscape Tablets and Small Laptops (e.g., 769px to 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  html, body, #root {
+    font-size: 16px; /* Base font size often works well here */
+  }
+
+  section {
+    padding: 1.5rem 2rem;
+    margin-bottom: 3rem;
+    width: 85%; /* Slightly narrower for better content focus */
+  }
+
+  hr {
+    width: 65%;
+  }
+
+  body::after {
+    background-size:
+      600px 600px,
+      700px 700px,
+      30px 30px,
+      80px 80px,
+      100% 100%; /* Can be similar to desktop or slightly adjusted */
+  }
+}
+
+/* 1024px Laptops (specific breakpoint, often included in the above range, but can be targeted) */
+@media (min-width: 992px) and (max-width: 1200px) {
+  html, body, #root {
+    font-size: 16.5px; /* Slightly larger for readability */
+  }
+
+  section {
+    width: 80%; /* Refined width for this range */
+    padding: 1.75rem 2.25rem;
+  }
+
+  hr {
+    width: 60%;
+  }
+}
+
+/* 1440px Laptops and Larger Desktops */
+@media (min-width: 1201px) { /* Changed from 1440px to 1201px to include 1440px and above */
+  html, body, #root {
+    font-size: 17px; /* Optimal font size for larger screens */
+  }
+
+  section {
+    padding: 2rem 2.5rem; /* More generous padding */
+    margin-bottom: 3.5rem;
+    width: 75%; /* Max width to prevent content from stretching too wide */
+    max-width: 1400px; /* Optional: Set a hard max-width for very large screens */
+  }
+
+  hr {
+    margin: 3.5rem auto;
+    width: 50%; /* Can be narrower for a more centered look */
+  }
+
+  body::before {
+    background-image:
+      linear-gradient(135deg, rgba(184, 103, 62, 0.4), rgba(123, 51, 7, 0.55)),
+      radial-gradient(circle at 20% 25%, rgba(228, 206, 192, 0.35), transparent 75%),
+      radial-gradient(circle at 85% 65%, rgba(227, 184, 174, 0.25), transparent 75%);
+  }
+
+  body::after {
+    background-size:
+      800px 800px,
+      900px 900px,
+      35px 35px,
+      90px 90px,
+      100% 100%; /* Larger texture sizes */
+  }
+}
+
+/* Optional: Landscape orientation for phones */
+@media screen and (max-width: 768px) and (orientation: landscape) {
+  section {
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+  }
 }

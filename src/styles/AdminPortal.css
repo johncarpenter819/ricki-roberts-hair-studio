@@ -288,6 +288,7 @@
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box; /* Include padding/border in width */
 }
 
 /* Base styles for .services-table */
@@ -295,6 +296,7 @@
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
+  table-layout: fixed; /* Crucial for predictable column widths */
 }
 
 /* Specific table styles for Services Editor */
@@ -303,6 +305,9 @@
   padding: 0.8rem 1rem;
   text-align: left;
   border-bottom: 1px solid #e0e0e0;
+  white-space: normal; /* Ensure text wraps by default */
+  word-wrap: break-word; /* Ensure long words break and wrap */
+  box-sizing: border-box; /* Include padding/border in width */
 }
 
 .services-editor-container .services-table thead th {
@@ -323,36 +328,47 @@
 }
 
 /* Column Width Adjustments based on screenshot order */
+/* Using percentages for better distribution when table-layout: fixed is used */
 .services-editor-container .services-table th:nth-child(1),
 .services-editor-container .services-table td:nth-child(1) {
-  min-width: 100px; /* Name */
+  width: 15%; /* Name */
+  min-width: 80px; /* Smallest sensible minimum */
 }
 .services-editor-container .services-table th:nth-child(2),
 .services-editor-container .services-table td:nth-child(2) {
-  min-width: 100px; /* Category */
+  width: 15%; /* Category */
+  min-width: 80px;
 }
 .services-editor-container .services-table th:nth-child(3),
 .services-editor-container .services-table td:nth-child(3) {
-  min-width: 120px; /* Duration */
+  width: 15%; /* Duration */
+  min-width: 90px;
 }
 .services-editor-container .services-table th:nth-child(4),
 .services-editor-container .services-table td:nth-child(4) {
-  min-width: 120px; /* Price */
+  width: 15%; /* Price */
+  min-width: 90px;
 }
 .services-editor-container .services-table th:nth-child(5),
 .services-editor-container .services-table td:nth-child(5) {
-  min-width: 300px; /* Description - Made wider */
-  max-width: 500px;
+  /* Description: This column will take remaining space and handle overflow */
+  width: 30%; /* Give it a larger percentage */
+  min-width: 150px; /* Base min-width for larger screens */
+  overflow: hidden;
+  text-overflow: ellipsis; /* Still good for single-line overflows if space is very tight */
 }
 .services-editor-container .services-table td:nth-child(5) textarea {
   min-height: 40px;
   font-size: 0.9rem;
   padding: 0.4rem;
+  width: 100%; /* Ensure textarea takes full width of its cell */
+  box-sizing: border-box; /* Include padding/border in width */
+  resize: vertical; /* Allow vertical resize */
 }
 .services-editor-container .services-table th:nth-child(6),
 .services-editor-container .services-table td:nth-child(6) {
-  min-width: 80px; /* Actions - Adjusted to be smaller */
-  max-width: 100px;
+  width: 10%; /* Actions */
+  min-width: 70px;
 }
 
 
@@ -606,13 +622,102 @@
     flex-direction: column;
     align-items: flex-start;
   }
+
+  /* Specific adjustments for services table on tablets/larger phones */
+  .services-editor-container .services-table th,
+  .services-editor-container .services-table td {
+    padding: 0.5rem 0.6rem; /* Slightly more aggressive padding reduction */
+    font-size: 0.9rem; /* Adjust font size if needed */
+  }
+
+  /* Force description column to be very narrow on tablets */
+  .services-editor-container .services-table th:nth-child(5),
+  .services-editor-container .services-table td:nth-child(5) {
+    width: 25%; /* Slightly larger percentage for tablets */
+    min-width: 80px; /* Reduced min-width */
+    max-width: 150px; /* Controlled max-width */
+  }
+
+  .services-editor-container .services-table td:nth-child(5) textarea {
+    min-height: 35px; /* Adjust textarea height */
+  }
+
+  /* Adjust other columns if necessary to make space */
+  .services-editor-container .services-table th:nth-child(1),
+  .services-editor-container .services-table td:nth-child(1), /* Name */
+  .services-editor-container .services-table th:nth-child(2),
+  .services-editor-container .services-table td:nth-child(2) /* Category */
+  {
+    min-width: 70px;
+    width: 15%;
+  }
+
+  .services-editor-container .services-table th:nth-child(3),
+  .services-editor-container .services-table td:nth-child(3), /* Duration */
+  .services-editor-container .services-table th:nth-child(4),
+  .services-editor-container .services-table td:nth-child(4) /* Price */
+  {
+    min-width: 80px;
+    width: 15%;
+  }
+
+  .services-editor-container .services-table th:nth-child(6),
+  .services-editor-container .services-table td:nth-child(6) /* Actions */
+  {
+    min-width: 60px;
+    width: 10%;
+  }
 }
 
 @media (max-width: 480px) {
   .services-editor-container .services-table th,
   .services-editor-container .services-table td {
-    padding: 0.5rem 0.6rem;
-    white-space: normal;
+    padding: 0.4rem 0.5rem; /* Even more aggressive padding reduction */
+    font-size: 0.75rem; /* Even smaller font size for very small screens */
+  }
+
+  /* Force description column to be minimal on small phones */
+  .services-editor-container .services-table th:nth-child(5),
+  .services-editor-container .services-table td:nth-child(5) {
+    width: 15%; /* Very small percentage */
+    min-width: 40px; /* Very small min-width */
+    max-width: 100px; /* Very small max-width */
+  }
+
+  .services-editor-container .services-table td:nth-child(5) textarea {
+    min-height: 25px; /* Smallest textarea height */
+    font-size: 0.7rem;
+  }
+
+  /* Ensure horizontal scrolling works if table is still too wide */
+  .admin-table-wrapper {
+    -webkit-overflow-scrolling: touch; /* For smoother scrolling on iOS */
+  }
+
+  /* Adjust other columns more aggressively for small phones */
+  .services-editor-container .services-table th:nth-child(1),
+  .services-editor-container .services-table td:nth-child(1), /* Name */
+  .services-editor-container .services-table th:nth-child(2),
+  .services-editor-container .services-table td:nth-child(2) /* Category */
+  {
+    min-width: 60px;
+    width: 18%;
+  }
+
+  .services-editor-container .services-table th:nth-child(3),
+  .services-editor-container .services-table td:nth-child(3), /* Duration */
+  .services-editor-container .services-table th:nth-child(4),
+  .services-editor-container .services-table td:nth-child(4) /* Price */
+  {
+    min-width: 70px;
+    width: 18%;
+  }
+
+  .services-editor-container .services-table th:nth-child(6),
+  .services-editor-container .services-table td:nth-child(6) /* Actions */
+  {
+    min-width: 50px;
+    width: 10%;
   }
 }
 

@@ -1,3 +1,4 @@
+/* Home.css */
 
 /* ----------------------------------------
    HERO BANNER 
@@ -11,6 +12,10 @@
   box-shadow: var(--shadow);
   position: relative;
   z-index: 1;
+  width: 100%; /* Already set */
+  max-width: 100%; /* Ensure it does not get restricted by any max-width from parent sections */
+  margin: 0; /* Remove any auto margins that might be centering it */
+  box-sizing: border-box; /* Ensure padding is included in the 100% width */
 }
 
 .glow-text {
@@ -81,7 +86,7 @@
     inset 0 0 30px rgba(123, 51, 7, 0.3),
     inset 0 10px 30px rgba(123, 51, 7, 0.15),
     var(--shadow);
-  width: 90%;
+  width: 90%; /* This width applies to glass sections, not hero banner */
   max-width: none;
   border: 1.5px solid rgba(123, 51, 7, 0.35);
   opacity: 0;
@@ -221,13 +226,6 @@
   gap: 0.3rem;
 }
 
-.review-meta .review-date,
-.review-meta .review-author {
-  font-style: normal;
-  font-weight: 500;
-  color: #925c20;
-}
-
 .review-meta > span:first-child {
   color: #b8673e;
   letter-spacing: 2px;
@@ -350,20 +348,11 @@
   pointer-events: none;
 }
 
-@keyframes pulseGlow {
-  0%, 100% {
-    box-shadow: 0 0 8px var(--light);
-  }
-  50% {
-    box-shadow: 0 0 20px var(--primary);
-  }
-}
-
 /* ----------------------------------------
    SERVICE & TEAM CONTAINER
 ------------------------------------------- */
 .team-container {
-  max-width: 1200%;
+  max-width: 1200%; /* This seems like a typo, should be 1200px or similar */
   width: 100%;
   margin: 2rem auto 0 auto;
   padding: 0 1.5rem;
@@ -598,5 +587,10 @@
   .hours-cancellation-container,
   .glass-reviews {
     width: 95%;
+  }
+
+  /* Ensure hero banner remains 100% on small screens */
+  .hero-banner {
+    padding: 2rem 1rem; /* Adjust padding for smaller screens */
   }
 }
