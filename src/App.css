@@ -43,6 +43,22 @@ html, body, #root {
   overflow-x: hidden;
 }
 
+/* Adjusting .layout-wrapper and .layout-content for sticky footer */
+.layout-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Ensure the wrapper takes full viewport height */
+  width: 100%;
+}
+
+.layout-content {
+  flex: 1; /* This is the key: makes the main content area grow and push the footer down */
+  display: flex; /* Keep this if you want flex for internal content layout */
+  flex-direction: column; /* Adjust as needed for your content */
+  /* You can optionally add padding or margin here if you want space around your main content */
+}
+
+
 /* Stronger warm overlay with multiple colors & blend */
 body::before {
   content: "";

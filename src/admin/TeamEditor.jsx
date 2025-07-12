@@ -41,6 +41,18 @@ export default function TeamEditor() {
     );
   }
 
+  // Function to handle file input change for an existing member
+  function handlePhotoChange(id, file) {
+    if (file) {
+      const localUrl = URL.createObjectURL(file);
+      setLocalTeam((prev) =>
+        prev.map((member) =>
+          member.id === id ? { ...member, photo: localUrl } : member
+        )
+      );
+    }
+  }
+
   function handleSave(id) {
     const updatedMember = localTeam.find((m) => m.id === id);
     if (updatedMember) {
@@ -120,12 +132,25 @@ export default function TeamEditor() {
                   rows={4}
                 />
               </label>
+              {/* Photo Upload for existing members */}
+              <input
+                type="file"
+                accept="image/*"
+                id={`member-photo-upload-${member.id}`}
+                className="photo-input"
+                onChange={(e) => handlePhotoChange(member.id, e.target.files[0])}
+                style={{ display: "none" }}
+              />
+              <label htmlFor={`member-photo-upload-${member.id}`} className="upload-button">
+                Change Photo
+              </label>
+
               <div className="team-member-actions">
                 <button
                   onClick={() => handleSave(member.id)}
-                  className="team-editor-save-button" // Changed class name here
+                  className="team-editor-save-button"
                 >
-                  Save
+                  Update Profile
                 </button>
                 <button
                   onClick={() => handleDelete(member.id)}

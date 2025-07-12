@@ -12,10 +12,11 @@
 /* --- Container Styles --- */
 /* Common container styles for all admin pages that previously used .admin-container */
 .business-settings-container,
-.services-editor-container,
-.social-links-container,
-.team-editor-container {
-  max-width: 60%;
+.team-editor-container,
+.services-editor-container, /* Added services-editor-container here */
+.gallery-manager-container { /* Adjusted these containers specifically */
+  width: 100%; /* Make it take full width of its parent up to max-width */
+  max-width: 90%; /* Set to 90% as requested */
   margin: 2rem auto;
   padding: 1.5rem 2rem;
   background-color: #f9f6f2;
@@ -23,16 +24,20 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   color: #4b3b2b;
+  box-sizing: border-box; /* Ensure padding is included in the width */
 }
 
 /* Specific override for Social Links container to make it smaller */
 .social-links-container {
-  max-width: 40%; /* Made smaller and independent */
-}
-
-/* Specific override for Services Editor container to make it full width */
-.services-editor-container {
-  max-width: 90%;
+  max-width: 40%; /* Retained as it was previously working for social links */
+  margin: 2rem auto; /* Ensure it's centered */
+  padding: 1.5rem 2rem;
+  background-color: #f9f6f2;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #4b3b2b;
+  box-sizing: border-box;
 }
 
 /* --- Toolbar Shared --- */
@@ -678,13 +683,4 @@
 .review-cell:hover .review-tooltip {
   opacity: 1;
   transform: translateY(0);
-}
-
-footer {
-  margin-top: auto; /* Pushes the footer to the bottom */
-  /* Add any other desired footer styling here, e.g., background, padding, text-align */
-  background-color: #f2f2f2; /* Example: light gray background for footer */
-  padding: 1.5rem;
-  text-align: center;
-  color: #5d4a3c;
 }
