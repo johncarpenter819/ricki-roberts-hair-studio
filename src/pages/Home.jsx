@@ -1,4 +1,5 @@
 import '../styles/Home.css';
+import '../../src/App.css'
 import { useBusiness } from '../context/BusinessContext';
 import { useTeam } from '../context/TeamContext';
 import { useNavigate } from 'react-router-dom';
