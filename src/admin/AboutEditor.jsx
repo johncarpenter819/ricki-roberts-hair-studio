@@ -34,20 +34,11 @@ export default function AboutEditor() {
       />
       <button
         onClick={handleSave}
-        style={{
-          marginTop: '1rem',
-          padding: '0.75rem 1.5rem',
-          fontSize: '1rem',
-          backgroundColor: '#a77b5a',
-          color: '#fff',
-          border: 'none',
-          borderRadius: '8px',
-          cursor: 'pointer',
-        }}
+        className="primary-action-button"
       >
         Save
       </button>
-      {savedMessage && <p style={{ color: 'green', marginTop: '1rem' }}>{savedMessage}</p>}
+      {savedMessage && <p>{savedMessage}</p>}
     </div>
   );
 }

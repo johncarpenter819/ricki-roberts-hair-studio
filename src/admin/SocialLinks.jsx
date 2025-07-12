@@ -11,6 +11,7 @@ import {
   orderBy,
   getDocs,
 } from 'firebase/firestore';
+import '../styles/AdminPortal.css'; // Ensure this is imported
 
 const defaultLinks = [
   { name: 'Instagram', url: 'https://instagram.com/', icon: '/icons/instagram.svg' },
@@ -42,73 +43,45 @@ export default function SocialLinks() {
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const fetchedLinks = snapshot.docs
         .map(doc => ({ id: doc.id, ...doc.data() }))
-        .filter(link => typeof link.name === 'string' && typeof link.url === 'string');
+        .sort((a, b) => a.name.localeCompare(b.name)); // Sort by name alphabetically
       setLinks(fetchedLinks);
       setLoading(false);
     });
-
-    return () => unsubscribe();
+    return unsubscribe;
   }, []);
 
-  async function handleAdd() {
-    if (!newName.trim() || !newUrl.trim()) return;
+  const handleUpdate = async (id, field, value) => {
+    const linkRef = doc(db, 'socialLinks', id);
+    await updateDoc(linkRef, { [field]: value });
+  };
 
-    const newLink = {
-      name: newName.trim(),
-      url: newUrl.trim(),
-      icon: '/icons/link.svg',
-    };
+  const handleDelete = async (id) => {
+    if (window.confirm('Are you sure you want to delete this link?')) {
+      const linkRef = doc(db, 'socialLinks', id);
+      await deleteDoc(linkRef);
+    }
+  };
 
-    try {
-      await addDoc(collection(db, 'socialLinks'), newLink);
+  const handleAdd = async () => {
+    if (newName && newUrl) {
+      await addDoc(collection(db, 'socialLinks'), { name: newName, url: newUrl });
       setNewName('');
       setNewUrl('');
-      // No need to update state here — onSnapshot listener will update it
-    } catch (err) {
-      alert('Failed to add link: ' + err.message);
     }
-  }
+  };
 
-  async function handleUpdate(id, field, value) {
-    try {
-      const stringValue = (typeof value === 'string') ? value : (value == null ? '' : String(value));
-      const docRef = doc(db, 'socialLinks', id);
-      await updateDoc(docRef, { [field]: stringValue });
-      // No manual state update — onSnapshot updates state
-    } catch (err) {
-      alert('Failed to update link: ' + err.message);
-    }
+  if (loading) {
+    return <div className="admin-container">Loading social links...</div>;
   }
-
-  async function handleDelete(id) {
-    if (!window.confirm('Delete this social link?')) return;
-    try {
-      await deleteDoc(doc(db, 'socialLinks', id));
-      // No manual state update — onSnapshot updates state
-    } catch (err) {
-      alert('Failed to delete link: ' + err.message);
-    }
-  }
-
-  if (loading) return <p>Loading social links...</p>;
 
   return (
-    <div className="admin-container">
-      <h2>Social Media Links</h2>
+    <div className="social-links-container"> {/* Changed from admin-container */}
+      <h2>Manage Social Media Links</h2>
+      <p>Click on a field to edit it.</p>
 
-      {links.length === 0 && <p>No social links added yet.</p>}
-
-      <ul style={{ listStyle: 'none', paddingLeft: 0 }}>
+      <ul className="social-links-list">
         {links.map(({ id, name, url }) => (
-          <li
-            key={id}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              marginBottom: '0.5rem',
-              gap: '0.5rem',
-            }}
-          >
+          <li key={id} className="social-link-item">
             <input
               type="text"
               value={typeof name === 'string' ? name : ''}
@@ -125,9 +98,8 @@ export default function SocialLinks() {
             />
             <button
               onClick={() => handleDelete(id)}
-              className="admin-cancel-button"
+              className="social-links-delete-button" // Changed from admin-cancel-button, removed inline style
               aria-label={`Delete ${name}`}
-              style={{ flexShrink: 0 }}
             >
               ✕
             </button>
@@ -136,7 +108,7 @@ export default function SocialLinks() {
       </ul>
 
       <h3>Add New Link</h3>
-      <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
+      <div className="add-social-link-form"> {/* Added a class for styling this div */}
         <input
           type="text"
           placeholder="Name (e.g., Instagram)"
@@ -155,8 +127,7 @@ export default function SocialLinks() {
         />
         <button
           onClick={handleAdd}
-          className="admin-button"
-          style={{ flexShrink: 0 }}
+          className="social-links-add-button" // Changed from admin-button, removed inline style
         >
           Add
         </button>

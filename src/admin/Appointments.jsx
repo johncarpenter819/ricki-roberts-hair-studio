@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useAppointments } from '../context/AppointmentsContext';
-import '../styles/Appointments.css';
+import '../styles/Appointments.css'; // Assuming this imports AdminPortal.css or similar
 
 function formatDate(dateStr) {
   const [year, month, day] = dateStr.split('-');
@@ -56,8 +56,9 @@ export default function Appointments() {
 
     const csvContent =
       'data:text/csv;charset=utf-8,' +
-      [headers, ...rows].map((row) => row.join(',')).join('\n');
-
+      headers.join(',') +
+      '\n' +
+      rows.map((e) => e.join(',')).join('\n');
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
@@ -69,26 +70,27 @@ export default function Appointments() {
 
   return (
     <div className="appointments-container">
-      <h2>Appointments Management</h2>
+      <h2>Appointments</h2>
 
-      <div className="appointments-toolbar">
-        <label htmlFor="filterDate">Filter by Date:</label>
-        <input
-          type="date"
-          id="filterDate"
-          value={filterDate}
-          onChange={(e) => setFilterDate(e.target.value)}
-          className="filter-input"
-        />
-
-        <button onClick={exportToCSV} className="csv-button">
+      <div className="admin-toolbar">
+        <label>
+          Filter by Date:
+          <input
+            type="date"
+            value={filterDate}
+            onChange={(e) => setFilterDate(e.target.value)}
+            className="admin-input"
+          />
+        </label>
+        <button onClick={exportToCSV} className="primary-action-button">
           Export to CSV
         </button>
       </div>
 
-      <div className="appointment-counts">
-        <p>Total Appointments: <strong>{filteredAppointments.length}</strong></p>
-        <p>Confirmed: <strong>{confirmedAppointments.length}</strong></p>
+      <div className="admin-counts">
+        <p>Total Appointments: {filteredAppointments.length}</p>
+        <p>Confirmed: {confirmedAppointments.length}</p>
+        <p>Pending: {filteredAppointments.length - confirmedAppointments.length}</p>
       </div>
 
       {filteredAppointments.length === 0 ? (
@@ -125,7 +127,7 @@ export default function Appointments() {
                   <td>
                     <button
                       onClick={() => cancelAppointment(appt.id)}
-                      className="cancel-button"
+                      className="danger-action-button"
                     >
                       Cancel
                     </button>

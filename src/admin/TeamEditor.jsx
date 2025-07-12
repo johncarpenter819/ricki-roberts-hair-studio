@@ -1,6 +1,7 @@
+// TeamEditor.jsx
 import { useState, useEffect } from "react";
 import { useTeam } from "../context/TeamContext";
-import "../styles/AdminPortal.css"; // assuming shared admin styles here
+import "../styles/AdminPortal.css";
 
 const defaultTeam = [
   {
@@ -16,10 +17,8 @@ export default function TeamEditor() {
   const { team, setTeam } = useTeam();
   const [message, setMessage] = useState("");
 
-  // Local state to hold editable team members before saving
   const [localTeam, setLocalTeam] = useState([]);
 
-  // Sync localTeam from team context initially or when team changes
   useEffect(() => {
     if (!team || team.length === 0) {
       setTeam(defaultTeam);
@@ -34,7 +33,6 @@ export default function TeamEditor() {
     setTimeout(() => setMessage(""), 3000);
   }
 
-  // Update local editable state when user types
   function handleLocalChange(id, field, value) {
     setLocalTeam((prev) =>
       prev.map((member) =>
@@ -43,124 +41,105 @@ export default function TeamEditor() {
     );
   }
 
-  // Save changes from local state to main team state for a single member
   function handleSave(id) {
     const updatedMember = localTeam.find((m) => m.id === id);
-    if (!updatedMember) return;
-
-    // Create new team array with the updated member replaced
-    const updated = team.map((member) =>
-      member.id === id ? updatedMember : member
-    );
-    saveTeam(updated);
+    if (updatedMember) {
+      saveTeam(localTeam); // Save the entire localTeam
+    }
   }
 
   function handleDelete(id) {
-    if (window.confirm("Delete this team member?")) {
-      const filtered = team.filter((member) => member.id !== id);
-      saveTeam(filtered);
-      // Also remove from localTeam
-      setLocalTeam((prev) => prev.filter((m) => m.id !== id));
+    if (window.confirm("Are you sure you want to delete this team member?")) {
+      const updatedTeam = team.filter((member) => member.id !== id);
+      saveTeam(updatedTeam);
     }
   }
 
-  // Add new member works as before
-  const [newMember, setNewMember] = useState({ name: "", role: "", photo: "", bio: "" });
+  const [newMember, setNewMember] = useState({
+    name: "",
+    role: "",
+    bio: "",
+    photo: "", // This will store a local URL for preview or a Firebase URL after upload
+  });
+
   function handleAdd() {
-    if (!newMember.name.trim() || !newMember.role.trim()) {
-      alert("Name and Role are required");
+    if (!newMember.name || !newMember.role || !newMember.bio) {
+      setMessage("Please fill in all fields for the new team member.");
+      setTimeout(() => setMessage(""), 3000);
       return;
     }
-
-    const memberToAdd = {
-      ...newMember,
-      id: Date.now(),
-      photo:
-        newMember.photo && typeof newMember.photo === "string" && newMember.photo.startsWith("blob:")
-          ? newMember.photo
-          : "/assets/default-profile.png",
-    };
-
-    const updated = [...team, memberToAdd];
-    saveTeam(updated);
-    setLocalTeam((prev) => [...prev, memberToAdd]); // keep local in sync
-
-    setNewMember({ name: "", role: "", photo: "", bio: "" });
+    const memberToAdd = { ...newMember, id: Date.now() }; // Simple ID generation
+    saveTeam([...team, memberToAdd]);
+    setNewMember({ name: "", role: "", bio: "", photo: "" }); // Reset form
+    document.getElementById("new-member-photo-upload").value = ""; // Clear file input
   }
 
   return (
-    <div className="admin-container team-editor-container">
-      <h2>Meet the Team Editor</h2>
+    <div className="team-editor-container">
+      <h2>Manage Team</h2>
 
-      {(!localTeam || localTeam.length === 0) && <p>No team members yet.</p>}
-
-      <ul className="team-list">
-        {localTeam &&
-          localTeam.map(({ id, name, role, photo, bio = "" }) => (
-            <li key={id} className="team-member">
-              <img src={photo} alt={name} className="team-photo" />
-              <div className="team-info">
+      <div className="team-members-list">
+        {localTeam.map((member) => (
+          <div key={member.id} className="team-member-card">
+            <img
+              src={member.photo}
+              alt={member.name}
+              className="team-member-photo"
+            />
+            <div className="member-details">
+              <label className="admin-label">
+                Name:
                 <input
                   type="text"
-                  value={name}
-                  onChange={(e) => handleLocalChange(id, "name", e.target.value)}
+                  value={member.name}
+                  onChange={(e) =>
+                    handleLocalChange(member.id, "name", e.target.value)
+                  }
                   className="admin-input"
-                  placeholder="Name"
                 />
+              </label>
+              <label className="admin-label">
+                Role:
                 <input
                   type="text"
-                  value={role}
-                  onChange={(e) => handleLocalChange(id, "role", e.target.value)}
+                  value={member.role}
+                  onChange={(e) =>
+                    handleLocalChange(member.id, "role", e.target.value)
+                  }
                   className="admin-input"
-                  placeholder="Role"
                 />
+              </label>
+              <label className="admin-label">
+                Bio:
                 <textarea
-                  value={bio}
-                  onChange={(e) => handleLocalChange(id, "bio", e.target.value)}
+                  value={member.bio}
+                  onChange={(e) =>
+                    handleLocalChange(member.id, "bio", e.target.value)
+                  }
                   className="admin-textarea"
-                  placeholder="Short bio or intro..."
-                  rows={3}
+                  rows={4}
                 />
-                <input
-                  type="file"
-                  accept="image/*"
-                  id={`photo-upload-${id}`}
-                  className="photo-input"
-                  onChange={(e) => {
-                    const file = e.target.files[0];
-                    if (file) {
-                      const localUrl = URL.createObjectURL(file);
-                      handleLocalChange(id, "photo", localUrl);
-                    }
-                  }}
-                  style={{ display: "none" }}
-                />
-                <label htmlFor={`photo-upload-${id}`} className="choose-photo">
-                  Choose Photo
-                </label>
-              </div>
-
-              <div className="team-member-buttons">
+              </label>
+              <div className="team-member-actions">
                 <button
-                  onClick={() => handleDelete(id)}
-                  className="delete-button"
-                  aria-label={`Delete ${name}`}
-                >
-                  Delete
-                </button>
-                <button
-                  onClick={() => handleSave(id)}
-                  className="admin-button"
-                  aria-label={`Save ${name}`}
+                  onClick={() => handleSave(member.id)}
+                  className="team-editor-save-button" // Changed class name here
                 >
                   Save
                 </button>
+                <button
+                  onClick={() => handleDelete(member.id)}
+                  className="admin-cancel-button"
+                >
+                  Delete
+                </button>
               </div>
-            </li>
-          ))}
-      </ul>
+            </div>
+          </div>
+        ))}
+      </div>
 
-      <h3>Add New Team Member</h3>
+      <h2>Add New Team Member</h2>
       <div className="add-member-form">
         <input
           type="text"
@@ -200,7 +179,7 @@ export default function TeamEditor() {
         <label htmlFor="new-member-photo-upload" className="upload-button">
           Choose Photo
         </label>
-        <button onClick={handleAdd} className="admin-button add-member-button">
+        <button onClick={handleAdd} className="team-editor-add-member-button">
           Add Member
         </button>
       </div>

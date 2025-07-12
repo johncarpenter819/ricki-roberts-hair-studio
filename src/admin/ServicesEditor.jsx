@@ -40,68 +40,78 @@ export default function ServicesEditor() {
   }
 
   return (
-    <div className="admin-container">
+    <div className="services-editor-container"> {/* Changed from admin-container */}
       <h2>Manage Services</h2>
-      <div className="admin-table-wrapper">
-        <table className="admin-table">
+      <div className="services-table-wrapper">
+        <table className="services-table">
           <thead>
             <tr>
               <th>Name</th>
               <th>Category</th>
               <th>Duration</th>
-              <th>Price ($)</th>
+              <th>Price</th>
               <th>Description</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {services.map(({ id, name, price, category, duration, description }) => (
-              <tr key={id}>
+            {services.map((service) => (
+              <tr key={service.id}>
                 <td>
                   <input
                     type="text"
-                    value={name}
-                    onChange={(e) => updateService(id, 'name', e.target.value)}
+                    value={service.name}
+                    onChange={(e) =>
+                      updateService(service.id, 'name', e.target.value)
+                    }
                     className="admin-input"
                   />
                 </td>
                 <td>
                   <input
                     type="text"
-                    value={category}
-                    onChange={(e) => updateService(id, 'category', e.target.value)}
+                    value={service.category}
+                    onChange={(e) =>
+                      updateService(service.id, 'category', e.target.value)
+                    }
                     className="admin-input"
-                    placeholder="e.g., Haircut"
                   />
                 </td>
                 <td>
                   <input
                     type="text"
-                    value={duration}
-                    onChange={(e) => updateService(id, 'duration', e.target.value)}
+                    value={service.duration}
+                    onChange={(e) =>
+                      updateService(service.id, 'duration', e.target.value)
+                    }
                     className="admin-input"
-                    placeholder="e.g., 30 min"
                   />
                 </td>
                 <td>
                   <input
                     type="number"
-                    value={price}
-                    onChange={(e) => updateService(id, 'price', e.target.value)}
+                    value={service.price}
+                    onChange={(e) =>
+                      updateService(service.id, 'price', e.target.value)
+                    }
                     className="admin-input"
                   />
                 </td>
                 <td>
                   <textarea
-                    value={description || ''}
-                    onChange={(e) => updateService(id, 'description', e.target.value)}
+                    value={service.description}
+                    onChange={(e) =>
+                      updateService(service.id, 'description', e.target.value)
+                    }
                     className="admin-input"
-                    placeholder="Service description"
                     rows={2}
                   />
                 </td>
                 <td>
-                  <button className="admin-cancel-button" onClick={() => deleteService(id)}>
+                  <button
+                    onClick={() => deleteService(service.id)}
+                    className="services-editor-delete-button"
+                  >
                     Delete
                   </button>
                 </td>
@@ -151,7 +161,7 @@ export default function ServicesEditor() {
                 />
               </td>
               <td>
-                <button className="admin-button" onClick={addService}>
+                <button className="services-editor-add-button" onClick={addService}> {/* Changed from admin-button */}
                   Add
                 </button>
               </td>

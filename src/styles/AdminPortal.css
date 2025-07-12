@@ -1,18 +1,41 @@
 /* AdminPortal.css */
 
-/* Container shared by all admin pages */
-.admin-container {
+/* --- CSS Variables --- */
+:root {
+  --primary-button-color: #a77b5a;
+  --primary-button-hover-color: #b8673e;
+  --danger-button-color: #dc3545; /* Standard Bootstrap red */
+  --danger-button-hover-color: #b02a37; /* Darker red for hover */
+  --text-white: white;
+}
+
+/* --- Container Styles --- */
+/* Common container styles for all admin pages that previously used .admin-container */
+.business-settings-container,
+.services-editor-container,
+.social-links-container,
+.team-editor-container {
   max-width: 60%;
   margin: 2rem auto;
   padding: 1.5rem 2rem;
   background-color: #f9f6f2;
   border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   color: #4b3b2b;
 }
 
-/* Toolbar shared */
+/* Specific override for Social Links container to make it smaller */
+.social-links-container {
+  max-width: 40%; /* Made smaller and independent */
+}
+
+/* Specific override for Services Editor container to make it full width */
+.services-editor-container {
+  max-width: 90%;
+}
+
+/* --- Toolbar Shared --- */
 .admin-toolbar {
   display: flex;
   align-items: center;
@@ -22,420 +45,573 @@
 }
 
 .admin-toolbar label {
-  font-weight: 600;
+  font-weight: bold;
+  color: #5d4a3c;
+}
+
+.admin-toolbar select,
+.admin-toolbar input[type="date"] {
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 0.9rem;
+}
+
+/* --- General Form Element Styles --- */
+.admin-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  color: #5d4a3c;
 }
 
 .admin-input,
-.admin-select {
-  padding: 0.4rem 0.6rem;
-  font-size: 1rem;
+.admin-textarea {
+  width: 100%;
+  padding: 0.6rem;
+  margin-top: 0.3rem;
+  margin-bottom: 0.8rem;
   border: 1px solid #ccc;
-  border-radius: 6px;
-  max-width: 180px;
+  border-radius: 8px;
+  font-size: 1rem;
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+.admin-textarea {
+  resize: vertical; /* Allow vertical resizing for textareas */
+  min-height: 80px;
+}
+
+/* --- Button Styles --- */
+/* Base button styles for primary actions */
+.admin-button {
+  background-color: var(--primary-button-color);
+  color: var(--text-white);
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease;
+  min-width: 80px; /* Ensure consistent width */
 }
 
 .admin-button:hover {
-  background-color: #8b6847;
+  background-color: var(--primary-button-hover-color);
 }
 
-.admin-counts {
-  margin-bottom: 1rem;
-  font-weight: 600;
-  display: flex;
-  gap: 2rem;
-  font-size: 1.1rem;
-}
-
-/* Table shared styles */
-.admin-table-wrapper {
-  overflow-x: auto;
-  width: 100%;
-  -webkit-overflow-scrolling: touch;
-}
-
-.admin-table {
-  border-collapse: collapse;
-  box-shadow: 0 0 8px rgba(0,0,0,0.05);
-  background-color: white;
-  border-radius: 8px;
-  overflow: hidden;
-  table-layout: fixed;
-  min-width: 1200px;
-  width: 100%;
-}
-
-/* Fix table header hover: keep brown background and white text */
-.admin-table.reviews-table thead tr,
-.admin-table.reviews-table thead tr th {
-  background-color: #a77b5a;
-  color: white;
-  cursor: default;
-}
-
-.admin-table.reviews-table thead tr:hover,
-.admin-table.reviews-table thead tr th:hover {
-  background-color: #a77b5a !important;
-  color: white !important;
-}
-
-.admin-table th,
-.admin-table td {
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid #e2ddd8;
-  vertical-align: middle;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.admin-table tbody tr:hover {
-  background-color: #f0e9df;
-}
-
-/* Status and action buttons */
-.admin-status-cell {
-  font-weight: 600;
-  color: #155724;
-}
-
+/* Danger/Delete button styles */
 .admin-cancel-button {
-  padding: 0.3rem 0.7rem;
-  background-color: #dc3545;
-  color: white;
+  background-color: var(--danger-button-color);
+  color: var(--text-white);
+  padding: 0.6rem 1.2rem;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
-  font-weight: 600;
-  transition: background-color 0.3s ease;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease;
+  min-width: 80px;
 }
 
 .admin-cancel-button:hover {
-  background-color: #b02a37;
+  background-color: var(--danger-button-hover-color);
 }
 
-/* Label styling for form fields */
-.admin-label {
-  display: flex;
-  flex-direction: column;
-  color: #4b3b2b;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  font-size: 1rem;
+/* Specific button styles for Services Editor */
+.services-editor-add-button {
+  background-color: var(--primary-button-color);
+  color: var(--text-white);
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease;
+  min-width: 80px;
 }
 
-/* Textarea style similar to inputs */
-.admin-textarea {
-  margin-top: 0.5rem;
-  padding: 0.6rem;
-  border: 1px solid #ccc;
+.services-editor-add-button:hover {
+  background-color: var(--primary-button-hover-color);
+}
+
+.services-editor-delete-button {
+  background-color: var(--danger-button-color);
+  color: var(--text-white);
+  padding: 0.4rem 0.8rem; /* Slightly smaller for inline table */
+  border: none;
   border-radius: 6px;
-  font-size: 1rem;
-  font-family: inherit;
-  resize: vertical;
-  background-color: #fff;
-  width: 100%;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background-color 0.2s ease;
 }
 
-/* Override margin bottom for inputs inside labels */
-.admin-input {
-  padding: 0.6rem;
+.services-editor-delete-button:hover {
+  background-color: var(--danger-button-hover-color);
+}
+
+/* Specific button styles for Business Settings */
+.business-settings-save-button {
+  background-color: var(--primary-button-color);
+  color: var(--text-white);
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
   font-size: 1rem;
+  transition: background-color 0.2s ease;
+  width: auto; /* Allow width to adjust to content */
+  margin-top: 1rem; /* Add some space above */
+}
+
+.business-settings-save-button:hover {
+  background-color: var(--primary-button-hover-color);
+}
+
+/* Specific button styles for Social Links */
+.social-links-add-button {
+  background-color: var(--primary-button-color);
+  color: var(--text-white);
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease;
+  flex-shrink: 0; /* Prevent shrinking */
+}
+
+.social-links-add-button:hover {
+  background-color: var(--primary-button-hover-color);
+}
+
+.social-links-delete-button {
+  background-color: var(--danger-button-color);
+  color: var(--text-white);
+  border: none;
+  padding: 0.4rem 0.8rem;
   border-radius: 6px;
-  border: 1px solid #ccc;
-  background-color: #fff;
-  margin-top: 0.3rem;
-}
-
-/* Message below buttons */
-.admin-message {
-  color: green;
-  margin-top: 1rem;
-  font-weight: 600;
-  font-size: 1rem;
-}
-
-/* Team Editor Styles */
-.team-list {
-  list-style: none;
-  padding-left: 0;
-  margin-top: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  width: 97%;
-  max-width: none;
-  margin-left: 0;
-  margin-right: 0;
-}
-
-.team-member {
-  position: relative;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  gap: 1rem;
-  width: 100%;
-  padding: 1.5rem;
-  padding-bottom: 4rem;
-  background-color: #fff;
-  border: 2px solid #a77b5a;
-  border-radius: 12px;
-  box-shadow: 0 6px 12px rgba(0,0,0,0.05);
-}
-
-.team-photo {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 50%;
-  border: 3px solid #a77b5a;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background-color 0.2s ease;
   flex-shrink: 0;
 }
 
-.team-info {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
+.social-links-delete-button:hover {
+  background-color: var(--danger-button-hover-color);
 }
 
-.team-info input,
-.team-info textarea {
+/* Specific button styles for Team Editor */
+.team-editor-add-member-button {
+  background-color: var(--primary-button-color);
+  color: var(--text-white);
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.2s ease;
+  width: auto; /* Allow width to adjust to content */
+  margin-top: 1rem; /* Add some space above */
+}
+
+.team-editor-add-member-button:hover {
+  background-color: var(--primary-button-hover-color);
+}
+
+.team-editor-save-button {
+  background-color: var(--primary-button-color);
+  color: var(--text-white);
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease;
+  min-width: 80px; /* Ensure consistent width */
+}
+
+.team-editor-save-button:hover {
+  background-color: var(--primary-button-hover-color);
+}
+
+/* Photo upload button in Team Editor */
+.upload-button {
+  display: inline-block;
+  text-align: center;
+  background-color: #6c757d; /* A neutral color */
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease;
+  margin-top: 0.5rem;
+}
+
+.upload-button:hover {
+  background-color: #5a6268;
+}
+
+/* --- Message Styles (for saved messages, errors) --- */
+.admin-message {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 0.8rem;
+  margin-top: 1rem;
+  border-radius: 8px;
+  border: 1px solid #c3e6cb;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.admin-error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 0.8rem;
+  margin-top: 1rem;
+  border-radius: 8px;
+  border: 1px solid #f5c6cb;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+/* --- Table Styles (used in ServicesEditor and partially in BusinessSettings for reviews) --- */
+.admin-table-wrapper {
+  overflow-x: auto; /* Allows table to scroll horizontally on small screens */
+  margin-top: 1.5rem;
+  margin-bottom: 2rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Base styles for .services-table */
+.services-table {
   width: 100%;
-  max-width: 600px;
+  border-collapse: separate;
+  border-spacing: 0;
 }
 
-.team-info textarea {
-  resize: vertical;
+/* Specific table styles for Services Editor */
+.services-editor-container .services-table th,
+.services-editor-container .services-table td {
+  padding: 0.8rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.services-editor-container .services-table thead th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+  color: #5d4a3c;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.services-editor-container .services-table tbody tr:last-child td {
+  border-bottom: none; /* No border for the last row */
+}
+
+.services-editor-container .services-table tbody tr:hover {
+  background-color: #f5f5f5;
+}
+
+/* Column Width Adjustments based on screenshot order */
+.services-editor-container .services-table th:nth-child(1),
+.services-editor-container .services-table td:nth-child(1) {
+  min-width: 100px; /* Name */
+}
+.services-editor-container .services-table th:nth-child(2),
+.services-editor-container .services-table td:nth-child(2) {
+  min-width: 100px; /* Category */
+}
+.services-editor-container .services-table th:nth-child(3),
+.services-editor-container .services-table td:nth-child(3) {
+  min-width: 120px; /* Duration */
+}
+.services-editor-container .services-table th:nth-child(4),
+.services-editor-container .services-table td:nth-child(4) {
+  min-width: 120px; /* Price */
+}
+.services-editor-container .services-table th:nth-child(5),
+.services-editor-container .services-table td:nth-child(5) {
+  min-width: 300px; /* Description - Made wider */
+  max-width: 500px;
+}
+.services-editor-container .services-table td:nth-child(5) textarea {
+  min-height: 40px;
+  font-size: 0.9rem;
+  padding: 0.4rem;
+}
+.services-editor-container .services-table th:nth-child(6),
+.services-editor-container .services-table td:nth-child(6) {
+  min-width: 80px; /* Actions - Adjusted to be smaller */
+  max-width: 100px;
+}
+
+
+/* Adjustments for inputs within table cells */
+.services-editor-container .services-table .admin-input {
+  margin-bottom: 0; /* Remove extra margin */
+  padding: 0.4rem;
+  font-size: 0.9rem;
+}
+
+.services-editor-container .services-table .admin-textarea {
+  margin-bottom: 0;
+  padding: 0.4rem;
+  font-size: 0.9rem;
   min-height: 60px;
 }
 
-.choose-photo {
-  background-color: #a77b5a;
-  color: white;
-  padding: 0.5rem 1.2rem;
-  border-radius: 8px;
-  font-weight: 700;
-  font-size: 1rem;
-  cursor: pointer;
-  border: none;
-  transition: background-color 0.3s ease;
-  display: inline-block;
-  text-align: center;
-  user-select: none;
-  white-space: nowrap;
-  max-width: 200px;
+/* --- Business Hours Styles (specific to BusinessSettings) --- */
+.hours-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem 2rem;
+  margin-bottom: 2rem;
 }
 
-.choose-photo:hover {
-  background-color: #8b6847;
-}
-
-/* Save & Delete buttons */
-.team-member-buttons {
-  position: absolute;
-  bottom: 1.5rem;
-  right: 1.5rem;
+.hours-grid label {
   display: flex;
-  gap: 0.75rem;
+  flex-direction: column;
+  font-weight: bold;
+  color: #5d4a3c;
 }
 
-.team-member-buttons button {
-  all: unset;
-  box-sizing: border-box;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 70px;
-  height: 36px;
-  font-size: 1rem;
-  font-weight: 700;
-  font-family: inherit;
-  text-align: center;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.team-member-buttons .admin-button {
-  background-color: #a77b5a;
-  color: white;
-}
-
-.team-member-buttons .admin-button:hover {
-  background-color: #8b6847;
-}
-
-.team-member-buttons .delete-button {
-  background-color: #dc3545;
-  color: white;
-}
-
-.team-member-buttons .delete-button:hover {
-  background-color: #b02a37;
-}
-
-/* Hide native file input */
-.file-input {
-  display: none;
-}
-
-/* Upload and admin buttons */
-.upload-button,
-.admin-button {
-  background-color: #a77b5a;
-  color: white;
-  border: none;
-  padding: 0.5rem 1.2rem;
-  border-radius: 8px;
-  font-weight: 700;
-  font-size: 1rem;
-  cursor: pointer;
-  user-select: none;
-  transition: background-color 0.3s ease;
-  display: inline-block;
-  text-align: center;
-  white-space: nowrap;
+.hours-grid input {
   margin-top: 0.3rem;
-  margin-left: 10px;
 }
 
-.upload-button:hover,
-.admin-button:hover {
-  background-color: #8b6847;
-}
-
-/* Add Member Form Buttons */
-.add-member-buttons {
-  display: flex;
-  gap: 0.75rem;
+/* --- Team Editor Styles --- */
+.team-members-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
   margin-top: 1.5rem;
-  justify-content: flex-end;
+  margin-bottom: 2rem;
 }
 
-.add-member-buttons button {
-  flex: 1;
-  padding: 0.6rem 1.2rem;
-  font-size: 1rem;
+.team-member-card {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.team-member-photo {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 1rem;
+  border: 3px solid var(--primary-button-color);
+}
+
+.team-member-card .member-details {
+  width: 100%;
+}
+
+.team-member-card .admin-label {
+  text-align: left;
+  margin-top: 0.8rem;
+  margin-bottom: 0.2rem;
+  font-size: 0.95rem;
+}
+
+.team-member-card .admin-input,
+.team-member-card .admin-textarea {
+  margin-bottom: 0.5rem;
+}
+
+.team-member-actions {
+  display: flex;
+  gap: 0.8rem;
+  margin-top: 1rem;
+  justify-content: center;
+}
+
+.add-member-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  padding: 1.5rem;
+  background-color: #f0f0f0;
+  border-radius: 12px;
+  margin-top: 2rem;
+}
+
+/* --- Social Links Styles --- */
+.social-links-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 1.5rem;
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.social-links-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  background-color: #fff;
+  padding: 0.8rem 1.2rem;
   border-radius: 8px;
-  font-weight: 700;
-  cursor: pointer;
-  border: none;
-  transition: background-color 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-.add-member-buttons .save-button {
-  background-color: #a77b5a;
-  color: white;
+.social-links-list li img {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
 }
 
-.add-member-buttons .save-button:hover {
-  background-color: #8b6847;
-}
-
-.add-member-buttons .cancel-button {
-  background-color: #dc3545;
-  color: white;
-}
-
-.add-member-buttons .cancel-button:hover {
-  background-color: #b02a37;
-}
-
-/* Services Section styled like Team Editor */
-.services {
-  max-width: 60%;
+/* --- Gallery Manager Styles --- */
+.gallery-manager-container {
+  max-width: 90%;
   margin: 2rem auto;
   padding: 1.5rem 2rem;
   background-color: #f9f6f2;
   border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   color: #4b3b2b;
 }
 
-.services .service-grid {
+.gallery-upload-section {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background-color: #e6e6e6; /* Light gray background */
+  border-radius: 10px;
+}
+
+.gallery-upload-section label {
+  background-color: var(--primary-button-color);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.2s ease;
+}
+
+.gallery-upload-section label:hover {
+  background-color: var(--primary-button-hover-color);
+}
+
+.gallery-upload-section input[type="file"] {
+  display: none; /* Hide the default file input */
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 1.5rem;
 }
 
-.service-card {
+.gallery-item {
   background-color: #fff;
-  border: 2px solid #a77b5a;
   border-radius: 12px;
-  padding: 1.5rem 1.5rem;
-  box-shadow: 0 6px 12px rgba(0,0,0,0.05);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
 }
 
-.service-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+.gallery-item img {
+  width: 100%;
+  height: 200px; /* Fixed height for consistency */
+  object-fit: cover;
+  display: block;
 }
 
-.service-card h3 {
-  font-family: 'Dancing Script', cursive;
-  font-size: 1.5rem;
-  color: #4b3b2b;
-  margin: 0 0 0.5rem;
+.gallery-item-info {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* Allows info section to take available space */
 }
 
-.service-card p {
-  font-size: 1rem;
-  color: #4b3b2b;
-  line-height: 1.4;
-  margin: 0;
+.gallery-item-info input[type="text"],
+.gallery-item-info textarea {
+  width: 100%;
+  margin-bottom: 0.5rem;
+  padding: 0.4rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 0.9rem;
+  box-sizing: border-box;
 }
 
-/* Example button style for call-to-action inside service cards */
-.service-card .service-btn {
-  align-self: flex-start;
-  background-color: #a77b5a;
+.gallery-item-info textarea {
+  min-height: 60px;
+  resize: vertical;
+}
+
+.gallery-item-delete-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background-color: var(--danger-button-color);
   color: white;
-  padding: 0.5rem 1.2rem;
-  border-radius: 8px;
-  font-weight: 700;
-  font-size: 1rem;
-  cursor: pointer;
   border: none;
-  user-select: none;
-  transition: background-color 0.3s ease;
-  margin-top: auto;
-  text-align: center;
-  white-space: nowrap;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  line-height: 1;
+  z-index: 10;
 }
 
-.service-card .service-btn:hover {
-  background-color: #8b6847;
+.gallery-item-delete-button:hover {
+  background-color: var(--danger-button-hover-color);
 }
 
-/* Responsive */
+/* Drag and Drop Feedback */
+.gallery-item.dragging {
+  opacity: 0.5;
+  border: 2px dashed var(--primary-button-color);
+}
+
+/* --- Media Queries for Responsiveness --- */
 @media (max-width: 768px) {
+  .business-settings-container,
+  .services-editor-container,
+  .social-links-container,
+  .team-editor-container,
+  .gallery-manager-container {
+    max-width: 95%;
+    margin: 1rem auto;
+    padding: 1rem;
+  }
+
   .admin-toolbar {
     flex-direction: column;
     align-items: flex-start;
   }
+}
 
-  .admin-counts {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .admin-table {
-    font-size: 0.85rem;
-  }
-
-  .admin-table th,
-  .admin-table td {
+@media (max-width: 480px) {
+  .services-editor-container .services-table th,
+  .services-editor-container .services-table td {
     padding: 0.5rem 0.6rem;
     white-space: normal;
   }
 }
 
+/* --- Review Approval List Styles (specific to BusinessSettings) */
 .review-approval-list {
   display: flex;
   flex-direction: column;
@@ -448,49 +624,27 @@
   margin-bottom: 2rem;
 }
 
-.admin-table.reviews-table {
+.reviews-table {
   width: 100%;
   border-collapse: collapse;
 }
 
-.admin-table.reviews-table th,
-.admin-table.reviews-table td {
+.reviews-table th,
+.reviews-table td {
   padding: 0.75rem;
-  border: 1px solid var(--deep);
+  border: 1px solid var(--deep); /* Assuming var(--deep) is defined elsewhere or replace with a color */
   text-align: left;
   vertical-align: top;
 }
 
-.admin-table.reviews-table thead tr {
-  background-color: #a77b5a;
-  color: white;
-}
-
-.admin-table.reviews-table tbody tr:hover {
+.reviews-table tbody tr:hover {
   background-color: #f9f9f9;
-}
-
-/* Button styles */
-.admin-button {
-  padding: 0.4rem 0.8rem;
-  font-weight: bold;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.admin-button-deny {
-  background-color: #f44336;
-  color: white;
-}
-
-.admin-button-deny:hover {
-  background-color: #d32f2f;
 }
 
 /* Review cell and preview tooltip */
 .review-cell {
-  position: relative;    /* Needed for tooltip positioning */
-  max-width: 300px;      /* Keep the truncated preview width */
+  position: relative; /* Needed for tooltip positioning */
+  max-width: 300px; /* Keep the truncated preview width */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -501,18 +655,36 @@
 /* Tooltip container */
 .review-tooltip {
   position: absolute;
-  top: 100%;             /* Directly below the cell */
+  top: 100%; /* Directly below the cell */
   left: 0;
-  z-index: 9999;         /* Make sure it's on top */
+  z-index: 9999; /* Make sure it's on top */
   width: 320px;
   background: #fff7ef;
   color: #4b3b2b;
   padding: 0.75rem 1rem;
   border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   font-size: 0.9rem;
   line-height: 1.4;
-  white-space: normal;   /* Wrap text */
-  word-wrap: break-word;
-  pointer-events: none;  /* So it doesn't interfere with mouse */
+  white-space: normal; /* Wrap text */
+  word-wrap: break-word; /* Break long words */
+  pointer-events: none; /* Allows clicks to pass through to elements behind it */
+  opacity: 0; /* Start hidden */
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  transform: translateY(5px); /* Slight offset */
+}
+
+/* Show tooltip on hover over review-cell */
+.review-cell:hover .review-tooltip {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+footer {
+  margin-top: auto; /* Pushes the footer to the bottom */
+  /* Add any other desired footer styling here, e.g., background, padding, text-align */
+  background-color: #f2f2f2; /* Example: light gray background for footer */
+  padding: 1.5rem;
+  text-align: center;
+  color: #5d4a3c;
 }

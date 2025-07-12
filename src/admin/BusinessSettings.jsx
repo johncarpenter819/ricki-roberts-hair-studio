@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useBusiness } from "../context/BusinessContext";
 import { getAllReviews, approveReview, deleteReview } from "../utils/firestore";
-import '../styles/AdminPortal.css';
+import '../styles/AdminPortal.css'; // Keep this if other admin styles are used
 
 export default function BusinessSettings() {
   const { hours, setHours, contact, setContact, about, setAbout } = useBusiness();
@@ -66,12 +66,12 @@ export default function BusinessSettings() {
   };
 
   return (
-    <div className="admin-container">
+    <div className="business-settings-container"> {/* Changed from admin-container */}
       <h2>Business Settings</h2>
 
       {/* Business Hours Section */}
       <h3>Business Hours</h3>
-      <table className="admin-table" style={{ marginBottom: "1rem" }}>
+      <table className="business-table" style={{ marginBottom: "1rem" }}>
         <tbody>
           {Object.entries(hours).map(([day, time]) => (
             <tr key={day}>
@@ -96,7 +96,7 @@ export default function BusinessSettings() {
         <p style={{ fontStyle: "italic" }}>No reviews found.</p>
       ) : (
         <div className="admin-reviews-table-wrapper" style={{ position: "relative" }}>
-          <table className="admin-table reviews-table">
+          <table className="business-table reviews-table">
             <thead>
               <tr>
                 <th>Name</th>
@@ -132,14 +132,14 @@ export default function BusinessSettings() {
                     {!review.approved && (
                       <button
                         onClick={() => handleApprove(review.id)}
-                        className="admin-button"
+                        className="business-settings-approve-button" // Changed from admin-button
                       >
                         Approve
                       </button>
                     )}
                     <button
                       onClick={() => handleDelete(review.id)}
-                      className="admin-button admin-button-deny"
+                      className="business-settings-delete-review-button" // Changed from admin-button admin-button-deny
                     >
                       Delete
                     </button>
@@ -217,7 +217,7 @@ export default function BusinessSettings() {
         style={{ width: "100%", marginBottom: "1rem" }}
       />
 
-      <button onClick={handleSave} className="admin-button" style={{ marginTop: "1rem" }}>
+      <button onClick={handleSave} className="business-settings-save-button"> {/* Removed inline style */}
         Save
       </button>
 
