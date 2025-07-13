@@ -172,7 +172,7 @@
 
 .reviews-container {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(5, 1fr); /* Default for very large screens */
   gap: 1.8rem;
   width: 100%;
   margin: 0;
@@ -188,8 +188,8 @@
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   border: 1.5px solid rgba(123, 51, 7, 0.15) !important;
+  width: 300px; /* Fixed width for cards */
   min-height: 240px;
-  width: 300px;
   display: flex;
   flex-direction: column;
   opacity: 1 !important;
@@ -200,6 +200,7 @@
   visibility: visible !important;
   position: relative;
   z-index: 1000;
+  box-sizing: border-box; /* Ensure padding is included in the width */
 }
 
 .review-card.visible {
@@ -560,9 +561,23 @@
 /* ----------------------------------------
    Responsive tweaks
 ------------------------------------------- */
+@media (max-width: 1400px) {
+  /* For screens up to 1400px (e.g., larger laptops), show 4 review cards */
+  .reviews-container {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 1100px) {
+  /* For screens up to 1100px (e.g., 1024px laptops), show 3 review cards */
+  .reviews-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 @media (max-width: 900px) {
   .reviews-container {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr); /* Existing rule for 2 columns */
   }
 
   .service-grid,
@@ -578,7 +593,7 @@
 
 @media (max-width: 600px) {
   .reviews-container {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; /* Existing rule for 1 column */
   }
 
   .glass-about,
